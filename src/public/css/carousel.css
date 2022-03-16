@@ -1,0 +1,65 @@
+.carouselContainer {
+  margin: 0 auto;
+  align-items: center;
+  width: auto;
+  max-width: 80vw;
+}
+.cardBox {
+  position: relative;
+  width: 100%;
+  padding: 20px;
+  grid-gap: 20px;
+}
+.cardBox .card {
+  overflow-y: auto;
+  height: 70vh;
+  position: relative;
+  background-color: #fff;
+  padding: 20px;
+  display: flex;
+  cursor: pointer;
+}
+.cardBox .card .numbers {
+  position: relative;
+  font-size: 2em;
+  font-weight: 500;
+}
+.cardBox .card .cardName {
+  color: #999;
+}
+.cardBox .card .iconBox {
+  font-size: 2.5em;
+  color: #03a9f4;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+  border-radius: 15px;
+  background-color: white;
+}
+.card .cardTitle {
+  padding-left: 4vw;
+}
+.card .cardContent {
+  padding: 4vh 2vw 4vh 2vw;
+
+}
+.card.cardContain {
+  width: 100%;
+}
+.carousel-control-prev-icon {
+  background-color: #03a9f4;
+}
+.carousel-control-next-icon {
+  background-color: #03a9f4;
+}
+.carousel-control-prev {
+  width: auto;
+  padding: 20px 0 20px 0;
+}
+.carousel-control-next {
+  width: auto;
+  padding: 20px 0 20px 0;
+}

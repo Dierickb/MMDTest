@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src"
+    "start": "nodemon src",
+    "dev": "nodemon src"
   },
   "keywords": [],
-  "author": "",
+  "author": "Dierick Brochero",
   "license": "ISC",
   "dependencies": {
     "argon2": "^0.28.4",
