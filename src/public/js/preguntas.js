@@ -36,4 +36,6 @@ const preguntas2 = {
         "asdadasdasa",
         "asdasdasdas"],
 };
-module.exports = preguntas2;
+module.exports = {
+    preguntas2,
+};

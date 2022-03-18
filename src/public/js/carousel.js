@@ -1,5 +1,4 @@
-const input = document.createElement('input');
-const label = document.createElement('label');
+
 
 const questions = {
     PersonalAndCulture: ["Dierick1 asdadasd",
@@ -193,3 +192,21 @@ const writeTbodyContent = (content) => {
 };
 
 writeCards(dimensions);  
+
+
+
+/*
+
+textPrueba = () => {    
+    const createDiv = document.createElement('p');
+    const newContent = document.createTextNode("Holsadas5343asssss Dierick");
+
+    createDiv.appendChild(newContent);
+
+    let currentDiv = document.getElementById('dierickb');
+    document.body.insertBefore(createDiv, currentDiv);
+}
+
+textPrueba()
+
+*/
