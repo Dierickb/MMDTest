@@ -10,8 +10,7 @@
   padding: 20px;
   grid-gap: 20px;
 }
-.cardBox .card {
-  overflow-y: auto;
+.cardBox .card {  
   height: 70vh;
   position: relative;
   background-color: #fff;
@@ -43,8 +42,8 @@
   padding-left: 4vw;
 }
 .card .cardContent {
+  overflow-y: auto;
   padding: 4vh 2vw 4vh 2vw;
-
 }
 .card.cardContain {
   width: 100%;
