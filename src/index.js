@@ -3,6 +3,7 @@ const session = require("express-session");
 const morgan = require("morgan");
 const engine = require("ejs-mate");
 var path = require("path");
+require("dotenv").config();
 
 // initializations
 const app = express();

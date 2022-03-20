@@ -35,20 +35,30 @@ const questions = {
         "adadadadadadsa",
         "asdadasdasa",
         "asdasdasdas", "Dierick"],
+    Dierick: ["Dierick5 asdadasd",
+        "DBNiebles",
+        "sdadadadad",
+        "adasdadadfsafa",
+        "adsadasadadad",
+        "adadadadasdfasfas",
+        "adadadadadadsa",
+        "asdadasdasa",
+        "asdasdasdas", "Dierick"],
 };
 
 const dimensions = {
-    PersonalAndCulture: ["persAndCultDimens", "Personal y Cultura", questions.PersonalAndCulture],
-    Estrategy: ["estrategiaDimens", "Estrategia", questions.Estrategy],
-    OrganizationAndStructure: ["orgAndEstraDimens", "Organización y Estructura", questions.OrganizationAndStructure],
-    Process: ["processDimens", "Procesos", questions.Process],
+    PersonalAndCulture: ["persAndCultDimens", "Personal y Cultura", "pc",questions.PersonalAndCulture],
+    Estrategy: ["estrategiaDimens", "Estrategia", "estr",questions.Estrategy],
+    OrganizationAndStructure: ["orgAndEstraDimens", "orgStr","Organización y Estructura", questions.OrganizationAndStructure],
+    Process: ["processDimens", "Procesos", "prcs",questions.Process],
+    Dierick: ["Dierick", "Dierick5", "Diericks", questions.Dierick],
 };
 
 const columnHeader = ["#", "Preguntas", "1", "2", "3", "4", "5"];
 
 const writeCards = (cardsNumber) => {
 
-    let carouselItem = document.getElementById("carouselItem");
+    const carouselItem = document.getElementById("carouselItem");
     let active = true;
     var i = 0; //Agrega el numero al final del id y el numero va de 0 hasta la antidad de dimensiones -1 que tenga el objeto
 
@@ -72,8 +82,8 @@ const writeCards = (cardsNumber) => {
             divItem.setAttribute("class", "carousel-item");
         };
 
-        divCardBox.setAttribute("class", "cardBox");
-        divCard.setAttribute("class", "card");
+        divCardBox.setAttribute("class", "cardBox  np-b");
+        divCard.setAttribute("class", "card nr-b nmg-b {");
         divCardTitle.setAttribute("class", "cardTitle");
         divNumbers.setAttribute("class", "numbers");
         divNumbers.setAttribute("id", "numPos");
@@ -93,16 +103,17 @@ const writeCards = (cardsNumber) => {
         i = i + 1;
     };
 
+    writeIndicators(cardsNumber);
     writeTable(cardsNumber);
 
 };
 
 const writeTable = (tableContent) => {
-    
+
     let i = 0;
 
     for (let tC in tableContent) {
-        
+
         let id = tableContent[tC];
 
         let cardContent = document.getElementById("cardContent-" + i);
@@ -120,15 +131,15 @@ const writeTable = (tableContent) => {
 
         tbody.setAttribute("id", id[0]);
         tbody.setAttribute("class", "dimensionItems");
-        
+
         i = i + 1;
 
-        for (let j=0; j<columnHeader.length; j++) {
+        for (let j = 0; j < columnHeader.length; j++) {
             const th = document.createElement('th');
             th.setAttribute("scope", "col");
             trThead.appendChild(th);
             let newContent = document.createTextNode(columnHeader[j]);
-            th.appendChild(newContent);        
+            th.appendChild(newContent);
         };
 
     };
@@ -141,7 +152,7 @@ const writeTbodyContent = (content) => {
 
     for (let property in content) {
 
-        let data = content[property][2];
+        let data = content[property][3];
 
         let estrategiaDimens = document.getElementById(content[property][0]);
 
@@ -167,8 +178,9 @@ const writeTbodyContent = (content) => {
                 } else {
                     const newContent = document.createTextNode(j - 1);
                     input.setAttribute("class", "form-check-input");
-                    input.setAttribute("type", "checkbox");
-                    input.setAttribute("id", "inlineCheckbox" + (j + 1));
+                    input.setAttribute("name", (content[property][2]+"-"+i))
+                    input.setAttribute("type", "radio");
+                    input.setAttribute("id", content[property][2]+"-"+(i+1)+"-"+(j-1) );
 
                     label.setAttribute("class", "form-check-label");
                     label.setAttribute("for", "inlineCheckbox" + (j + 1));
@@ -179,7 +191,6 @@ const writeTbodyContent = (content) => {
                     td.appendChild(div);
                     div.appendChild(input);
                     div.appendChild(label);
-                    //label.appendChild(newContent);
                 };
 
             };
@@ -189,22 +200,34 @@ const writeTbodyContent = (content) => {
     };
 };
 
-writeCards(dimensions);  
+const writeIndicators = (indicatorsNumber) => {
+
+    const carouselItem = document.getElementById("carouselIndicators");
+    let active = true;
+
+    let i = 1;
+
+    for (let indicators in indicatorsNumber) {
+
+        let itemIndicator = indicatorsNumber[indicators][1];
+        console.log(itemIndicator);
+
+        const button = document.createElement('button');
+        button.setAttribute("type", "button");
+        button.setAttribute("title", itemIndicator);
+        button.setAttribute("data-bs-target", "#carouselExampleDark");
+        button.setAttribute("data-bs-slide-to", "0");
+        button.setAttribute("aria-label", "Slide " + i);
+
+        if (active) {
+            button.setAttribute("class", "active");
+            button.setAttribute("aria-current", "true");
+        };
+
+        carouselIndicators.appendChild(button);
+    };
+
+};
 
 
-
-/*
-
-textPrueba = () => {    
-    const createDiv = document.createElement('p');
-    const newContent = document.createTextNode("Holsadas5343asssss Dierick");
-
-    createDiv.appendChild(newContent);
-
-    let currentDiv = document.getElementById('dierickb');
-    document.body.insertBefore(createDiv, currentDiv);
-}
-
-textPrueba()
-
-*/
+writeCards(dimensions);

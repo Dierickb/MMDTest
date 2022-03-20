@@ -1,28 +1,46 @@
-<div class="carouselContainer">
+<!DOCTYPE html>
+<html lang="en">
 
-    <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-touch="false" data-bs-interval="false">
-        <div class="carousel-indicators">
-            <button title="Personal y Cultural" type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0"
-                class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button title="Estrategias" type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1"
-                aria-label="Slide 2"></button>
-            <button title="Organización y Estructura" type="button" data-bs-target="#carouselExampleDark"
-                data-bs-slide-to="2" aria-label="Slide 3"></button>
-            <button title="Procesos" type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="3"
-                aria-label="Slide 4"></button>
+<%- include('../../layouts/head') %>
+    <script defer src="/js/carousel.js"></script>
+    </head>
+
+    <body>
+        <%- include('../../layouts/navBar') %>
+        <div class="bodyContent">
+            <div class="carouselContainer">
+                
+                <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-touch="false"
+                    data-bs-interval="false">
+                    <div class="carousel-indicators nmg-b" id="carouselIndicators">
+                        
+                    </div>
+
+                    <form action="submit">
+                        <div class="carousel-inner" id="carouselItem"></div>
+                    </form>
+                    
+                    
+
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+                
+                <div class="cardBox np-t">
+                    <div class="card nr-t nmg-t chg-b">
+                        <button class="btn btn-primary" type="submit">Enviar Test Uninorte</button>
+                    </div>
+                </div>
+            </div>
         </div>
+    </body>
 
-        <form>
-            <div class="carousel-inner" id="carouselItem"></div>
-        </form>        
-        
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-</div>
+</html>
