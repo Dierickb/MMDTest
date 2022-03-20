@@ -1,6 +1,7 @@
 .carouselContainer {
-  margin: 0 auto;
+  margin: calc(60px + 20px) auto;
   align-items: center;
+  vertical-align: middle;
   width: auto;
   max-width: 80vw;
 }
@@ -13,7 +14,7 @@
 .cardBox .card {  
   height: 70vh;
   position: relative;
-  background-color: #fff;
+  background-color: #F6F8F6;
   padding: 20px;
   display: flex;
   cursor: pointer;
@@ -61,4 +62,6 @@
 .carousel-control-next {
   width: auto;
   padding: 20px 0 20px 0;
+  background-color: aliceblue;
 }
+

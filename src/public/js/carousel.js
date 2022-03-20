@@ -1,5 +1,3 @@
-
-
 const questions = {
     PersonalAndCulture: ["Dierick1 asdadasd",
         "DBNiebles",
