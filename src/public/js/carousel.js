@@ -35,23 +35,13 @@ const questions = {
         "adadadadadadsa",
         "asdadasdasa",
         "asdasdasdas", "Dierick"],
-    Dierick: ["Dierick5 asdadasd",
-        "DBNiebles",
-        "sdadadadad",
-        "adasdadadfsafa",
-        "adsadasadadad",
-        "adadadadasdfasfas",
-        "adadadadadadsa",
-        "asdadasdasa",
-        "asdasdasdas", "Dierick"],
 };
 
 const dimensions = {
-    PersonalAndCulture: ["persAndCultDimens", "Personal y Cultura", "pc",questions.PersonalAndCulture],
-    Estrategy: ["estrategiaDimens", "Estrategia", "estr",questions.Estrategy],
-    OrganizationAndStructure: ["orgAndEstraDimens", "orgStr","Organización y Estructura", questions.OrganizationAndStructure],
-    Process: ["processDimens", "Procesos", "prcs",questions.Process],
-    Dierick: ["Dierick", "Dierick5", "Diericks", questions.Dierick],
+    PersonalAndCulture: ["persAndCultDimens", "Personal y Cultura", "pc", questions.PersonalAndCulture],
+    Estrategy: ["estrategiaDimens", "Estrategia", "estr", questions.Estrategy],
+    OrganizationAndStructure: ["orgAndEstraDimens", "Organización y Estructura", "orgStr", questions.OrganizationAndStructure],
+    Process: ["processDimens", "Procesos", "prcs", questions.Process],
 };
 
 const columnHeader = ["#", "Preguntas", "1", "2", "3", "4", "5"];
@@ -165,7 +155,11 @@ const writeTbodyContent = (content) => {
                 const input = document.createElement("input");
                 const label = document.createElement("label");
                 td.setAttribute("scope", "col");
-                td.setAttribute("class", "wd-min")
+                td.setAttribute("class", "wd-min");
+
+                if (j == 1) {
+                    td.setAttribute("id", content[property][2] + "-" + (i + 1));
+                };
 
                 if (j === 0) {
                     let newContent = document.createTextNode(i + 1);
@@ -178,9 +172,10 @@ const writeTbodyContent = (content) => {
                 } else {
                     const newContent = document.createTextNode(j - 1);
                     input.setAttribute("class", "form-check-input");
-                    input.setAttribute("name", (content[property][2]+"-"+i))
+                    input.setAttribute("name", (content[property][2] + "-" + i))
                     input.setAttribute("type", "radio");
-                    input.setAttribute("id", content[property][2]+"-"+(i+1)+"-"+(j-1) );
+                    input.setAttribute("id", content[property][2] + "-" + (i + 1) + "-" + (j - 1));
+                    input.setAttribute("value", (j - 1));
 
                     label.setAttribute("class", "form-check-label");
                     label.setAttribute("for", "inlineCheckbox" + (j + 1));
@@ -210,13 +205,12 @@ const writeIndicators = (indicatorsNumber) => {
     for (let indicators in indicatorsNumber) {
 
         let itemIndicator = indicatorsNumber[indicators][1];
-        console.log(itemIndicator);
 
         const button = document.createElement('button');
         button.setAttribute("type", "button");
         button.setAttribute("title", itemIndicator);
         button.setAttribute("data-bs-target", "#carouselExampleDark");
-        button.setAttribute("data-bs-slide-to", "0");
+        button.setAttribute("data-bs-slide-to", (i-1));
         button.setAttribute("aria-label", "Slide " + i);
 
         if (active) {
@@ -225,9 +219,44 @@ const writeIndicators = (indicatorsNumber) => {
         };
 
         carouselIndicators.appendChild(button);
+
+        i = i+1
     };
 
 };
 
+const validateData = (data) => {
+    var form = document.getElementById("firstForm");
+    let levels = columnHeader.length - 2;
+    let i = 0;
+    let cant = [];
+    let totalCant = 0;
+    let cantQuestions = [];
+
+    for (let property in data) {
+        cantQuestions[i] = data[property][3].length;
+        cant[i] = cantQuestions[i] * levels;
+        totalCant = totalCant + cant[i];
+        i = i + 1;
+    };
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        var tasks = e.target.elements;
+        let k = 0;
+        let task = [ ]
+        for (let j = 0; j < totalCant; j++) {  
+            if (tasks[j].checked == true) {
+                
+                task[k] = [tasks[j].value, tasks[j].id];
+                k=k+1;
+               
+            };           
+
+        };        
+
+    });
+};
 
 writeCards(dimensions);
+validateData(dimensions);
