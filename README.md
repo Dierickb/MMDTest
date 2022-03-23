@@ -17,9 +17,15 @@ se logra personalizar aun mas el diseño la pagina.
 
 
 Se hace uso de las siguientes librerias:
-* Express
-* Morgan
 * Argon-2
+* Express
 * Express-validator
+* Express-session
+* Express-flash
+* Dotenv
+* Morgan
 * MySQL
+* EJS
+
+
 

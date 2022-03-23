@@ -1,0 +1,71 @@
+<% active = true; i=0; %> 
+<% for (let cards in dimensions) { %>
+    <% let itemsCard = dimensions[cards][1]; let data = dimensions[cards][3]%>
+    <% if (active === true ) { %> 
+        <div class="carousel-item active">                            
+            <% active = false; %> 
+        
+    <% } else { %> 
+        <div class="carousel-item">
+            
+        
+    <% } %>  
+            <div class="cardBox np-b">
+                <div class="card nr-b nmg-b">
+                    <div class="cardTitle">
+                        <div class="numbers" id="numPos">
+                            <%= itemsCard %> 
+                        </div>
+                        <div class="cardName">
+
+                        </div>
+                    </div>
+                    <div class="cardContent" id="cardContent-<%= i %> ">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <% for( let j = 0; j <columnHeader.length; j++ ) { %> 
+                                        <th scope="col">
+                                            <%= columnHeader[j] %> 
+                                        </th>
+                                    <% } %> 
+                                </tr>
+                            </thead>
+                            <tbody class="dimensionItems" id="<%= dimensions[cards][0] %> ">
+                                <% for( j = 0; j<dimensions[cards][3].length; j++) { %> 
+                                    <tr>
+                                        <% for( let k = 0; k < columnHeader.length; k++) { %> 
+                                            
+                                            <td scope="col" class="wd-min" 
+                                                <% if(k===1) { %> 
+                                                    id="<%= dimensions[cards][2] %> - <%= (j+1) %> "
+                                                <% } %>                                             
+                                            >
+                                                <% if(k===0) { %> 
+                                                    <%= (j+1) %> 
+                                                <% } else if ( k === 1) {%>    
+                                                    <%= data[j] %> 
+                                                <% } else { %> 
+                                                    <div class="form-check form-check-inline">
+                                                        <input type="radio" class="form-check-input" 
+                                                        name="<%= dimensions[cards][2] %> - <%= j %> "
+                                                        id="<%= dimensions[cards][2] %> - <%= (j+1) %>  - <%= (k-1) %> " 
+                                                        value="<%= (k-1) %> "> 
+                                                        <label for="inlineCheckbox<%= (k+1) %> "></label>
+                                                    </div>                                                    
+                                                <% } %> 
+                                            </td>
+                                        <% } %> 
+                                    </tr>                                    
+                                <% } %> 
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <% i=i+1; %> 
+<% } %>
+
+<script defer src="/js/carousel.js"></script>

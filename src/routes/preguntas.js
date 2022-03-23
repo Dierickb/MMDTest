@@ -43,7 +43,6 @@ const dimensions = {
     OrganizationAndStructure: ["orgAndEstraDimens", "Organización y Estructura", "orgStr", questions.OrganizationAndStructure],
     Process: ["processDimens", "Procesos", "prcs", questions.Process],
 };
-
 const columnHeader = ["#", "Preguntas", "1", "2", "3", "4", "5"];
 
 const validateCardsContent = (data) => {
@@ -86,5 +85,8 @@ const validateCardsContent = (data) => {
 
     });
 };
-
-validateCardsContent(dimensions);
+module.exports = {
+    questions,
+    dimensions,
+    columnHeader,
+};

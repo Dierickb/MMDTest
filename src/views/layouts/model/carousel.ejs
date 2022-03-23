@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<%- include('../../layouts/head') %>
-    <script defer src="/js/carousel.js"></script>
+    
+    <%- include('../../layouts/head') %>        
     </head>
-
+    
     <body>
         <%- include('../../layouts/navBar') %>
         <div class="bodyContent">
@@ -13,11 +12,13 @@
                 <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-touch="false"
                     data-bs-interval="false">
                     <div class="carousel-indicators nmg-b" id="carouselIndicators">
-                        
+                        <%- include('./indicatorsCarousel') %>
                     </div>
 
                     <form id="firstForm" action="onSubmit">
-                        <div class="carousel-inner" id="carouselItem"></div>
+                        <div class="carousel-inner" id="carouselItem">
+                            <%- include('./contentCarousel') %>
+                        </div>
                     </form>
                     
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
@@ -40,9 +41,5 @@
             </div>
         </div>
     </body>
-
-    <script>
-        
-    </script>
 
 </html>
