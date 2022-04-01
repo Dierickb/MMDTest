@@ -3,6 +3,7 @@ const session = require("express-session");
 const morgan = require("morgan");
 const engine = require("ejs-mate");
 var path = require("path");
+const { json } = require("express/lib/response");
 require("dotenv").config();
 
 // initializations
@@ -28,8 +29,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 // Global Variables
 
+app.use(express.json());
+
 //Routes
-app.use(require("./routes"));
+const indexRouter = require('./routes/index');
+const formularioAPIRouter = require('./routes/api/formulario');
+app.use('/',indexRouter);
+app.use('/api/v1/formulario',formularioAPIRouter);
 
 //Public
 app.use(express.static(path.join(__dirname, "public")));

@@ -46,45 +46,61 @@ const dimensions = {
 
 const columnHeader = ["#", "Preguntas", "1", "2", "3", "4", "5"];
 
-const validateCardsContent = (data) => {
-    const form = document.getElementById("firstForm");
-    let levels = columnHeader.length - 2;
-    let i = 0;
-    let cant = [];
-    let totalCant = 0;
-    let cantQuestions = [];
-    let cantQuestionsTotal = 0;
+let dierick = [];
+let cantQuestionsTotal = 0;
+let totalCantCheckBox = 0;
 
-    for (let property in data) {
-        cantQuestions[i] = data[property][3].length;
-        cantQuestionsTotal = cantQuestionsTotal + cantQuestions[i];
-        cant[i] = cantQuestions[i] * levels;
-        totalCant = totalCant + cant[i];
-        i = i + 1;
-    };
+const validateCardsContent = ([data, cantHeader]) => {
+    const formulario = document.getElementById("firstForm");
+    let form
 
-    let cantCards = cantQuestions.length;
+    $.ajax({
+        dataType: "json",
+        url: "api/v1/formulario",
+        success: function (result) {
+            form = result.formulario;
+            for (let i = 0; i < form.length; i++) {
+                dierick[i] = form[i].questions.length
+                cantQuestionsTotal += dierick[i];
+            };
+            totalCantCheckBox = cantQuestionsTotal * 5;
+        }
+    });
 
-    form.addEventListener('submit', (e) => {
+    formulario.addEventListener('submit', (e) => {
         e.preventDefault();
+
         let tasks = e.target.elements;
         let k = 0;
         let task = []
-        for (let j = 0; j < totalCant; j++) {
+
+        for (let j = 0; j < totalCantCheckBox; j++) {
             if (tasks[j].checked == true) {
                 task[k] = [tasks[j].value, tasks[j].id];
                 k = k + 1;
             };
         };
 
-        if (task.length < cantQuestionsTotal) {
-            console.log("Debe rellenar tod el formulario");
-        } else {
-            console.log("Enviado exitosamente");
-        };
-        console.log(cantQuestionsTotal)
 
+        if (task.length < cantQuestionsTotal) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Ha ocurrido un error, por favor responder a todas las preguntas del formulario!',
+                timer: 1500
+                //footer: '<a href="">Why do I have this issue?</a>'
+            })
+        } else {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Your work has been saved',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        };
     });
+    
 };
 
-validateCardsContent(dimensions);
+validateCardsContent([dimensions, columnHeader]);
