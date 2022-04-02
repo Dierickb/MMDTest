@@ -3,10 +3,12 @@ var router = express.Router();
 
 const {
     getIndex,
-    getTest,
+    getOurTest,
+    getMinticTest,
 } = require('./routes');
 
 router.get('/', getIndex);
-router.get('/StartTest', getTest);
+router.get('/OurTest', getOurTest);
+router.get('/MinTicTest', getMinticTest);
 
 module.exports = router;

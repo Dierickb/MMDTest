@@ -1,7 +1,7 @@
-var Formulario = require('../../models/formulario');
+var OurFormulario = require('../../models/ourFormulario');
 
 exports.formulario_list = function(req, res){
     res.status(200).json({
-        formulario: Formulario.allForm
+        formulario: OurFormulario.allForm
     });
 };

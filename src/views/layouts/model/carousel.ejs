@@ -12,12 +12,12 @@
                 <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-touch="false"
                     data-bs-interval="false">
                     <div class="carousel-indicators nmg-b" id="carouselIndicators">
-                        <%- include('./indicatorsCarousel') %>
+                        <%- include('./indicatorsCarousel') %>                        
                     </div>
 
                     <form id="firstForm" action="">
                         <div class="carousel-inner" id="carouselItem">
-                            <%- include('./contentCarousel') %>
+                            <%- include('./contentCarousel') %>                            
                         </div>
                     </form>
                     
@@ -37,7 +37,11 @@
                     <div class="card nr-t nmg-t chg-b">
                         <button  type="submit" form="firstForm" 
                             class="btn btn-primary">
-                            Enviar Test Uninorte
+                            <% if (url === "/MinTicTest" ) { %> 
+                                Enviar Test
+                            <% } else { %> 
+                                Siguiente Test
+                            <% } %>
                         </button>
                     </div>
                 </div>

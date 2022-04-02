@@ -1,56 +1,10 @@
-const questions = {
-    PersonalAndCulture: ["Dierick1 asdadasd",
-        "DBNiebles",
-        "sdadadadad",
-        "adasdadadfsafa",
-        "adsadasadadad",
-        "adadadadasdfasfas",
-        "adadadadadadsa",
-        "asdadasdasa",
-        "asdasdasdas"],
-    Estrategy: ["Dierick2 asdadasd",
-        "DBNiebles",
-        "sdadadadad",
-        "adasdadadfsafa",
-        "adsadasadadad",
-        "adadadadasdfasfas",
-        "adadadadadadsa",
-        "asdadasdasa",
-        "asdasdasdas"],
-    OrganizationAndStructure: ["Dierick3 asdadasd",
-        "DBNiebles",
-        "sdadadadad",
-        "adasdadadfsafa",
-        "adsadasadadad",
-        "adadadadasdfasfas",
-        "adadadadadadsa",
-        "asdadasdasa",
-        "asdasdasdas"],
-    Process: ["Dierick4 asdadasd",
-        "DBNiebles",
-        "sdadadadad",
-        "adasdadadfsafa",
-        "adsadasadadad",
-        "adadadadasdfasfas",
-        "adadadadadadsa",
-        "asdadasdasa",
-        "asdasdasdas", "Dierick"],
-};
-
-const dimensions = {
-    PersonalAndCulture: ["persAndCultDimens", "Personal y Cultura", "pc", questions.PersonalAndCulture],
-    Estrategy: ["estrategiaDimens", "Estrategia", "estr", questions.Estrategy],
-    OrganizationAndStructure: ["orgAndEstraDimens", "Organización y Estructura", "orgStr", questions.OrganizationAndStructure],
-    Process: ["processDimens", "Procesos", "prcs", questions.Process],
-};
-
-const columnHeader = ["#", "Preguntas", "1", "2", "3", "4", "5"];
+const res = require("express/lib/response");
 
 let dierick = [];
 let cantQuestionsTotal = 0;
 let totalCantCheckBox = 0;
 
-const validateCardsContent = ([data, cantHeader]) => {
+const validateCardsContent = () => {
     const formulario = document.getElementById("firstForm");
     let form
 
@@ -99,8 +53,11 @@ const validateCardsContent = ([data, cantHeader]) => {
                 timer: 1500
             })
         };
+
+        res.redirect("/MinTicTest");
+
     });
     
 };
 
-validateCardsContent([dimensions, columnHeader]);
+validateCardsContent();
