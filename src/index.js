@@ -33,9 +33,11 @@ app.use(express.json());
 
 //Routes
 const indexRouter = require('./routes/index');
-const formularioAPIRouter = require('./routes/api/formulario');
+const ourFormAPIRouter = require('./routes/api/ourTestAPI');
+const minTicFormAPIRouter = require('./routes/api/minTicTestAPI');
 app.use('/',indexRouter);
-app.use('/api/v1/formulario',formularioAPIRouter);
+app.use('/api/v1/ourForm',ourFormAPIRouter);
+app.use('/api/v1/minTicForm',minTicFormAPIRouter);
 
 //Public
 app.use(express.static(path.join(__dirname, "public")));

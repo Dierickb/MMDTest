@@ -3,16 +3,41 @@
         <span class="subheading">Digital transformation</span>
         <h1 class="heading">Digital Maturity Model.</h1>
         <div class="d-grid gap-2 col-6 mx-auto">
-            <button onClick="startTest()" class="btn btn-primary testButton" type="button">Start Test</button>
+            <button class="btn btn-primary testButton" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">Start Test</button>
+        </div>
+
+        <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+            <div class="offcanvas-header">
+                <h5 id="offcanvasTopLabel">Datos Iniciales</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <form id="formHome" action="">
+                    <div class="mb-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Empresa</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <select id="formHomeSelect" class="form-select" aria-label="Default select example">
+                            <option selected>Seleccione el departamento</option>
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" form="formHome" class="btn btn-primary">Submit</button>
+                    </div>
+
+                </form>
+            </div>
         </div>
     </div>
     <figure class="ilustration">
         <img class="imgHome" src="/images/2.jpg" alt="imagen">
-    </figure> 
+    </figure>
 </div>
 
-<script>
-    const startTest = () => {
-        window.location.href='/OurTest';   
-    };
-</script>
+<script src="/js/startTest.js"></script>
