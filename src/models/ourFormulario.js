@@ -8,7 +8,7 @@ var OurFormulario = function (idDimensions, idButtonsDim, dimensions, questions)
 OurFormulario.prototype.toString = function () {
     return 'columnHeader: ' + this.columnHeader + " | dimensions: " + this.dimensions;
 };
-
+//hola
 OurFormulario.allForm = [];
 
 OurFormulario.add = function (aForm) {
