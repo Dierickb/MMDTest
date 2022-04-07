@@ -14,7 +14,7 @@ const ourForm = () => {
         dataType: "json",
         url: "api/v1/ourForm",
         success: function (result) {
-            form = result.formulario;
+            let form = result.ourFormulario;
             for (let i = 0; i < form.length; i++) {
                 dierick[i] = form[i].questions.length
                 cantQuestionsTotal += dierick[i];
@@ -29,7 +29,7 @@ const MinTicForm = () => {
         dataType: "json",
         url: "api/v1/minTicForm",
         success: function (result) {
-            form = result.formulario;
+            let form = result.minTicFormulario;
             for (let i = 0; i < form.length; i++) {
                 dierick[i] = form[i].questions.length
                 cantQuestionsTotal += dierick[i];

@@ -202,6 +202,21 @@ for (let i of statesArr) {
     formHomeSelect.appendChild(option);
 };
 
+const postIndex = (info) => {
+    console.log("DIERICK");
+    async () => {
+        const sendStartTest = await fetch('/', {
+            method: 'POST',
+            body: info
+        });
+
+        const content = await sendStartTest.json();
+        console.log(content)
+    }
+
+    //window.location.href = '/OurTest';
+};
+
 const formHomeSubmit = () => {
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
@@ -224,7 +239,6 @@ const formHomeSubmit = () => {
             department: tasks[1].value
         };
 
-        console.log(task)
         if (task.name === '' && task.department === 'Seleccione el departamento') {
             Swal.fire({
                 icon: 'error',
@@ -243,7 +257,7 @@ const formHomeSubmit = () => {
 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '/OurTest';
+                    postIndex(task);
                 } else if (
                     // Read more about handling dismissals below 
                     result.dismiss === Swal.DismissReason.cancel
