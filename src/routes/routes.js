@@ -5,37 +5,91 @@ const columnHeader = ["#", "Preguntas", "1", "2", "3", "4", "5"];
 const OurFormulario = require("../models/ourFormulario");
 const ourFormulario = Object.values(OurFormulario)[0];
 
-const getIndex = (req, res, next) => {
-    res.render("index", { title: "MMD Test", });
+const getIndex = (req, res) => {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+        req.session.busisnessName = '';
+        req.session.department = 'ddd';
+        res.render("index", { title: "MMD Test", });
+    } else {
+        console.error(e);
+    }
 };
 const postIndex = (req, res) => {
     const newLink = req.body;
+    console.log("");
+    console.log(newLink);
+    console.log("");
+    req.session.busisnessName = newLink.busisnessName;
+    req.session.department = newLink.department;
+    res.status(200).redirect('/OurTest')
+};
+
+const getOurTest = (req, res) => {
+    const url = req.url;
     const errors = validationResult(req);
-    console.log("")
-    console.log(newLink)
-    console.log("")
+
+    if (errors.isEmpty()) {
+        try {
+            if (req.session.busisnessName === '' || req.session.department === 'Seleccione el departamento') {
+                res.redirect('/')
+            } else {
+                res.render("layouts/model/carousel",
+                    {
+                        url: url,
+                        title: "Start Test",
+                        formulario: ourFormulario,
+                        columnHeader: columnHeader,
+                    });
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    } else {
+        res.redirect('/')
+    };
 };
 
-const getOurTest = (req, res, next) => {
-    const url = req.url;
-    res.render("layouts/model/carousel",
-        {
-            url: url,
-            title: "Start Test",
-            formulario: ourFormulario,
-            columnHeader: columnHeader,
-        });
+const postOurTest = (req, res) => {
+    const newLink = req.body;
+    if (newLink.lenght !== 0) {
+        req.session.ourTestFull = true;
+        console.log('');
+        console.log(newLink);
+        console.log('');
+    };
 };
 
-const getMinticTest = (req, res, next) => {
+const getMinticTest = (req, res) => {
     const url = req.url;
-    res.render("layouts/model/carousel",
-        {
-            url: url,
-            title: "Start MinTicTest",
-            columnHeader: columnHeader,
-            formulario: ourFormulario,
-        });
+    const errors = validationResult(req);
+
+    if (errors.isEmpty()) {
+        try {
+
+            if (req.session.ourTestFull = true) {
+                res.render("layouts/model/carousel",
+                    {
+                        url: url,
+                        title: "Start MinTicTest",
+                        columnHeader: columnHeader,
+                        formulario: ourFormulario,
+                    });
+            }
+
+        } catch (e) {
+            console.log(e);
+        }
+
+    } else {
+        res.redirect('/OurTest')
+    };
+};
+const postMinTicTest = (req, res) => {
+    const newLink = req.body;
+    console.log('');
+    console.log(newLink);
+    console.log('');
 };
 
 module.exports = {
@@ -43,5 +97,7 @@ module.exports = {
     getIndex,
     postIndex,
     getOurTest,
+    postOurTest,
     getMinticTest,
+    postMinTicTest
 };

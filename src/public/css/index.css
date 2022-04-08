@@ -39,8 +39,12 @@ body {
   width: 70vw;
   max-width: 700px;
   margin: auto;
-  height: 30vh;
+  height: 38vh;
   border-radius: 9px;
+}
+
+#formControl {
+  text-transform: uppercase;
 }
 
 @media (max-width: 1300px) {

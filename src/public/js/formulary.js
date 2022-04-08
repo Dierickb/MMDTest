@@ -9,6 +9,18 @@ let dierick = [];
 let cantQuestionsTotal = 0;
 let totalCantCheckBox = 0;
 
+const postDatos = async (url, data) => {
+    let json = JSON.stringify(data);
+    return await fetch(url, {
+        method: 'POST',
+        body: json,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+
+};
+
 const ourForm = () => {
     $.ajax({
         dataType: "json",
@@ -39,10 +51,12 @@ const MinTicForm = () => {
     });
 };
 
-const redirect = (nextUrl) => {
-    if (nextUrl === "ourForm") {
-        window.location.assign("http://localhost/MinTicTest");
-        console.log(nextUrl)
+const redirect = async (nextUrl, data) => {
+    let result = await postDatos(nextUrl, data);
+    if (nextUrl === "/ourForm") {
+        
+        console.log(result);
+        window.location.href = "/MinTicTest";
     };
 };
 
@@ -52,17 +66,17 @@ const validateCardsContent = () => {
     let url;
 
     if (URLactual === "http://localhost/OurTest") {
-        url = "ourForm"
+        url = "/OurTest"
         ourForm();
     };
     if (URLactual === "http://localhost/MinTicTest") {
-        url = "minTicForm"
+        url = "/MinTicTest"
         MinTicForm();
     };
 
-    formulario.addEventListener('submit', (e) => {
+    formulario.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         let tasks = e.target.elements;
         let k = 0;
         let task = []
@@ -73,6 +87,7 @@ const validateCardsContent = () => {
                 k = k + 1;
             };
         };
+
         if (task.length < cantQuestionsTotal) {
             Swal.fire({
                 icon: 'warning',
@@ -80,8 +95,9 @@ const validateCardsContent = () => {
                 text: 'Ha ocurrido un error, por favor responder a todas las preguntas del formulario!',
                 timer: 1500,
             });
+            
         } else {
-            swalWithBootstrapButtons.fire({
+            let result = await swalWithBootstrapButtons.fire({
                 title: 'Está seguro ?',
                 text: "Una vez enviado el test, no podrá modificarlo",
                 icon: 'warning',
@@ -90,20 +106,19 @@ const validateCardsContent = () => {
                 cancelButtonText: 'No, cancel!',
                 reverseButtons: true,
 
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    redirect(url);
-                } else if (
-                    /* Read more about handling dismissals below */
-                    result.dismiss === Swal.DismissReason.cancel
-                ) {
-                    swalWithBootstrapButtons.fire(
-                        'Envio cancelado',
-                        'El formulario no ha sido enviado',
-                        'error'
-                    )
-                };
-            });
+            })
+
+            if (result.isConfirmed) {
+                redirect(url, task);
+            } else if (
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Envio cancelado',
+                    'El formulario no ha sido enviado',
+                    'error'
+                )                
+            };
         };
     });
 

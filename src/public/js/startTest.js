@@ -202,19 +202,16 @@ for (let i of statesArr) {
     formHomeSelect.appendChild(option);
 };
 
-const postIndex = (info) => {
-    console.log("DIERICK");
-    async () => {
-        const sendStartTest = await fetch('/', {
-            method: 'POST',
-            body: info
-        });
-
-        const content = await sendStartTest.json();
-        console.log(content)
-    }
-
-    //window.location.href = '/OurTest';
+const postIndex = async (url, data) => {
+    let json = JSON.stringify(data);
+    return await fetch(url, {
+        method: 'POST',
+        body: json,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    
 };
 
 const formHomeSubmit = () => {
@@ -226,49 +223,30 @@ const formHomeSubmit = () => {
         buttonsStyling: false
     });
     const buttonId = document.getElementById('formHome')
-    buttonId.addEventListener('submit', (e) => {
+    buttonId.addEventListener('submit', async (e) => {
         let task = {
             name: '',
-            department: ''
+            department: '',
+            sector: ''
         };
         e.preventDefault();
 
         let tasks = e.target.elements;
         task = {
-            name: tasks[0].value,
-            department: tasks[1].value
+            busisnessName: tasks[0].value.toUpperCase(),
+            department: tasks[1].value,
+            sector: tasks[2].value
         };
 
-        if (task.name === '' && task.department === 'Seleccione el departamento') {
+        if (task.busisnessName === '' || task.department === 'Seleccione el departamento') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Debe colocar el nombre y selecconar el departamento en el que se encuentra la empresa',
             });
         } else {
-            swalWithBootstrapButtons.fire({
-                title: 'Está seguro ?',
-                text: "Una vez enviado, no podrá modificarlo",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ok',
-                cancelButtonText: 'No, cancel!',
-                reverseButtons: true,
-
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    postIndex(task);
-                } else if (
-                    // Read more about handling dismissals below 
-                    result.dismiss === Swal.DismissReason.cancel
-                ) {
-                    swalWithBootstrapButtons.fire(
-                        'Envio cancelado',
-                        'El formulario no ha sido enviado',
-                        'error'
-                    )
-                };
-            });
+            let res = await postIndex('/',task);
+            window.location.href = res.url;
         };
 
     });

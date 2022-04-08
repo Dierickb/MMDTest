@@ -18,13 +18,24 @@
                     <div class="mb-3">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default" name="businessName">Empresa</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input"
+                            <input id="formControl" type="text" class="form-control" aria-label="Sizing example input"
                                 aria-describedby="inputGroup-sizing-default">
                         </div>
                     </div>
                     <div class="mb-3">
-                        <select id="formHomeSelect" class="form-select" name="department" aria-label="Default select example">
+                        <select id="formHomeSelect" class="form-select" name="department" aria-label="Default select example"
+                        onblur="aMayusculas(this.value,this.id)">
                             <option selected>Seleccione el departamento</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <select id="formHomeSelect-Sector" class="form-select" name="sector" aria-label="Default select example">
+                            <option selected>Seleccione el sector de la empresa </option>
+                            <option >Sector 1 </option>
+                            <option >Sector 2</option>
+                            <option >Sector 3 </option>
+                            <option >Sectoe 5 </option>
+                            <option >Sectoe 6 </option>
                         </select>
                     </div>
                     <div class="d-grid gap-2">
