@@ -194,14 +194,6 @@ const statesArr = [
 ];
 const formHomeSelect = document.getElementById("formHomeSelect");
 
-for (let i of statesArr) {
-    const option = document.createElement('option');
-    option.setAttribute('value', i.name)
-    const state = document.createTextNode(i.name);
-    option.appendChild(state)
-    formHomeSelect.appendChild(option);
-};
-
 const postIndex = async (url, data) => {
     let json = JSON.stringify(data);
     return await fetch(url, {
@@ -215,18 +207,10 @@ const postIndex = async (url, data) => {
 };
 
 const formHomeSubmit = () => {
-    const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-            confirmButton: 'btn btn-success',
-            cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-    });
     const buttonId = document.getElementById('formHome')
     buttonId.addEventListener('submit', async (e) => {
         let task = {
             name: '',
-            department: '',
             sector: ''
         };
         e.preventDefault();
@@ -234,11 +218,10 @@ const formHomeSubmit = () => {
         let tasks = e.target.elements;
         task = {
             busisnessName: tasks[0].value.toUpperCase(),
-            department: tasks[1].value,
-            sector: tasks[2].value
+            sector: tasks[1].value
         };
 
-        if (task.busisnessName === '' || task.department === 'Seleccione el departamento') {
+        if (task.busisnessName === '' ) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',

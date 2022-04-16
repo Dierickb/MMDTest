@@ -19,3 +19,4 @@ router.post('/OurTest', postOurTest);
 router.post('/MinTicTest', postMinTicTest);
 
 module.exports = router;
+

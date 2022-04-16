@@ -33,6 +33,7 @@ body {
   overflow: hidden;
   width: 55vw;
   margin: 0 0 0 1vw;
+  text-align-last: center;
 }
 .offcanvas-top {
   position: fixed;
@@ -41,6 +42,10 @@ body {
   margin: auto;
   height: 38vh;
   border-radius: 9px;
+}
+.imgHome {
+  align-items: center;
+  width: 40vw;
 }
 
 #formControl {
