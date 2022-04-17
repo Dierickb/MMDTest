@@ -31,7 +31,6 @@ const apiForm = (myUrl) => {
                 cantQuestionsTotal += dierick[i];
             };
             totalCantCheckBox = cantQuestionsTotal * 5;
-            console.log(myUrl)
         }
     });
 };
