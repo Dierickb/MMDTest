@@ -4,7 +4,10 @@ const { check, validationResult } = require("express-validator");
 const columnHeader = ["#", "Preguntas", "1", "2", "3", "4", "5"];
 const OurFormulario = require("../models/ourFormulario");
 const ourFormulario = Object.values(OurFormulario)[0];
-
+const dierick = {
+    process: "Procesos",
+    habilitador: "Habilitadores"
+}
 const getIndex = (req, res) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
@@ -40,6 +43,7 @@ const getOurTest = (req, res) => {
                         title: "Start Test",
                         formulario: ourFormulario,
                         columnHeader: columnHeader,
+                        process: dierick
                     });
             }
         } catch (e) {

@@ -35,8 +35,8 @@ const indexRouter = require('./routes/index');
 const ourFormAPIRouter = require('./routes/api/ourTestAPI');
 const minTicFormAPIRouter = require('./routes/api/minTicTestAPI');
 app.use('/', indexRouter);
-app.use('/api/v1/ourForm', ourFormAPIRouter);
-app.use('/api/v1/minTicForm', minTicFormAPIRouter);
+app.use('/api/v1/OurTest', ourFormAPIRouter);
+app.use('/api/v1/MinTicTest', minTicFormAPIRouter);
 
 //Public
 app.use(express.static(path.join(__dirname, "public")));

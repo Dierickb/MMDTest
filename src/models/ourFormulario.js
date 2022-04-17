@@ -36,37 +36,21 @@ var a = new OurFormulario('persAndCultDimens', 'pc', 'Personal y Cultura', ["Die
     "DBNiebles",
     "sdadadadad",
     "adasdadadfsafa",
-    "adsadasadadad",
-    "adadadadasdfasfas",
-    "adadadadadadsa",
-    "asdadasdasa",
     "asdasdasdas"]);
 var b = new OurFormulario('estrategiaDimens', 'estr', 'Estrategia', ["Dierick2 asdadasd",
 "DBNiebles",
 "sdadadadad",
 "adasdadadfsafa",
-"adsadasadadad",
-"adadadadasdfasfas",
-"adadadadadadsa",
-"asdadasdasa",
 "asdasdasdas"]);
 var c = new OurFormulario('orgAndEstraDimens', 'orgStr', 'Organización y Estructura', ["Dierick3 asdadasd",
 "DBNiebles",
 "sdadadadad",
 "adasdadadfsafa",
-"adsadasadadad",
-"adadadadasdfasfas",
-"adadadadadadsa",
-"asdadasdasa",
 "asdasdasdas"]);
 var d = new OurFormulario('processDimens', 'prcs', 'Procesos', ["Dierick4 asdadasd",
 "DBNiebles",
 "sdadadadad",
 "adasdadadfsafa",
-"adsadasadadad",
-"adadadadasdfasfas",
-"adadadadadadsa",
-"asdadasdasa",
 "asdasdasdas", "Dierick"]);
 
 OurFormulario.add(a);
