@@ -14,11 +14,14 @@
                         <div class="numbers" id="numPos">
                             <%= element.dimensions %>
                         </div>
-                        <div class="cardName">
-
+                        <div class="cardName">    
+                            <% if (element.dimensions === "Procesos" ) { %> 
+                                <%=  process.process %> 
+                            <% } else { %> 
+                                <%= process.habilitador %>
+                            <% } %> 
                         </div>
                     </div>
-
 
                     <div class="cardContent" id="cardContent-<%= i %> ">
                         <table class="table">

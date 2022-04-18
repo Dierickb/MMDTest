@@ -36,37 +36,21 @@ var a = new MinTicForm('persAndCultDimens', 'pc', 'Personal y Cultura', ["Dieric
     "DBNiebles",
     "sdadadadad",
     "adasdadadfsafa",
-    "adsadasadadad",
-    "adadadadasdfasfas",
-    "adadadadadadsa",
-    "asdadasdasa",
     "asdasdasdas"]);
 var b = new MinTicForm('estrategiaDimens', 'estr', 'Estrategia', ["Dierick2 asdadasd",
     "DBNiebles",
     "sdadadadad",
     "adasdadadfsafa",
-    "adsadasadadad",
-    "adadadadasdfasfas",
-    "adadadadadadsa",
-    "asdadasdasa",
     "asdasdasdas"]);
 var c = new MinTicForm('orgAndEstraDimens', 'orgStr', 'Organización y Estructura', ["Dierick3 asdadasd",
     "DBNiebles",
     "sdadadadad",
     "adasdadadfsafa",
-    "adsadasadadad",
-    "adadadadasdfasfas",
-    "adadadadadadsa",
-    "asdadasdasa",
     "asdasdasdas"]);
 var d = new MinTicForm('processDimens', 'prcs', 'Procesos', ["Dierick4 asdadasd",
     "DBNiebles",
     "sdadadadad",
     "adasdadadfsafa",
-    "adsadasadadad",
-    "adadadadasdfasfas",
-    "adadadadadadsa",
-    "asdadasdasa",
     "asdasdasdas", "Dierick"]);
 
 MinTicForm.add(a);

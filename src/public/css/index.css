@@ -33,14 +33,23 @@ body {
   overflow: hidden;
   width: 55vw;
   margin: 0 0 0 1vw;
+  text-align-last: center;
 }
 .offcanvas-top {
   position: fixed;
   width: 70vw;
   max-width: 700px;
   margin: auto;
-  height: 30vh;
+  height: 38vh;
   border-radius: 9px;
+}
+.imgHome {
+  align-items: center;
+  width: 40vw;
+}
+
+#formControl {
+  text-transform: uppercase;
 }
 
 @media (max-width: 1300px) {

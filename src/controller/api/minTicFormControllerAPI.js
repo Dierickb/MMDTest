@@ -5,3 +5,4 @@ exports.formulario_list = function(req, res){
         minTicFormulario: MinTicForm.allForm
     });
 };
+
