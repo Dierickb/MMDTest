@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <%- include('../../layouts/head') %>        
+    </head>
+    
+    <body>
+        <%- include('../../layouts/navBar') %>
+        <% if (selected) { %>
+            <%- include('./carousel') %>
+        <% } else {%>
+            <%- include('./prevForm') %>
+        <% } %>       
+        
+    </body>
+
+</html>

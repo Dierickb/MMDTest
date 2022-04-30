@@ -14,11 +14,11 @@
                         <div class="numbers" id="numPos">
                             <%= element.dimensions %>
                         </div>
-                        <div class="cardName">    
-                            <% if (element.dimensions === "Procesos" ) { %> 
-                                <%=  process.process %> 
+                        <div class="cardName">   
+                            <% if (element.prcsHabl === true) { %>
+                                Proceso
                             <% } else { %> 
-                                <%= process.habilitador %>
+                                Habilitador
                             <% } %> 
                         </div>
                     </div>

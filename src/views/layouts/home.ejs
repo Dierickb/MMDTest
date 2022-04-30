@@ -24,12 +24,10 @@
                     </div>
                     <div class="mb-3">
                         <select id="formHomeSelect-Sector" class="form-select" name="sector" aria-label="Default select example">
-                            <option selected>Seleccione el sector de la empresa </option>
-                            <option >Sector 1 </option>
-                            <option >Sector 2</option>
-                            <option >Sector 3 </option>
-                            <option >Sectoe 5 </option>
-                            <option >Sectoe 6 </option>
+                            <option selected>Sector empresarial </option>                          
+                            <% for ( let i=0; i<sector.length; i++) { %>
+                                <option value=<%= idSector[i] %> > <%= sector[i] %> </option>
+                            <% } %>
                         </select>
                     </div>
                     <div class="d-grid gap-2">

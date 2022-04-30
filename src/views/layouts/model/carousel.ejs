@@ -1,53 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-    
-    <%- include('../../layouts/head') %>        
-    </head>
-    
-    <body>
-        <%- include('../../layouts/navBar') %>
-        <div class="bodyContent">
-            <div class="carouselContainer">
-                
-                <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-touch="false"
-                    data-bs-interval="false">
-                    <div class="carousel-indicators nmg-b" id="carouselIndicators">
-                        <%- include('./indicatorsCarousel') %>                        
-                    </div>
+<div class="bodyContent">
+    <div class="carouselContainer">
+        
+        <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-touch="false"
+            data-bs-interval="false">
+            <div class="carousel-indicators nmg-b" id="carouselIndicators">
+                <%- include('./indicatorsCarousel') %>                        
+            </div>
 
-                    <form id="firstForm" action="">
-                        <div class="carousel-inner" id="carouselItem">
-                            <%- include('./contentCarousel') %>                            
-                        </div>
-                    </form>
-                    
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
-                        data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark"
-                        data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+            <form id="firstForm" action="">
+                <div class="carousel-inner" id="carouselItem">
+                    <%- include('./contentCarousel') %>                            
                 </div>
-                
-                <div class="cardBox np-t">
-                    <div class="card nr-t nmg-t chg-b">
-                        <button  type="submit" form="firstForm" 
-                            class="btn btn-primary">
-                            <% if (url === "/MinTicTest" ) { %> 
-                                Enviar Test
-                            <% } else { %> 
-                                Siguiente Test
-                            <% } %>
-                        </button>
-                    </div>
-                </div>
+            </form>
+            
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        
+        <div class="cardBox np-t">
+            <div class="card nr-t nmg-t chg-b">
+                <button  type="submit" form="firstForm" 
+                    class="btn btn-primary">
+                    <% if (url === "/MinTicTest" ) { %> 
+                        Enviar Test
+                    <% } else { %> 
+                        Siguiente Test
+                    <% } %>
+                </button>
             </div>
         </div>
-        <script src="/js/formulary.js"></script>
-    </body>
-
-</html>
+    </div>
+</div>
+<script src="/js/formulary.js"></script>

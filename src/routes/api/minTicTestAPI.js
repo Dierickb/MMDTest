@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var formularioController = require('../../controller/api/minTicFormControllerAPI');
+var minTicFormularioController = require('../../controller/api/minTicFormControllerAPI');
 
-router.get('/', formularioController.formulario_list);
+router.get('/', minTicFormularioController.minTicFormulario_list);
 
 module.exports = router;

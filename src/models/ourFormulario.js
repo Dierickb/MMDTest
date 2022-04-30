@@ -1,8 +1,9 @@
-var OurFormulario = function (idDimensions, idButtonsDim, dimensions, questions) {
+var OurFormulario = function (idDimensions, idButtonsDim, dimensions, questions, prcsHabl) {
     this.dimensions = dimensions;
     this.idButtonsDim = idButtonsDim;
     this.questions = questions;
     this.idDimensions = idDimensions;
+    this.prcsHabl = prcsHabl;
 }
 
 OurFormulario.prototype.toString = function () {
@@ -25,33 +26,35 @@ OurFormulario.finById = function (aFormId) {
 
 OurFormulario.removeById = function (aBiciId) {
     for (let i = 0; i < OurFormulario.allForm.length; i++) {
-        if (OurFormulario.allForm[i].id == aFormId) {
+        if (OurFormulario.allForm[i].id == aBiciId) {
             OurFormulario.allForm.splice(i, 1);
             break;
         };
     };
 };
 
+// Si es True es un proceso si es False es un habilitador
+
 var a = new OurFormulario('persAndCultDimens', 'pc', 'Personal y Cultura', ["Dierick1 asdadasd",
     "DBNiebles",
     "sdadadadad",
     "adasdadadfsafa",
-    "asdasdasdas"]);
+    "asdasdasdas"], true);
 var b = new OurFormulario('estrategiaDimens', 'estr', 'Estrategia', ["Dierick2 asdadasd",
 "DBNiebles",
 "sdadadadad",
 "adasdadadfsafa",
-"asdasdasdas"]);
+"asdasdasdas"], true);
 var c = new OurFormulario('orgAndEstraDimens', 'orgStr', 'Organización y Estructura', ["Dierick3 asdadasd",
 "DBNiebles",
 "sdadadadad",
 "adasdadadfsafa",
-"asdasdasdas"]);
+"asdasdasdas"], true);
 var d = new OurFormulario('processDimens', 'prcs', 'Procesos', ["Dierick4 asdadasd",
 "DBNiebles",
 "sdadadadad",
 "adasdadadfsafa",
-"asdasdasdas", "Dierick"]);
+"asdasdasdas", "Dierick"], true);
 
 OurFormulario.add(a);
 OurFormulario.add(b);

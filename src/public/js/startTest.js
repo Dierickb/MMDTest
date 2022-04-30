@@ -12,14 +12,14 @@ const postIndex = async (url, data) => {
 };
 
 const advices = async (task) => {
-    if (task.busisnessName === '' ) {
+    if (task.busisnessName === '') {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: 'Debe colocar el nombre y selecconar el departamento en el que se encuentra la empresa',
         });
     } else {
-        let res = await postIndex('/',task);
+        let res = await postIndex('/', task);
         window.location.href = res.url;
     };
 }
@@ -30,8 +30,8 @@ const formHomeSubmit = () => {
         e.preventDefault();
         let tasks = e.target.elements;
 
-        let task = { name: '', sector: ''};
-        
+        let task = { name: '', sector: '' };
+
         task = {
             busisnessName: tasks[0].value.toUpperCase(),
             sector: tasks[1].value

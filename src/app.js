@@ -34,9 +34,16 @@ app.use(express.json());
 const indexRouter = require('./routes/index');
 const ourFormAPIRouter = require('./routes/api/ourTestAPI');
 const minTicFormAPIRouter = require('./routes/api/minTicTestAPI');
+const economicSector = require('./routes/api/ecnonomicSectorsAPI');
+const filterBySector = require('./routes/api/filterBySector');
+
 app.use('/', indexRouter);
-app.use('/api/v1/OurTest', ourFormAPIRouter);
-app.use('/api/v1/MinTicTest', minTicFormAPIRouter);
+
+app.use('/api', ourFormAPIRouter);
+app.use('/api', minTicFormAPIRouter);
+app.use('/api', economicSector);
+app.use('/api', filterBySector)
+
 
 //Public
 app.use(express.static(path.join(__dirname, "public")));

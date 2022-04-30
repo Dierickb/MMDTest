@@ -1,8 +1,9 @@
-var MinTicForm = function (idDimensions, idButtonsDim, dimensions, questions) {
+var MinTicForm = function (idDimensions, idButtonsDim, dimensions, questions, prcsHabl) {
     this.dimensions = dimensions;
     this.idButtonsDim = idButtonsDim;
     this.questions = questions;
     this.idDimensions = idDimensions;
+    this.prcsHabl = prcsHabl;
 }
 
 MinTicForm.prototype.toString = function () {
@@ -36,22 +37,22 @@ var a = new MinTicForm('persAndCultDimens', 'pc', 'Personal y Cultura', ["Dieric
     "DBNiebles",
     "sdadadadad",
     "adasdadadfsafa",
-    "asdasdasdas"]);
+    "asdasdasdas"], true);
 var b = new MinTicForm('estrategiaDimens', 'estr', 'Estrategia', ["Dierick2 asdadasd",
     "DBNiebles",
     "sdadadadad",
     "adasdadadfsafa",
-    "asdasdasdas"]);
+    "asdasdasdas"], true);
 var c = new MinTicForm('orgAndEstraDimens', 'orgStr', 'Organización y Estructura', ["Dierick3 asdadasd",
     "DBNiebles",
     "sdadadadad",
     "adasdadadfsafa",
-    "asdasdasdas"]);
+    "asdasdasdas"], true);
 var d = new MinTicForm('processDimens', 'prcs', 'Procesos', ["Dierick4 asdadasd",
     "DBNiebles",
     "sdadadadad",
     "adasdadadfsafa",
-    "asdasdasdas", "Dierick"]);
+    "asdasdasdas", "Dierick"], true);
 
 MinTicForm.add(a);
 MinTicForm.add(b);

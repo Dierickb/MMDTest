@@ -75,11 +75,7 @@ const redirect = (nextUrl, data) => {
 };
 
 const resIsConfirmed = (results, url, task) => {
-    if (results.isConfirmed) {
-        redirect(url, task);
-    } else if (
-        results.dismiss === Swal.DismissReason.cancel
-    ) {
+    if (results.dismiss === Swal.DismissReason.cancel) { 
         swalWithBootstrapButtons.fire(
             'Envio cancelado',
             'El formulario no ha sido enviado',
