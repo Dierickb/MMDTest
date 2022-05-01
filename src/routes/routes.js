@@ -1,95 +1,128 @@
 const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
-const columnHeader = ["#", "Preguntas", "1", "2", "3", "4", "5"];
+const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
 const OurFormulario = require("../models/ourFormulario");
 const ourFormulario = Object.values(OurFormulario)[0];
 const Sectors = require('../models/economicSector')
-const FilterBySector = require('../models/filerBySector')
+const FilterBySector = require('../models/filerBySector');
+const ProcessSelected = require("../models/processSelected");
+let selected = false;
 
-const connection = require('../accessDB')
-const dierick = {
-    process: "Procesos",
-    habilitador: "Habilitadores"
-}
 const getIndex = (req, res) => {
-    req.session.selected = false
     const errors = validationResult(req);
-    let sector = []; k = 0;
-    let idSector = [];
+    let sector = []; k = 0; let idSector = [];
     for (let value of Sectors.allSectors) {
         sector[k] = value.tipo_empresas;
         idSector[k] = value.id_tipo_empresa;
         k = k + 1;
     }
     if (errors.isEmpty()) {
-        req.session.busisnessName = '';
-        req.session.department = 'ddd';
         res.render("index", { title: "MMD Test", sector: sector, idSector: idSector });
     } else {
         console.error(e);
     }
 };
-const postIndex = (req, res) => {
+const postIndex = async (req, res) => {
     const newLink = req.body;
-    FilterBySector.pullDB(newLink.sector)
+    await FilterBySector.pullDB(newLink.sector);
     req.session.busisnessName = newLink.busisnessName;
-    res.status(200).redirect('/OurTest')
+    req.session.sector = newLink.sector;
+    res.status(200).redirect('/PrevTest')
+
 };
 
 const getOurTest = (req, res) => {
-    const url = req.url;
+
     const errors = validationResult(req);
     if (errors.isEmpty()) {
         try {
-            if (req.session.busisnessName === '' || req.session.department === 'Seleccione el departamento') {
+            if (req.session.busisnessName === '' || req.session.sector === 'Sector empresarial') {
                 res.redirect('/')
             } else {
                 res.render("layouts/model/index",
                     {
-                        url: url,
+                        url: req.url,
                         title: "Start Test",
                         formulario: ourFormulario,
                         columnHeader: columnHeader,
-                        process: dierick,
                         selected: req.session.selected,
                     });
             }
         } catch (e) {
-            console.log(e)
+            throw new Error(e.message)
         }
     } else {
         res.redirect('/')
     };
 };
-
 const postOurTest = (req, res) => {
     const newLink = req.body;
     if (newLink.lenght !== 0) {
         req.session.ourTestFull = true;
-        console.log('');
-        console.log(newLink);
-        console.log('');
     };
 };
+
+const getPrevTest = async (req, res) => {
+    const url = req.url;
+    const columnHeader = ["#", "Proceso", ""];
+    const processBySector = await FilterBySector.allFilterBySector;
+    if (req.session.selected) {        
+        res.status(200).redirect('/MinTicTest')
+    } else {
+        req.session.selected = false
+        res.render("layouts/model/index",
+            {
+                title: "Previus to test",
+                url: url,
+                selected: req.session.selected,
+                process: processBySector,
+                columnHeader: columnHeader,
+            }
+        );
+    }
+}
+const postPrevTest = async (req, res) => {
+    let processSelected = {
+        idSector: FilterBySector.allFilterBySector.sectorId,
+        sector: FilterBySector.allFilterBySector.sector,
+        process: [],
+        processId: req.body,
+        length: req.body.length
+    }
+    const processId = FilterBySector.allFilterBySector.processId;
+    const process = FilterBySector.allFilterBySector.process;
+    
+    let i = 0;
+    processSelected.processId.forEach(element => {
+        processSelected.process[i] = process[processId.indexOf(element)];
+        i=i+1;
+    }); 
+    await ProcessSelected.add(processSelected);
+    console.log(ProcessSelected.allProcessSelected)
+    //req.session.selected = true;
+    selected = true;
+    res.status(200).redirect('/MinTicTest')
+}
 
 const getMinticTest = (req, res) => {
     const url = req.url;
     const errors = validationResult(req);
     if (errors.isEmpty()) {
-        console.log(FilterBySector.allFilterBySector)
-        if (req.session.ourTestFull = true) {
+        if (selected) {
             res.render("layouts/model/index",
                 {
                     url: url,
                     title: "Start MinTicTest",
                     columnHeader: columnHeader,
-                    formulario: ourFormulario,
-                    selected: req.session.selected,
+                    formulario: ProcessSelected.allProcessSelected,
+                    selected: selected,
                 });
+        } else {
+            res.redirect('/PrevTest')
         }
     } else {
-        res.redirect('/OurTest')
+        res.redirect('/')
     };
 };
 const postMinTicTest = (req, res) => {
@@ -106,5 +139,7 @@ module.exports = {
     getOurTest,
     postOurTest,
     getMinticTest,
-    postMinTicTest
+    postMinTicTest,
+    getPrevTest,
+    postPrevTest
 };

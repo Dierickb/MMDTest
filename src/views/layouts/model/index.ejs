@@ -6,10 +6,16 @@
     
     <body>
         <%- include('../../layouts/navBar') %>
-        <% if (selected) { %>
+        <% if (url == '/OurTest') { %>
             <%- include('./carousel') %>
         <% } else {%>
-            <%- include('./prevForm') %>
+
+            <% if (selected) { %>
+                <%- include('./carousel') %>
+            <% } else {%>                
+                <%- include('./prevForm') %>
+            <% } %>  
+            
         <% } %>       
         
     </body>
