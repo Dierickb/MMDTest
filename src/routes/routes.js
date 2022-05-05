@@ -7,6 +7,7 @@ const ourFormulario = Object.values(OurFormulario)[0];
 const Sectors = require('../models/economicSector')
 const FilterBySector = require('../models/filerBySector');
 const ProcessSelected = require("../models/processSelected");
+const AxesByProcess = require("../models/EvaluationAxes");
 let selected = false;
 
 const getIndex = (req, res) => {
@@ -99,13 +100,12 @@ const postPrevTest = async (req, res) => {
         i=i+1;
     }); 
     await ProcessSelected.add(processSelected);
-    console.log(ProcessSelected.allProcessSelected)
     //req.session.selected = true;
     selected = true;
     res.status(200).redirect('/MinTicTest')
 }
 
-const getMinticTest = (req, res) => {
+const getMinticTest = async (req, res) => {
     const url = req.url;
     const errors = validationResult(req);
     if (errors.isEmpty()) {
@@ -118,6 +118,8 @@ const getMinticTest = (req, res) => {
                     formulario: ProcessSelected.allProcessSelected,
                     selected: selected,
                 });
+            const dataDB = await AxesByProcess.pullDB(ProcessSelected.allProcessSelected.processId);
+            AxesByProcess.tagProcess(dataDB)
         } else {
             res.redirect('/PrevTest')
         }
@@ -127,9 +129,6 @@ const getMinticTest = (req, res) => {
 };
 const postMinTicTest = (req, res) => {
     const newLink = req.body;
-    console.log('');
-    console.log(newLink);
-    console.log('');
 };
 
 module.exports = {
