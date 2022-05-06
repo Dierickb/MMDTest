@@ -109,7 +109,7 @@ const postPrevTest = async (req, res) => {
 const getMinticTest = (req, res) => {
     const axesByProcess = AxesByProcess.axesByProcess;
     const url = req.url;
-    const errors = validationResult(req);
+    const errors = validationResult(req);    
     if (errors.isEmpty()) {
         if (selected) {
             res.render("layouts/model/index",
@@ -119,10 +119,10 @@ const getMinticTest = (req, res) => {
                     columnHeader: columnHeader,
                     process: ProcessSelected.allProcessSelected,
                     selected: selected,
-                    axesByProcess: axesByProcess,
+                    axesByProcess: axesByProcess.axesByProcess,
                 });
         } else {
-            res.redirect('/PrevTest')
+            res.redirect('/')
         }
     } else {
         res.redirect('/')
