@@ -1,5 +1,5 @@
 <% active = true; i=0; %> 
-<% for (let j = 0; j < formulario.length; j++) { %>
+<% for (let j = 0; j < process.length; j++) { %>
     
     <% if (active === true ) { %> 
         <div class="carousel-item active">                            
@@ -12,10 +12,10 @@
                 <div class="card nr-b nmg-b">
                     <div class="cardTitle">
                         <div class="numbers" id="numPos">
-                            <%= formulario.process[j] %>
+                            <%= process.process[j] %>
                         </div>
                         <div class="cardName">   
-                            <%= formulario.process[j] %> 
+                            <%= process.process[j] %> 
                         </div>
                     </div>
 
@@ -30,7 +30,7 @@
                                     <% } %> 
                                 </tr>
                             </thead>
-                            <tbody class="dimensionItems" id="<%= formulario.idSector[j] %> ">
+                            <tbody class="dimensionItems" id="<%= process.idSector[j] %> ">
                                 
                             </tbody>
                         </table>                    

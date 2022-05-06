@@ -22,7 +22,7 @@ const checkBoxFunc = (taskss) => {
 };
 
 
-const validateCardsContent = () => {
+const validateCardsContent = async () => {
     const principalProcess = document.getElementById("principalProcess");
 
     principalProcess.addEventListener('submit', async (e) => {
@@ -30,7 +30,7 @@ const validateCardsContent = () => {
 
         const task = checkBoxFunc(e.target.elements)
 
-        postDatos(task)
+        await postDatos(task)
         window.location.href = "/MinTicTest";
     });
 };

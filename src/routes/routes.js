@@ -99,13 +99,15 @@ const postPrevTest = async (req, res) => {
         processSelected.process[i] = process[processId.indexOf(element)];
         i=i+1;
     }); 
-    await ProcessSelected.add(processSelected);
+    ProcessSelected.add(processSelected);
+    await AxesByProcess.pullDB(ProcessSelected.allProcessSelected.processId);
     //req.session.selected = true;
     selected = true;
     res.status(200).redirect('/MinTicTest')
 }
 
-const getMinticTest = async (req, res) => {
+const getMinticTest = (req, res) => {
+    const axesByProcess = AxesByProcess.axesByProcess;
     const url = req.url;
     const errors = validationResult(req);
     if (errors.isEmpty()) {
@@ -115,11 +117,10 @@ const getMinticTest = async (req, res) => {
                     url: url,
                     title: "Start MinTicTest",
                     columnHeader: columnHeader,
-                    formulario: ProcessSelected.allProcessSelected,
+                    process: ProcessSelected.allProcessSelected,
                     selected: selected,
+                    axesByProcess: axesByProcess,
                 });
-            const dataDB = await AxesByProcess.pullDB(ProcessSelected.allProcessSelected.processId);
-            AxesByProcess.tagProcess(dataDB)
         } else {
             res.redirect('/PrevTest')
         }

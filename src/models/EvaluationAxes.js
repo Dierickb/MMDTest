@@ -1,6 +1,10 @@
 const connection = require('../accessDB')
 const ProcessSelected = require('./ProcessSelected');
 
+function eliminarDiacriticos(texto) {
+    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g,"");
+}
+
 let AxesByProcess = function (idProcess, process, axes, idSector) {
     this.idProcess = idProcess;
     this.process = process;
@@ -16,16 +20,62 @@ AxesByProcess.toNumber = function (id) {
     return parseInt(id);
 }
 
+AxesByProcess.axesByProcess = {
+    idSector: 0,
+    sector: "",
+    processId: [],
+    tagProcess: [],
+    axesByProcess: {},
+}
+
+AxesByProcess.add = async function (idProcess, tagProcess, axesByProcess) {
+    AxesByProcess.axesByProcess.idSector = ProcessSelected.allProcessSelected.idSector;
+    AxesByProcess.axesByProcess.sector = ProcessSelected.allProcessSelected.sector;
+    AxesByProcess.axesByProcess.processId = idProcess;
+    AxesByProcess.axesByProcess.tagProcess = tagProcess; 
+    AxesByProcess.axesByProcess.axesByProcess = axesByProcess;
+}
+
 AxesByProcess.createElementsProcess = function (process) {
     return process.replace(/ /g, "_")
 }
 
-AxesByProcess.axesByProcess = {
-    idSector: 0,
-    processId: [],
-    process: [],
-    axesByProcess: {},
-    length: 0
+AxesByProcess.tagProcess = function (data) {
+    let object = ""; let idProcess = [];
+    let tagProcess = []; let j = 0;
+    data.map(element => {
+        if (element.proceso !== object) {
+            object = element.proceso;
+            idProcess[j] = element.id_proceso;
+            tagProcess[j] = AxesByProcess.createElementsProcess(element.proceso); 
+            j = j +1;
+        }
+    });
+
+    return [ tagProcess, idProcess ]
+}
+
+AxesByProcess.arrayToObject = async function ( processData ) {
+    let [ tagProcess,  idProcess ] = AxesByProcess.tagProcess( processData )
+    let j = 0;
+    let axesByProcess = new Object();
+
+    idProcess.map(idArray => {
+        let data = []; let axes = []; let i = 0; 
+        processData.map(element => {
+            if (element.id_proceso === idArray) {
+                data[i] = element.nombre_metodo
+                i = i + 1;
+            }            
+        })      
+
+        tagProcess[j] = tagProcess[j].toLowerCase(); 
+        tagProcess[j] = eliminarDiacriticos(tagProcess[j])
+        axesByProcess[tagProcess[j]] = data;
+        j = j + 1;
+    })
+
+    await AxesByProcess.add(idProcess, tagProcess, axesByProcess);
 }
 
 AxesByProcess.pullDB = async function (idProcesses) {
@@ -51,22 +101,7 @@ AxesByProcess.pullDB = async function (idProcesses) {
             throw e;
         });
 
-    return response
-}
-
-AxesByProcess.tagProcess = function (data) {
-    let object = "";
-    let tagProcess = []; let j = 0;
-    data.map(element => {
-        if (element.proceso !== object) {
-            object = element.proceso;
-            tagProcess[j] = AxesByProcess.createElementsProcess(element.proceso); 
-            j = j +1;
-        }
-    });
-    console.log(data)
-    console.log(tagProcess)
-    return tagProcess
+    await AxesByProcess.arrayToObject(response);
 }
 
 module.exports = AxesByProcess;
