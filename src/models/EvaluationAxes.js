@@ -1,5 +1,4 @@
 const connection = require('../accessDB')
-const ProcessSelected = require('./ProcessSelected');
 
 function eliminarDiacriticos(texto) {
     return texto.normalize('NFD').replace(/[\u0300-\u036f]/g,"");
