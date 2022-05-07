@@ -28,9 +28,9 @@ AxesByProcess.axesByProcess = {
     axesByProcess: {},
 }
 
-AxesByProcess.add = async function (idProcess, tagProcess, axesByProcess) {
-    AxesByProcess.axesByProcess.idSector = ProcessSelected.allProcessSelected.idSector;
-    AxesByProcess.axesByProcess.sector = ProcessSelected.allProcessSelected.sector;
+AxesByProcess.add = async function (idSector, sector, idProcess, tagProcess, axesByProcess) {
+    AxesByProcess.axesByProcess.idSector = idSector;
+    AxesByProcess.axesByProcess.sector = sector;
     AxesByProcess.axesByProcess.processId = idProcess;
     AxesByProcess.axesByProcess.tagProcess = tagProcess; 
     AxesByProcess.axesByProcess.axesByProcess = axesByProcess;
@@ -75,7 +75,7 @@ AxesByProcess.arrayToObject = async function ( processData ) {
         j = j + 1;
     })
 
-    await AxesByProcess.add(idProcess, tagProcess, axesByProcess);
+    return [idProcess, tagProcess, axesByProcess];
 }
 
 AxesByProcess.pullDB = async function (idProcesses) {
@@ -101,7 +101,7 @@ AxesByProcess.pullDB = async function (idProcesses) {
             throw e;
         });
 
-    await AxesByProcess.arrayToObject(response);
+    return AxesByProcess.arrayToObject(response);
 }
 
 module.exports = AxesByProcess;

@@ -29,7 +29,7 @@ const postIndex = async (req, res) => {
     await FilterBySector.pullDB(newLink.sector);
     req.session.busisnessName = newLink.busisnessName;
     req.session.sector = newLink.sector;
-    res.status(200).redirect('/PrevTest')
+    res.status(200).redirect('/OurTest')
 
 };
 
@@ -45,23 +45,22 @@ const getOurTest = (req, res) => {
                     {
                         url: req.url,
                         title: "Start Test",
-                        formulario: ourFormulario,
                         columnHeader: columnHeader,
-                        selected: req.session.selected,
+                        selected: selected,
                     });
             }
         } catch (e) {
             throw new Error(e.message)
-        }
+        }2
     } else {
         res.redirect('/')
-    };
+    }
 };
 const postOurTest = (req, res) => {
     const newLink = req.body;
     if (newLink.lenght !== 0) {
         req.session.ourTestFull = true;
-    };
+    }
 };
 
 const getPrevTest = async (req, res) => {
@@ -99,8 +98,11 @@ const postPrevTest = async (req, res) => {
         processSelected.process[i] = process[processId.indexOf(element)];
         i=i+1;
     }); 
-    ProcessSelected.add(processSelected);
-    await AxesByProcess.pullDB(ProcessSelected.allProcessSelected.processId);
+    await ProcessSelected.add(processSelected);
+    let [idProcess, tagProcess, axesByProcess] = await AxesByProcess.pullDB(ProcessSelected.allProcessSelected.processId);
+    let idSector = ProcessSelected.allProcessSelected.idSector;
+    let sector = ProcessSelected.allProcessSelected.sector;
+    await AxesByProcess.add(idSector, sector, idProcess, tagProcess, axesByProcess)
     //req.session.selected = true;
     selected = true;
     res.status(200).redirect('/MinTicTest')
@@ -108,13 +110,12 @@ const postPrevTest = async (req, res) => {
 
 const getMinticTest = (req, res) => {
     const axesByProcess = AxesByProcess.axesByProcess;
-    const url = req.url;
     const errors = validationResult(req);    
     if (errors.isEmpty()) {
         if (selected) {
             res.render("layouts/model/index",
                 {
-                    url: url,
+                    url: req.url,
                     title: "Start MinTicTest",
                     columnHeader: columnHeader,
                     process: ProcessSelected.allProcessSelected,
@@ -126,7 +127,7 @@ const getMinticTest = (req, res) => {
         }
     } else {
         res.redirect('/')
-    };
+    }
 };
 const postMinTicTest = (req, res) => {
     const newLink = req.body;
