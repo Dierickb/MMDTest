@@ -1,7 +1,5 @@
-var express = require('express');
-var router = express.Router();
 var formularioController = require('../../controller/api/ourFormControllerAPI');
 
-router.get('/', formularioController.formulario_list);
+const ourTestAPI = formularioController.formulario_list;
 
-module.exports = router;
+module.exports = ourTestAPI;

@@ -7,16 +7,20 @@ const {
     getOurTest,
     postOurTest,
     getMinticTest,
-    postMinTicTest
+    postMinTicTest,
+    getPrevTest,
+    postPrevTest
 } = require('./routes');
 
 router.get('/', getIndex);
 router.get('/OurTest', getOurTest);
 router.get('/MinTicTest', getMinticTest);
+router.get('/PrevTest', getPrevTest)
 
 router.post('/', postIndex);
 router.post('/OurTest', postOurTest);
 router.post('/MinTicTest', postMinTicTest);
+router.post('/PrevTest', postPrevTest)
 
 module.exports = router;
 

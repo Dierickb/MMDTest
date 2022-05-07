@@ -32,17 +32,10 @@ app.use(express.json());
 
 //Routes
 const indexRouter = require('./routes/index');
-const ourFormAPIRouter = require('./routes/api/ourTestAPI');
-const minTicFormAPIRouter = require('./routes/api/minTicTestAPI');
-const economicSector = require('./routes/api/ecnonomicSectorsAPI');
-const filterBySector = require('./routes/api/filterBySector');
+const indexApi = require('./routes/api/index')
 
 app.use('/', indexRouter);
-
-app.use('/api', ourFormAPIRouter);
-app.use('/api', minTicFormAPIRouter);
-app.use('/api', economicSector);
-app.use('/api', filterBySector)
+app.use('/api/v1', indexApi)
 
 
 //Public

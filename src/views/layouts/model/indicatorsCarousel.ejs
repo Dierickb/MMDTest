@@ -1,16 +1,16 @@
 <% let i = 0; let active = true;%> 
-<% formulario.forEach(element => { %>
+<% for (let j = 0; j < process.length; j++) { %>
     <% if (active === true ) { %> 
-        <button type="button" title="<%= element.dimensions %> "
+        <button type="button" title="<%= process.process[j] %> "
             data-bs-target="#carouselExampleDark" data-bs-slide-to="<%= i %>"
             aria-label="Slide <%= (i+1) %> " aria-current="true" class="active"
         ></button>
     <% } else { %> 
-        <button type="button" title="<%= element.dimensions %> "
+        <button type="button" title="<%= process.process[j] %> "
             data-bs-target="#carouselExampleDark" data-bs-slide-to="<%= i %>"
             aria-label="Slide <%= (i+1) %> " aria-current="true"
         ></button>
     <% } %> 
     
     <% i=i+1; active=false; %>
-<% }); %>
+<% }; %>

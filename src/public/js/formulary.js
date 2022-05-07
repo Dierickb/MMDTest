@@ -29,7 +29,7 @@ const apiForm = (myUrl) => {
             for (let i = 0; i < form.length; i++) {
                 dierick[i] = form[i].questions.length
                 cantQuestionsTotal += dierick[i];
-            };
+            }
             totalCantCheckBox = cantQuestionsTotal * 5;
         }
     });
@@ -50,11 +50,11 @@ const totalCantCheckBoxFunc = (taskss, totalCantCheckBoxx) => {
     let taskk = [];
     let k = 0;
     for (let j = 0; j < totalCantCheckBoxx; j++) {
-        if (taskss[j].checked == true) {
+        if (taskss[j].checked === true) {
             taskk[k] = [taskss[j].value, taskss[j].id];
             k = k + 1;
-        };
-    };
+        }
+    }
     return taskk;
 };
 
@@ -71,17 +71,17 @@ const redirect = (nextUrl, data) => {
     postDatos(nextUrl, data);   
     if (nextUrl === "OurTest") {
         window.location.href = "/MinTicTest";
-    };
+    }
 };
 
-const resIsConfirmed = (results, url, task) => {
+const resIsConfirmed = (results, task) => {
     if (results.dismiss === Swal.DismissReason.cancel) { 
         swalWithBootstrapButtons.fire(
             'Envio cancelado',
             'El formulario no ha sido enviado',
             'error'
         )
-    };
+    }
 };
 
 const validateCardsContent = () => {
@@ -101,7 +101,7 @@ const validateCardsContent = () => {
             oppsAdvice();           
         } else {
             resIsConfirmed(result, url, task);
-        };
+        }
     });
 };
 

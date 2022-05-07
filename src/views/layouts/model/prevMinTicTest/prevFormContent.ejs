@@ -1,0 +1,37 @@
+<% active = true; i=0; %> 
+<table class="table">
+    <thead class="theadProcess">
+        <tr>
+            <% for( let j = 0; j <columnHeader.length; j++ ) { %> 
+                <th scope="col">
+                    <%= columnHeader[j] %> 
+                </th>
+            <% } %> 
+        </tr>
+    </thead>
+    <tbody class="dimensionItems">
+        <% for (let j = 0; j < process.length; j++) {  %>
+            <tr>
+                <td scope="col" class="wd-min">
+                    <%= j+1  %> 
+                </td>
+                <td scope="col" class="wd-min" >
+                    <%- process.process[j]  %> 
+                </td >
+                <td scope="col" class="wd-min">
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" class="form-check-input" 
+                        name="<%= process.processId[j] %>"
+                        id="<%=process.processId[j] %>" 
+                        > 
+                        <label for="inlineCheckbox"></label>
+                    </div>            
+                </td>    
+            </tr>             
+        <% }; %>       
+        
+    </tbody>
+    
+</table>     
+
+

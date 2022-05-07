@@ -12,11 +12,11 @@ const postIndex = async (url, data) => {
 };
 
 const advices = async (task) => {
-    if (task.busisnessName === '') {
+    if (task.busisnessName === '' || task.sector === 'Sector empresarial') {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Debe colocar el nombre y selecconar el departamento en el que se encuentra la empresa',
+            text: 'Debe colocar el nombre y el sector al que pertenece la empresa',
         });
     } else {
         let res = await postIndex('/', task);
@@ -29,8 +29,6 @@ const formHomeSubmit = () => {
     buttonId.addEventListener('submit', async (e) => {
         e.preventDefault();
         let tasks = e.target.elements;
-
-        let task = { name: '', sector: '' };
 
         task = {
             busisnessName: tasks[0].value.toUpperCase(),

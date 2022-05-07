@@ -9,7 +9,7 @@
                     <div class="card">
                         <div class="cardTitle">
                             <div class="numbers" id="numPos">
-                                Selección procesos
+                                Selección de procesos
                             </div>
                             <div class="cardName">
                                 Seleccione los principales procesos en su empresa
@@ -18,14 +18,18 @@
 
                         <div class="cardContent">
                             <form id="principalProcess" action="">
-        
-                            </form>
-        
-                            <button type="submit" form="firstForm" class="btn btn-primary allwidth">
-                                Dierick
-                            </button>
+                                <div class="carousel-inner" id="carouselItem">
+                                    <%- include('./prevFormContent') %>                            
+                                </div>
+                            </form>                              
+                            
                         </div>
+                        
+                        <button type="submit" form="principalProcess" class="btn btn-primary allwidth">
+                            Enviar procesos
+                        </button>
                     </div>
+                    
                 </div>                
 
             </div>
@@ -33,3 +37,5 @@
         </div>
     </div>
 </div>
+
+<script src="/js/prevTest.js"></script>
