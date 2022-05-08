@@ -2,12 +2,11 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
-const OurFormulario = require("../models/OurFormulario");
-const ourFormulario = Object.values(OurFormulario)[0];
+const OurFormulario = require("../models/ourTest/OurFormulario");
 const Sectors = require('../models/EconomicSector')
-const FilterBySector = require('../models/FilerBySector');
-const ProcessSelected = require("../models/ProcessSelected");
-const AxesByProcess = require("../models/EvaluationAxes");
+const FilterBySector = require('../models/minTicTest/FilerBySector');
+const ProcessSelected = require("../models/minTicTest/ProcessSelected");
+const AxesByProcess = require("../models/minTicTest/EvaluationAxes");
 let selected = false;
 
 const getIndex = (req, res) => {

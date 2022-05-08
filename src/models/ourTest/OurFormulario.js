@@ -29,8 +29,8 @@ OurFormulario.removeById = function (aBiciId) {
         if (OurFormulario.allForm[i].id == aBiciId) {
             OurFormulario.allForm.splice(i, 1);
             break;
-        };
-    };
+        }
+    }
 };
 
 // Si es True es un proceso si es False es un habilitador

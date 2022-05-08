@@ -1,4 +1,4 @@
-const connection = require('../accessDB')
+const connection = require('../../accessDB')
 
 let FilterBySector = function (idEconomicSector, economicSector, idProcess, process) {
     this.idEconomicSector = idEconomicSector;

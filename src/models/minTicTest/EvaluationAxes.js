@@ -1,4 +1,4 @@
-const connection = require('../accessDB')
+const connection = require('../../accessDB')
 
 function eliminarDiacriticos(texto) {
     return texto.normalize('NFD').replace(/[\u0300-\u036f]/g,"");
@@ -57,10 +57,10 @@ AxesByProcess.tagProcess = function (data) {
 AxesByProcess.arrayToObject = async function ( processData ) {
     let [ tagProcess,  idProcess ] = AxesByProcess.tagProcess( processData )
     let j = 0;
-    let axesByProcess = new Object();
+    let axesByProcess = {};
 
     idProcess.map(idArray => {
-        let data = []; let axes = []; let i = 0; 
+        let data = []; let i = 0;
         processData.map(element => {
             if (element.id_proceso === idArray) {
                 data[i] = element.nombre_metodo
@@ -80,7 +80,7 @@ AxesByProcess.arrayToObject = async function ( processData ) {
 AxesByProcess.pullDB = async function (idProcesses) {
     let data = ''
     for (let i = 0; i < idProcesses.length; i++) {
-        if (i == 0) {
+        if (i === 0) {
             data = data.concat(' ', `WHERE ev.id_proceso = "${idProcesses[i]}"`)
         } else {
             data = data.concat(' ', `OR ev.id_proceso = "${idProcesses[i]}"`)

@@ -1,5 +1,3 @@
-const connection = require('../accessDB')
-
 let ProcessSelected = function (idProcess, process, idSector) {
     this.idProcess = idProcess;
     this.process = process;
