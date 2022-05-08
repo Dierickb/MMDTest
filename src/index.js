@@ -1,5 +1,5 @@
 const app = require('./app');
-const Sectors = require('./models/economicSector')
+const Sectors = require('./models/EconomicSector')
 async function main() {
     try {       
         require('./accessDB')

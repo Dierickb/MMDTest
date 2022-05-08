@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
-const OurFormulario = require("../models/ourFormulario");
+const OurFormulario = require("../models/OurFormulario");
 const ourFormulario = Object.values(OurFormulario)[0];
-const Sectors = require('../models/economicSector')
-const FilterBySector = require('../models/filerBySector');
-const ProcessSelected = require("../models/processSelected");
+const Sectors = require('../models/EconomicSector')
+const FilterBySector = require('../models/FilerBySector');
+const ProcessSelected = require("../models/ProcessSelected");
 const AxesByProcess = require("../models/EvaluationAxes");
 let selected = false;
 
