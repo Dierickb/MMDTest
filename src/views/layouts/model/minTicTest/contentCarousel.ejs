@@ -1,0 +1,46 @@
+<% active = true; j=0;%> 
+
+<% for (property in axesByProcess) { %>
+
+    <%  i=0; %> 
+    <% if (active === true ) { %> 
+        <div class="carousel-item active">                            
+            <% active = false; %> 
+        
+    <% } else { %> 
+        <div class="carousel-item">          
+    <% } %>  
+            <div class="cardBox np-b">
+                <div class="card nr-b nmg-b">
+                    <div class="cardTitle">
+                        <div class="numbers" id="numPos">
+                            <%= process.process[j] %>
+                        </div>
+                        <div class="cardName">   
+                            <%= process.process[j] %> 
+                        </div>
+                    </div>
+
+                    <div class="cardContent" id="cardContent-<%= j+1 %> ">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <% for( let j = 0; j <columnHeader.length; j++ ) { %> 
+                                        <th scope="col">
+                                            <%= columnHeader[j] %> 
+                                        </th>
+                                    <% } %> 
+                                </tr>
+                            </thead>
+                            <tbody class="dimensionItems" id="<%= process.idSector[j] %> ">
+                                <%- include('./minTicTest') %>
+                            </tbody>
+                        </table>                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+<% j=j+1;}; %>
+
+

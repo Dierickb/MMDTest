@@ -1,6 +1,6 @@
 <% active = true; j=0;%> 
 
-<% for (property in axesByProcess) { %>
+<% for (property in dimension) { %>
 
     <%  i=0; %> 
     <% if (active === true ) { %> 
@@ -14,10 +14,10 @@
                 <div class="card nr-b nmg-b">
                     <div class="cardTitle">
                         <div class="numbers" id="numPos">
-                            <%= process.process[j] %>
+                            <%= dimension[property].dimension  %> 
                         </div>
-                        <div class="cardName">   
-                            <%= process.process[j] %> 
+                        <div class="cardName"> 
+                            Proceso  
                         </div>
                     </div>
 
@@ -32,12 +32,8 @@
                                     <% } %> 
                                 </tr>
                             </thead>
-                            <tbody class="dimensionItems" id="<%= process.idSector[j] %> ">
-                                <% if (url === '/OurTest') { %>
-                                    <%- include('./ourTest/ourTest') %>
-                                <% } else if (url === '/MinTicTest') {%>
-                                    <%- include('./minTicTest/minTicTest') %>
-                                <% } %>
+                            <tbody class="dimensionItems" id="  ">
+                                <%- include('./ourTest') %>
                             </tbody>
                         </table>                    
                     </div>

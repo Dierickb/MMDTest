@@ -2,11 +2,13 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
-const OurFormulario = require("../models/ourTest/OurFormulario");
+const OurFormulary = require("../models/ourTest/OurFormulario");
 const Sectors = require('../models/EconomicSector')
+const AxesDimension = require('../models/ourTest/EvaluationAxes')
 const FilterBySector = require('../models/minTicTest/FilerBySector');
 const ProcessSelected = require("../models/minTicTest/ProcessSelected");
 const AxesByProcess = require("../models/minTicTest/EvaluationAxes");
+const Dimension = require("../models/ourTest/Dimension")
 let selected = false;
 
 const getIndex = (req, res) => {
@@ -26,6 +28,8 @@ const getIndex = (req, res) => {
 const postIndex = async (req, res) => {
     const newLink = req.body;
     await FilterBySector.pullDB(newLink.sector);
+    await Dimension.pullDB();
+    await AxesDimension.pullDB();
     req.session.busisnessName = newLink.busisnessName;
     req.session.sector = newLink.sector;
     res.status(200).redirect('/OurTest')
@@ -33,7 +37,6 @@ const postIndex = async (req, res) => {
 };
 
 const getOurTest = (req, res) => {
-
     const errors = validationResult(req);
     if (errors.isEmpty()) {
         try {
@@ -44,8 +47,11 @@ const getOurTest = (req, res) => {
                     {
                         url: req.url,
                         title: "Start Test",
-                        columnHeader: columnHeader,
                         selected: selected,
+                        columnHeader: columnHeader,
+                        dimension: AxesDimension.allAxesByDimension,
+                        process: AxesDimension.axesDimension,
+                        tagDimension: AxesDimension.tagDimension
                     });
             }
         } catch (e) {

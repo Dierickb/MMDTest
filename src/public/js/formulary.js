@@ -96,7 +96,7 @@ const validateCardsContent = () => {
 
         let tasks = e.target.elements;
         let task = totalCantCheckBoxFunc(tasks, totalCantCheckBox);
-
+        console.log(task)
         if (task.length < cantQuestionsTotal) {
             oppsAdvice();           
         } else {

@@ -1,0 +1,27 @@
+<% const levels = dimension[property]; let n = 0;%> 
+<% for( elements in levels ) { %>
+
+    <% if(elements !== "dimensionId" && elements !== "dimension" && elements !== "formularyId") { %>
+        <% for (data of levels[elements]) {  %> 
+            <tr>
+                <td scope="col" class="wd-min">
+                    <%= n+1 %> 
+                </td>
+                <td scope="col" class="wd-min" >
+                    <%= data  %>
+                </td>
+                <% for( let k = 0; k < 5; k++ ) { %>
+                    <td scope="col" class="wd-min" style="vertical-align: middle;">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" value="<%= k %>"
+                             name="<%= elements %>-<%= levels.formularyId[n] %>-<%= (k+1) %>" id="<%= elements %>-<%= levels.formularyId[n] %>-<%= (k+1) %>">
+                            <label class="form-check-label"></label>
+                        </div>
+                    </td>
+                <% } %>
+            </tr>        
+        <% n = n +1 ;} %>
+        
+    <% } %> 
+    
+<% } %>

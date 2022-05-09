@@ -9,7 +9,12 @@
 
             <form id="firstForm" action="">
                 <div class="carousel-inner" id="carouselItem">
-                    <%- include('./contentCarousel') %>                            
+                    <% if (url === "/MinTicTest" ) { %> 
+                        <%- include('./minTicTest/contentCarousel') %> 
+                    <% } else { %> 
+                        <%- include('./ourTest/contentCarousel') %> 
+                    <% } %>
+                                               
                 </div>
             </form>
             

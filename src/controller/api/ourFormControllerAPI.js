@@ -1,7 +1,7 @@
-var OurFormulario = require('../../models/ourTest/OurFormulario');
+var OurFormulary = require('../../models/ourTest/OurFormulario');
 
-exports.formulario_list = function(req, res){
+exports.ourFormulary_list = async function(req, res){
     res.status(200).json({
-        ourFormulario: OurFormulario.allForm
+        ourFormulary: await OurFormulary.pullDB()
     });
 };

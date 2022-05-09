@@ -1,5 +1,5 @@
-var formularioController = require('../../controller/api/ourFormControllerAPI');
+let ourFormularyController = require('../../controller/api/ourFormControllerAPI');
 
-const ourTestAPI = formularioController.formulario_list;
+const ourTestAPI = ourFormularyController.ourFormulary_list;
 
 module.exports = ourTestAPI;
