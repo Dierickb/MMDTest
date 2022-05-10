@@ -1,5 +1,4 @@
 const connection = require('../../accessDB')
-const FilterBySector = require('../minTicTest/FilerBySector')
 
 let AxesDimension = function (idDimension, dimension, level, question) {
     this.idDimension = idDimension;

@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 //Routes
-const indexRouter = require('./routes/index');
+const indexRouter = require('./routes/index.routes');
 const indexApi = require('./routes/api/index')
 
 app.use('/', indexRouter);
