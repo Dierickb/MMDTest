@@ -10,6 +10,15 @@ const swalWithBootstrapButtons = Swal.mixin({
     buttonsStyling: false
 });
 
+const oppsAdvice = () => {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Ha ocurrido un error, por favor responder a todas las preguntas del formulario!',
+        timer: 1500,
+    });
+};
+
 const result = async() => await swalWithBootstrapButtons.fire({
     title: 'Está seguro ?',
     text: "Una vez enviado el test, no podrá modificarlo",
@@ -26,7 +35,14 @@ const apiForm = (myUrl) => {
         url: ("api/v1/" + myUrl),
         success: function (result) {
             let form = Object.values(result)[0];  //Convierto el objeto en un array 
-            for (let i = 0; i < form.length; i++) {
+            console.log(form)
+            cnatDierick = 0;
+            for (let property in form) {
+                if(property !== "dimensionId" && property !== "dimension" && property !== "formularyId") {
+                    console.log(property.length)
+                }
+            }
+            for (let i = 0; i < form.length ; i++) {
                 dierick[i] = form[i].questions.length
                 cantQuestionsTotal += dierick[i];
             }
@@ -58,14 +74,6 @@ const totalCantCheckBoxFunc = (taskss, totalCantCheckBoxx) => {
     return taskk;
 };
 
-const oppsAdvice = () => {
-    Swal.fire({
-        icon: 'warning',
-        title: 'Oops...',
-        text: 'Ha ocurrido un error, por favor responder a todas las preguntas del formulario!',
-        timer: 1500,
-    });
-};
 
 const redirect = (nextUrl, data) => {
     postDatos(nextUrl, data);   
@@ -93,10 +101,9 @@ const validateCardsContent = () => {
 
     formulario.addEventListener('submit', async (e) => {
         e.preventDefault();
-
         let tasks = e.target.elements;
         let task = totalCantCheckBoxFunc(tasks, totalCantCheckBox);
-        console.log(task)
+        //console.log(task)
         if (task.length < cantQuestionsTotal) {
             oppsAdvice();           
         } else {

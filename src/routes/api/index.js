@@ -13,7 +13,7 @@ router.get('/evaluationAxes', evaluationAxes)
 router.get('/filterBySector', filterBySector)
 router.get('/economicSector', economicSector)
 router.get('/dimension', dimension)
-router.get('/axesDimension', axesDimension)
+router.get('/OurTest', axesDimension)
 
 module.exports = (
     router

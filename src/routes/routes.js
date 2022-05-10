@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
-const OurFormulary = require("../models/ourTest/OurFormulario");
 const Sectors = require('../models/EconomicSector')
 const AxesDimension = require('../models/ourTest/EvaluationAxes')
 const FilterBySector = require('../models/minTicTest/FilerBySector');
@@ -38,6 +37,7 @@ const postIndex = async (req, res) => {
 
 const getOurTest = (req, res) => {
     const errors = validationResult(req);
+    console.log()
     if (errors.isEmpty()) {
         try {
             if (req.session.busisnessName === '' || req.session.sector === 'Sector empresarial') {
@@ -50,8 +50,7 @@ const getOurTest = (req, res) => {
                         selected: selected,
                         columnHeader: columnHeader,
                         dimension: AxesDimension.allAxesByDimension,
-                        process: AxesDimension.axesDimension,
-                        tagDimension: AxesDimension.tagDimension
+                        process: AxesDimension.allDimension
                     });
             }
         } catch (e) {
@@ -81,7 +80,7 @@ const getPrevTest = async (req, res) => {
                 title: "Previus to test",
                 url: url,
                 selected: req.session.selected,
-                process: processBySector,
+                process: processBySector.process,
                 columnHeader: columnHeader,
             }
         );
