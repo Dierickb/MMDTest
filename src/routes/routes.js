@@ -37,7 +37,7 @@ const postIndex = async (req, res) => {
 
 const getOurTest = (req, res) => {
     const errors = validationResult(req);
-    console.log()
+
     if (errors.isEmpty()) {
         try {
             if (req.session.busisnessName === '' || req.session.sector === 'Sector empresarial') {
@@ -62,8 +62,10 @@ const getOurTest = (req, res) => {
 };
 const postOurTest = (req, res) => {
     const newLink = req.body;
+    console.log(newLink)
     if (newLink.lenght !== 0) {
         req.session.ourTestFull = true;
+        res.status(200).redirect('/PrevTest')
     }
 };
 
@@ -80,7 +82,7 @@ const getPrevTest = async (req, res) => {
                 title: "Previus to test",
                 url: url,
                 selected: req.session.selected,
-                process: processBySector.process,
+                process: processBySector,
                 columnHeader: columnHeader,
             }
         );
@@ -139,8 +141,6 @@ const postMinTicTest = (req, res) => {
 
 module.exports = {
     router,
-    getIndex,
-    postIndex,
     getOurTest,
     postOurTest,
     getMinticTest,

@@ -2,8 +2,6 @@ var express = require('express');
 var router = express.Router();
 
 const {
-    getIndex,
-    postIndex,
     getOurTest,
     postOurTest,
     getMinticTest,
@@ -11,6 +9,8 @@ const {
     getPrevTest,
     postPrevTest
 } = require('./routes');
+
+const { getIndex, postIndex, } = require('./home')
 
 router.get('/', getIndex);
 router.get('/OurTest', getOurTest);

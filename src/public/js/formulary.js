@@ -2,49 +2,16 @@ let dierick = [];
 let cantQuestionsTotal = 0;
 let totalCantCheckBox = 0;
 
-const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
-    },
-    buttonsStyling: false
-});
-
-const oppsAdvice = () => {
-    Swal.fire({
-        icon: 'warning',
-        title: 'Oops...',
-        text: 'Ha ocurrido un error, por favor responder a todas las preguntas del formulario!',
-        timer: 1500,
-    });
-};
-
-const result = async() => await swalWithBootstrapButtons.fire({
-    title: 'Está seguro ?',
-    text: "Una vez enviado el test, no podrá modificarlo",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Ok',
-    cancelButtonText: 'No, cancel!',
-    reverseButtons: true,
-});
-
 const apiForm = (myUrl) => {
     $.ajax({
         dataType: "json",
         url: ("api/v1/" + myUrl),
         success: function (result) {
-            let form = Object.values(result)[0];  //Convierto el objeto en un array 
-            console.log(form)
-            cnatDierick = 0;
+            let form = Object.values(result)[0];
             for (let property in form) {
                 if(property !== "dimensionId" && property !== "dimension" && property !== "formularyId") {
-                    console.log(property.length)
+                    cantQuestionsTotal += form[property].formularyId.length;
                 }
-            }
-            for (let i = 0; i < form.length ; i++) {
-                dierick[i] = form[i].questions.length
-                cantQuestionsTotal += dierick[i];
             }
             totalCantCheckBox = cantQuestionsTotal * 5;
         }
@@ -74,21 +41,68 @@ const totalCantCheckBoxFunc = (taskss, totalCantCheckBoxx) => {
     return taskk;
 };
 
-
-const redirect = (nextUrl, data) => {
-    postDatos(nextUrl, data);   
+const redirect = async (nextUrl, data) => {
+    await postDatos(nextUrl, data);   
+    console.log(data)
     if (nextUrl === "OurTest") {
-        window.location.href = "/MinTicTest";
+        //window.location.href = "/PrevTest";
     }
 };
 
-const resIsConfirmed = (results, task) => {
+const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: false
+});
+
+
+const oppsAdvice = () => {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Ha ocurrido un error, por favor responder a todas las preguntas del formulario!',
+        timer: 1500,
+    });
+};
+
+const result = async() => await swalWithBootstrapButtons.fire({
+    title: 'Está seguro ?',
+    text: "Una vez enviado el test, no podrá modificarlo",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Ok',
+    cancelButtonText: 'No, cancel!',
+    reverseButtons: true,
+});
+
+const obtainData = (dataValue)  => {
+    const question = {
+        value: [],
+        idQuestion: [],
+    } 
+    let i = 0;
+    for (element of dataValue) {        
+        question.value[i] = parseInt(element[0]);
+        question.idQuestion[i] = parseInt(element[1].split("-")[1]);
+        i = i + 1;
+    }
+    console.log(question);
+    return question
+}
+
+const resIsConfirmed = (url,results, task) => {  
     if (results.dismiss === Swal.DismissReason.cancel) { 
         swalWithBootstrapButtons.fire(
             'Envio cancelado',
             'El formulario no ha sido enviado',
             'error'
         )
+    } 
+    if (results.isConfirmed) {
+        const data = obtainData(task)
+        redirect(url, data)
     }
 };
 
@@ -103,11 +117,12 @@ const validateCardsContent = () => {
         e.preventDefault();
         let tasks = e.target.elements;
         let task = totalCantCheckBoxFunc(tasks, totalCantCheckBox);
-        //console.log(task)
+
         if (task.length < cantQuestionsTotal) {
+            const pullrequest = await result();
+            resIsConfirmed(url, pullrequest, task)
+        } else {            
             oppsAdvice();           
-        } else {
-            resIsConfirmed(result, url, task);
         }
     });
 };
