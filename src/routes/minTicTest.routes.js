@@ -4,9 +4,16 @@ const { check, validationResult } = require("express-validator");
 const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
 const ProcessSelected = require("../models/minTicTest/ProcessSelected");
 const AxesByProcess = require("../models/minTicTest/EvaluationAxes");
-
+const Sectors = require('../models/EconomicSector')
 
 const getMinticTest = (req, res) => {
+    let sector = []; k = 0; let idSector = [];
+    for (let value of Sectors.allSectors) {
+        sector[k] = value.tipo_empresas;
+        idSector[k] = value.id_tipo_empresa;
+        k = k + 1;
+    }
+
     const axesByProcess = AxesByProcess.axesByProcess;
     const errors = validationResult(req);
     if (errors.isEmpty() && req.session.selected) {
@@ -18,6 +25,8 @@ const getMinticTest = (req, res) => {
                 columnHeader: columnHeader,
                 process: ProcessSelected.allProcessSelected,
                 selected: true,
+                sector: sector, 
+                idSector: idSector,
                 axesByProcess: axesByProcess.axesByProcess,
             });
         } else {

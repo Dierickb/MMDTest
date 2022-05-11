@@ -4,12 +4,20 @@ const FilterBySector = require('../models/minTicTest/FilerBySector');
 const ProcessSelected = require("../models/minTicTest/ProcessSelected");
 const AxesByProcess = require("../models/minTicTest/EvaluationAxes");
 const { check, validationResult } = require("express-validator");
+const Sectors = require('../models/EconomicSector');
 
 const getPrevTest = async (req, res) => {
     const url = req.url;
     const columnHeader = ["#", "Proceso", ""];
     const processBySector = await FilterBySector.allFilterBySector;
-    const errors = validationResult(req);
+
+    let sector = []; k = 0; let idSector = [];
+    for (let value of Sectors.allSectors) {
+        sector[k] = value.tipo_empresas;
+        idSector[k] = value.id_tipo_empresa;
+        k = k + 1;
+    }
+
     if ( req.session.selected && req.session.processSelected !== true) {        
         res.render("layouts/model/index",
             {
@@ -18,6 +26,8 @@ const getPrevTest = async (req, res) => {
                 selected: false,
                 process: processBySector,
                 columnHeader: columnHeader,
+                sector: sector, 
+                idSector: idSector,
             }
         );
     } else {        

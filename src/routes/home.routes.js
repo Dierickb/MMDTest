@@ -16,7 +16,10 @@ const getIndex = (req, res) => {
         k = k + 1;
     }
     if (errors.isEmpty()) {
-        res.render("index", { title: "MMD Test", sector: sector, idSector: idSector });
+        res.render("index", { 
+            title: "MMD Test", 
+            sector: sector, 
+            idSector: idSector });
     } else {
         console.error(e);
     }

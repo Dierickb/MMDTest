@@ -4,9 +4,16 @@ const { check, validationResult } = require("express-validator");
 const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
 const AxesDimension = require('../models/ourTest/EvaluationAxes');
 const PushOurTest = require('../models/ourTest/PushOurTest');
+const Sectors = require('../models/EconomicSector');
 
 const getOurTest = (req, res) => {
     const errors = validationResult(req);
+    let sector = []; k = 0; let idSector = [];
+    for (let value of Sectors.allSectors) {
+        sector[k] = value.tipo_empresas;
+        idSector[k] = value.id_tipo_empresa;
+        k = k + 1;
+    }
 
     if (errors.isEmpty() && req.session.selected) {
         try {            
@@ -16,7 +23,9 @@ const getOurTest = (req, res) => {
                     title: "Start Test",
                     columnHeader: columnHeader,
                     dimension: AxesDimension.allAxesByDimension,
-                    process: AxesDimension.allDimension
+                    process: AxesDimension.allDimension,
+                    sector: sector, 
+                    idSector: idSector,
                 });
         } catch (e) {
             throw new Error(e.message)
