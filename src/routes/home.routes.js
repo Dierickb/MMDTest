@@ -31,8 +31,8 @@ const postIndex = async (req, res) => {
         const idbusiness = await PushOurTest.pushBusiness(newLink.busisnessName, newLink.sector);
         if ( idbusiness !== undefined && idbusiness !== null) {
             req.session.idbusiness = idbusiness;
+            req.session.selected = true;
         } 
-        req.session.selected = true;
         res.status(200).redirect('/OurTest')
     } catch (e) {
         console.error(e)

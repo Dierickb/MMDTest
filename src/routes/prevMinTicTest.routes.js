@@ -3,25 +3,25 @@ const router = express.Router();
 const FilterBySector = require('../models/minTicTest/FilerBySector');
 const ProcessSelected = require("../models/minTicTest/ProcessSelected");
 const AxesByProcess = require("../models/minTicTest/EvaluationAxes");
+const { check, validationResult } = require("express-validator");
 
 const getPrevTest = async (req, res) => {
     const url = req.url;
     const columnHeader = ["#", "Proceso", ""];
     const processBySector = await FilterBySector.allFilterBySector;
     const errors = validationResult(req);
-    if (errors.isEmpty() && req.session.selected) {        
-        res.status(200).redirect('/')
-    } else {
-        req.session.selected = false
+    if ( req.session.selected) {        
         res.render("layouts/model/index",
             {
                 title: "Previus to test",
                 url: url,
-                selected: req.session.selected,
+                selected: false,
                 process: processBySector,
                 columnHeader: columnHeader,
             }
         );
+    } else {        
+        res.status(200).redirect('/')
     }
 }
 const postPrevTest = async (req, res) => {

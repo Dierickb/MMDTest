@@ -16,7 +16,7 @@ const getMinticTest = (req, res) => {
                 title: "Start MinTicTest",
                 columnHeader: columnHeader,
                 process: ProcessSelected.allProcessSelected,
-                selected: selected,
+                selected: true,
                 axesByProcess: axesByProcess.axesByProcess,
             });
     } else {

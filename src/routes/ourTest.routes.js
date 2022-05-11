@@ -4,7 +4,6 @@ const { check, validationResult } = require("express-validator");
 const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
 const AxesDimension = require('../models/ourTest/EvaluationAxes');
 const PushOurTest = require('../models/ourTest/PushOurTest');
-let selected = false;
 
 const getOurTest = (req, res) => {
     const errors = validationResult(req);
@@ -15,7 +14,6 @@ const getOurTest = (req, res) => {
                 {
                     url: req.url,
                     title: "Start Test",
-                    selected: selected,
                     columnHeader: columnHeader,
                     dimension: AxesDimension.allAxesByDimension,
                     process: AxesDimension.allDimension
