@@ -4,26 +4,21 @@ const { check, validationResult } = require("express-validator");
 const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
 const ProcessSelected = require("../models/minTicTest/ProcessSelected");
 const AxesByProcess = require("../models/minTicTest/EvaluationAxes");
-let selected = false;
 
 
 const getMinticTest = (req, res) => {
     const axesByProcess = AxesByProcess.axesByProcess;
-    const errors = validationResult(req);    
-    if (errors.isEmpty()) {
-        if (selected) {
-            res.render("layouts/model/index",
-                {
-                    url: req.url,
-                    title: "Start MinTicTest",
-                    columnHeader: columnHeader,
-                    process: ProcessSelected.allProcessSelected,
-                    selected: selected,
-                    axesByProcess: axesByProcess.axesByProcess,
-                });
-        } else {
-            res.redirect('/')
-        }
+    const errors = validationResult(req);
+    if (errors.isEmpty() && req.session.selected) {
+        res.render("layouts/model/index",
+            {
+                url: req.url,
+                title: "Start MinTicTest",
+                columnHeader: columnHeader,
+                process: ProcessSelected.allProcessSelected,
+                selected: selected,
+                axesByProcess: axesByProcess.axesByProcess,
+            });
     } else {
         res.redirect('/')
     }

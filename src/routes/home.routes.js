@@ -24,17 +24,15 @@ const getIndex = (req, res) => {
 
 const postIndex = async (req, res) => {
     const newLink = req.body;
-    req.session.busisnessName = newLink.busisnessName;
-    req.session.sector = newLink.sector;
-    console.log(req.session.busisnessName)
     try {
         await FilterBySector.pullDB(newLink.sector);
         await Dimension.pullDB();
         await AxesDimension.pullDB();
-        const idbusiness = await PushOurTest.pushBusiness(req.session.busisnessName, req.session.sector);
+        const idbusiness = await PushOurTest.pushBusiness(newLink.busisnessName, newLink.sector);
         if ( idbusiness !== undefined && idbusiness !== null) {
             req.session.idbusiness = idbusiness;
         } 
+        req.session.selected = true;
         res.status(200).redirect('/OurTest')
     } catch (e) {
         console.error(e)

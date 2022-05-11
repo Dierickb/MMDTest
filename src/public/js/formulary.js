@@ -42,10 +42,9 @@ const totalCantCheckBoxFunc = (taskss, totalCantCheckBoxx) => {
 };
 
 const redirect = async (nextUrl, data) => {
-    await postDatos(nextUrl, data);   
-    console.log(data)
+    await postDatos(nextUrl, data);
     if (nextUrl === "OurTest") {
-        //window.location.href = "/PrevTest";
+        window.location.href = "/PrevTest";
     }
 };
 
@@ -63,7 +62,7 @@ const oppsAdvice = () => {
         icon: 'warning',
         title: 'Oops...',
         text: 'Ha ocurrido un error, por favor responder a todas las preguntas del formulario!',
-        timer: 1500,
+        timer: 2500,
     });
 };
 
@@ -88,7 +87,6 @@ const obtainData = (dataValue)  => {
         question.idQuestion[i] = parseInt(element[1].split("-")[1]);
         i = i + 1;
     }
-    console.log(question);
     return question
 }
 
@@ -119,10 +117,10 @@ const validateCardsContent = () => {
         let task = totalCantCheckBoxFunc(tasks, totalCantCheckBox);
 
         if (task.length < cantQuestionsTotal) {
+            oppsAdvice(); 
+        } else {     
             const pullrequest = await result();
-            resIsConfirmed(url, pullrequest, task)
-        } else {            
-            oppsAdvice();           
+            resIsConfirmed(url, pullrequest, task)                 
         }
     });
 };

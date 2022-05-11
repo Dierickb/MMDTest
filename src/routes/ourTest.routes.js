@@ -9,32 +9,27 @@ let selected = false;
 const getOurTest = (req, res) => {
     const errors = validationResult(req);
 
-    if (errors.isEmpty()) {
-        try {
-            if (req.session.busisnessName === '' || req.session.sector === 'Sector empresarial') {
-                res.redirect('/')
-            } else {
-                res.render("layouts/model/index",
-                    {
-                        url: req.url,
-                        title: "Start Test",
-                        selected: selected,
-                        columnHeader: columnHeader,
-                        dimension: AxesDimension.allAxesByDimension,
-                        process: AxesDimension.allDimension
-                    });
-            }
+    if (errors.isEmpty() && req.session.selected) {
+        try {            
+            res.render("layouts/model/index",
+                {
+                    url: req.url,
+                    title: "Start Test",
+                    selected: selected,
+                    columnHeader: columnHeader,
+                    dimension: AxesDimension.allAxesByDimension,
+                    process: AxesDimension.allDimension
+                });
         } catch (e) {
             throw new Error(e.message)
-        }2
+        }
     } else {
         res.redirect('/')
     }
 };
 const postOurTest = async (req, res) => {
-    const newLink = req.body;
-    if (newLink.lenght !== 0) {
-        await PushOurTest.pushAskResult(req.session.idbusiness, newLink)
+    if (req.body.lenght !== 0) {
+        await PushOurTest.pushAskResult(req.session.idbusiness, req.body)
         res.status(200).redirect('/PrevTest')
     }
 };

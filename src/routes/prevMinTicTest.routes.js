@@ -8,8 +8,9 @@ const getPrevTest = async (req, res) => {
     const url = req.url;
     const columnHeader = ["#", "Proceso", ""];
     const processBySector = await FilterBySector.allFilterBySector;
-    if (req.session.selected) {        
-        res.status(200).redirect('/MinTicTest')
+    const errors = validationResult(req);
+    if (errors.isEmpty() && req.session.selected) {        
+        res.status(200).redirect('/')
     } else {
         req.session.selected = false
         res.render("layouts/model/index",
