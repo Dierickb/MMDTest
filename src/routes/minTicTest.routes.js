@@ -10,7 +10,8 @@ const getMinticTest = (req, res) => {
     const axesByProcess = AxesByProcess.axesByProcess;
     const errors = validationResult(req);
     if (errors.isEmpty() && req.session.selected) {
-        res.render("layouts/model/index",
+        if (req.session.processSelected === true) {
+            res.render("layouts/model/index",
             {
                 url: req.url,
                 title: "Start MinTicTest",
@@ -19,6 +20,10 @@ const getMinticTest = (req, res) => {
                 selected: true,
                 axesByProcess: axesByProcess.axesByProcess,
             });
+        } else {
+            res.redirect('/PrevTest')
+        }
+        
     } else {
         res.redirect('/')
     }

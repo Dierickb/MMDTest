@@ -10,7 +10,7 @@ const getPrevTest = async (req, res) => {
     const columnHeader = ["#", "Proceso", ""];
     const processBySector = await FilterBySector.allFilterBySector;
     const errors = validationResult(req);
-    if ( req.session.selected) {        
+    if ( req.session.selected && req.session.processSelected !== true) {        
         res.render("layouts/model/index",
             {
                 title: "Previus to test",
@@ -47,6 +47,7 @@ const postPrevTest = async (req, res) => {
     await AxesByProcess.add(idSector, sector, idProcess, tagProcess, axesByProcess)
     //req.session.selected = true;
     selected = true;
+    req.session.processSelected = req.body.length !== 0;
     res.status(200).redirect('/MinTicTest')
 }
 

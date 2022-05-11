@@ -1,3 +1,22 @@
+const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: false
+});
+
+
+const oppsAdvice = () => {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Ha ocurrido un error, por favor responder a todas las preguntas del formulario!',
+        timer: 2500,
+    });
+};
+
+
 const postDatos = async (data) => {
     let json = JSON.stringify(data);
     return await fetch( ('/PrevTest'), {
@@ -16,8 +35,8 @@ const checkBoxFunc = (taskss) => {
         if (taskss[j].checked === true) {
             taskk[k] = parseInt(taskss[j].id);
             k = k + 1;
-        };
-    };
+        }
+    }
     return taskk;
 };
 
@@ -30,8 +49,12 @@ const validateCardsContent = async () => {
 
         const task = checkBoxFunc(e.target.elements)
 
-        await postDatos(task)
-        window.location.href = "/MinTicTest";
+        if (task.length === 0) {
+            oppsAdvice()
+        } {
+            await postDatos(task)
+            window.location.href = "/MinTicTest";            
+        }
     });
 };
 

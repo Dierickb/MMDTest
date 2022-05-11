@@ -1,4 +1,4 @@
-let axesDimensionController = require('../../controller/api/ourTest/evaluationOurAxes');
+let axesDimensionController = require('../../../controller/api/ourTest/evaluationOurAxes');
 
 const axesDimension = axesDimensionController.axesDimension_list;
 

@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const ourTestAPI = require('./ourTestAPI');
-const evaluationAxes = require('./evaluationAxes');
-const filterBySector = require('./filterBySector');
+const ourTestAPI = require('./ourTest/ourTestAPI');
+const evaluationAxes = require('./minTicTest/evaluationAxes');
+const filterBySector = require('./minTicTest/filterBySector');
 const economicSector = require('./ecnonomicSectorsAPI');
-const dimension = require('./dimensionAPI')
-const axesDimension = require('./axesDimension')
+const dimension = require('./ourTest/dimensionAPI')
+const axesDimension = require('./ourTest/axesDimension')
 
 router.get('/ourTestApi', ourTestAPI)
 router.get('/evaluationAxes', evaluationAxes)
