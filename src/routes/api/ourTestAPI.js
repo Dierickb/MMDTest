@@ -1,4 +1,4 @@
-let ourFormularyController = require('../../controller/api/ourFormControllerAPI');
+let ourFormularyController = require('../../controller/api/ourTest/ourFormControllerAPI');
 
 const ourTestAPI = ourFormularyController.ourFormulary_list;
 
