@@ -120,8 +120,6 @@ DBMinTicTest.validateBusinessById = async function (id) {
 }
 DBMinTicTest.validateBusiness = async function (business, idSector) {
     const businessDB = await DBMinTicTest.allBussisness()
-    console.log("")
-    console.log(businessDB)
     let finded = false; let id = 0;
     if (businessDB.length !== 0) {
         for ( element of businessDB ) {

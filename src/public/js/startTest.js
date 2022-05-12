@@ -19,7 +19,8 @@ const advices = async (task) => {
             text: 'Debe colocar el nombre y el sector al que pertenece la empresa',
         });
     } else {
-        let res = await postIndex('/', task);
+        let hash = window.location.hash.slice(1)
+        let res = await postIndex(`/?redirect=${hash}`, task);
         window.location.href = res.url;
     };
 }
@@ -41,3 +42,14 @@ const formHomeSubmit = () => {
 };
 
 formHomeSubmit();
+
+const minT = document.getElementById("MinT")
+
+minT.onclick = () => {
+    window.location.hash = "#MinTicTest"
+}
+
+const OurTest = document.getElementById("OurTest")
+OurTest.onclick = () => {
+    window.location.hash = "#OurTest"
+}
