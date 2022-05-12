@@ -2,7 +2,7 @@ let dierick = [];
 let cantQuestionsTotal = 0;
 let totalCantCheckBox = 0;
 
-const apiForm = (myUrl) => {
+const apiFormOurTest = async  (myUrl) => {
     $.ajax({
         dataType: "json",
         url: ("api/v1/" + myUrl),
@@ -12,6 +12,20 @@ const apiForm = (myUrl) => {
                 if(property !== "dimensionId" && property !== "dimension" && property !== "formularyId") {
                     cantQuestionsTotal += form[property].formularyId.length;
                 }
+            }
+            totalCantCheckBox = cantQuestionsTotal * 5;
+        }
+    });
+};
+
+const apiFormMinTicTest = async  (myUrl) => {
+    $.ajax({
+        dataType: "json",
+        url: ("api/v1/" + myUrl),
+        success: function (result) {
+            const process = result.axesByProcess.axesByProcess;
+            for (let property in process) {
+                cantQuestionsTotal += process[property].length;
             }
             totalCantCheckBox = cantQuestionsTotal * 5;
         }
@@ -104,17 +118,22 @@ const resIsConfirmed = (url,results, task) => {
     }
 };
 
-const validateCardsContent = () => {
+const validateCardsContent = async () => {
     const URLactual = window.location.href;
     const formulario = document.getElementById("firstForm");
     let url = URLactual.split('/')[3];
 
-    apiForm(url);
+    if (url === "OurTest"){        
+        await apiFormOurTest(url);
+    } else {
+        await apiFormMinTicTest(url);
+    }
 
     formulario.addEventListener('submit', async (e) => {
         e.preventDefault();
         let tasks = e.target.elements;
         let task = totalCantCheckBoxFunc(tasks, totalCantCheckBox);
+        console.log(task)
         if (task.length < cantQuestionsTotal) {
             oppsAdvice(); 
         } else {                  

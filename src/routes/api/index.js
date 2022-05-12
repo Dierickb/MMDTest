@@ -9,7 +9,7 @@ const dimension = require('./ourTest/dimensionAPI')
 const axesDimension = require('./ourTest/axesDimension')
 
 router.get('/ourTestApi', ourTestAPI)
-router.get('/evaluationAxes', evaluationAxes)
+router.get('/MinTicTest', evaluationAxes)
 router.get('/filterBySector', filterBySector)
 router.get('/economicSector', economicSector)
 router.get('/dimension', dimension)

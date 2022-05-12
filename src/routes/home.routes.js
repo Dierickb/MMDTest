@@ -6,6 +6,7 @@ const Dimension = require("../models/ourTest/Dimension");
 const AxesDimension = require('../models/ourTest/EvaluationAxes')
 const FilterBySector = require('../models/minTicTest/FilerBySector');
 const PushOurTest = require('../models/ourTest/PushOurTest')
+const DBMinTicTest = require('../controller/minTic/DBMinTicTest')
 
 const getIndex = (req, res) => {
     const errors = validationResult(req);
@@ -19,7 +20,9 @@ const getIndex = (req, res) => {
         res.render("index", { 
             title: "MMD Test", 
             sector: sector, 
-            idSector: idSector });
+            idSector: idSector,
+            selected: req.session.selected
+        });
     } else {
         console.error(e);
     }
@@ -31,6 +34,8 @@ const postIndex = async (req, res) => {
         await FilterBySector.pullDB(newLink.sector);
         await Dimension.pullDB();
         await AxesDimension.pullDB();
+        const idbusinessMinTic = await DBMinTicTest.pushBusiness(newLink.busisnessName, newLink.sector);
+        console.log(idbusinessMinTic)
         const idbusiness = await PushOurTest.pushBusiness(newLink.busisnessName, newLink.sector);
         if ( idbusiness !== undefined && idbusiness !== null) {
             req.session.idbusiness = idbusiness;

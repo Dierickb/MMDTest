@@ -25,10 +25,20 @@
                         data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" >Iniciar test</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/OurTest">Brochero-Suarez Test</a>
+                        <% if(selected !== true) { %> 
+                            <a class="nav-link" data-bs-toggle="offcanvas" href="#"
+                            data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">Brochero-Suarez Test</a>                            
+                        <% } else { %> 
+                            <a class="nav-link" href="/OurTest">MMD Test</a>
+                        <% } %>                         
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/MinTicTest">MinTicTest</a>
+                        <% if(selected !== true) { %> 
+                            <a class="nav-link" data-bs-toggle="offcanvas" href="#"
+                            data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">MinTicTest</a>                            
+                        <% } else { %> 
+                            <a class="nav-link" href="/MinTicTest">MinTicTest</a>
+                        <% } %>   
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button"
