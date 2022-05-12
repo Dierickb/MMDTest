@@ -41,9 +41,6 @@ const getMinticTest = (req, res) => {
 };
 const postMinTicTest = async (req, res) => {
     if (req.body.lenght !== 0) {
-        console.log("")
-        console.log(req.session.idBusinessMinTic)
-        console.log(req.body)
         await DBMinTicTest.pushAskResult(req.session.idBusinessMinTic, req.body)
         res.status(200).redirect('/PrevTest')
     }
