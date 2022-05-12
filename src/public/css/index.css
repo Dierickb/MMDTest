@@ -25,7 +25,7 @@ body {
   width: 60vw;
 }
 .content {
-  margin-top: 61px;
+  margin-top: 10vh;
   vertical-align: middle;
   margin-right: 1vw;
 }
@@ -54,11 +54,18 @@ body {
 
 @media (max-width: 1300px) {
   .content {
-    margin-top: 40px;
+    margin-top: 5vh;
   }
   .home {
     height: 40vh;
   }
+  .d-grid.gap-2.col-6.mx-auto {
+    right: 20vw;
+    position: absolute;
+    top: 29vh;
+    width: 20vw;
+  }
+  
   .imgHome {
     width: 80vh;
     margin: 0 5vw 0 0;
