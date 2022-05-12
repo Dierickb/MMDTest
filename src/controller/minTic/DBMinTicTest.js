@@ -23,8 +23,8 @@ DBMinTicTest.allBussisness = async function () {
 DBMinTicTest.allBussisnessInAsks = async function () {
     const response = await connection.query(
         `   
-            SELECT idbusisnesses FROM pf.asksresults
-            GROUP BY idbusisnesses
+            SELECT id_business_name FROM MINTIC_MODEL.ask_results
+            GROUP BY id_business_name
         `
     )
     .catch((e) => {
@@ -58,17 +58,16 @@ DBMinTicTest.pushAskResult = async function (idbusiness, askObject) {
     const value = askObject.value; const questionId = askObject.idQuestion; let data = '';
     const insert = async (asks) => {
         connection.query(
-            `INSERT INTO pf.asksresults (idbusisnesses, value, idquestion) VALUES ${asks}`
+            `INSERT INTO MINTIC_MODEL.ask_results (id_business_name, id_evaluacion, value) VALUES ${asks}`
         )
         .catch((e) => {
             throw e;
         });
     }
     for (let i =0; i< value.length -1; i++) {
-        data = data.concat(`("${idbusiness}", "${value[i]}", "${questionId[i]}" ), `);
+        data = data.concat(`("${idbusiness}", "${questionId[i]}", "${value[i]}"), `);
     }    
-    data = data.concat(`("${idbusiness}", "${value[value.length -1]}", "${questionId[value.length -1]}" ); `) ;
-
+    data = data.concat(`("${idbusiness}", "${questionId[value.length -1]}" , "${value[value.length -1]}");`) ;
     if (finded) {
         await DBMinTicTest.deleteBusinessInAskByBusiness(idbusiness)
         await insert(data)
@@ -79,14 +78,16 @@ DBMinTicTest.pushAskResult = async function (idbusiness, askObject) {
 
 // Delete
 DBMinTicTest.deleteBusinessById = async function(id) {
-    DBMinTicTest.validateBusinessById(id)
+    const finded = DBMinTicTest.validateBusinessById(id)
 
-    await connection.query(
-        ` DELETE FROM pf.asksresults WHERE idbusinesses=${id};  `
-    )
-    .catch((e) => {
-        throw e;
-    });
+    if (finded) {
+        await connection.query(
+            ` DELETE FROM MINTIC_MODEL.ask_results WHERE id_business_name=${id};  `
+        )
+        .catch((e) => {
+            throw e;
+        });
+    }
 
 }
 DBMinTicTest.deleteBusinessInAskByBusiness = async function(idBusiness) {
@@ -95,7 +96,7 @@ DBMinTicTest.deleteBusinessInAskByBusiness = async function(idBusiness) {
     
     if (finded) {
         await connection.query(
-            ` DELETE FROM pf.asksresults WHERE idbusisnesses=${idBusiness};  `
+            ` DELETE FROM MINTIC_MODEL.ask_results WHERE id_business_name=${idBusiness};  `
         )
         .catch((e) => {
             throw e;
@@ -112,7 +113,7 @@ DBMinTicTest.validateBusinessById = async function (id) {
     const finded = false;
 
     for ( element of businessDB ) {
-        if ( element.idbusinesses === id) {
+        if ( element.id_business_name === id) {
             finded = true ;
         }
     }
@@ -139,7 +140,7 @@ DBMinTicTest.validateBusinessInAsks = async function (idBusiness) {
     const response = await DBMinTicTest.allBussisnessInAsks();
     let idBusinessFound = false;
     for ( let property of response ){
-        if (idBusiness === property.idbusisnesses) {
+        if (idBusiness === property.id_business_name) {
             idBusinessFound = true;
             return idBusinessFound
         }

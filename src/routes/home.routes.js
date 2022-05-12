@@ -9,9 +9,6 @@ const PushOurTest = require('../models/ourTest/PushOurTest')
 const DBMinTicTest = require('../controller/minTic/DBMinTicTest')
 
 const getIndex = (req, res) => {
-    console.log("")
-    console.log(req.url)
-    console.log("")
     const errors = validationResult(req);
     let sector = []; k = 0; let idSector = [];
     for (let value of Sectors.allSectors) {
@@ -34,19 +31,25 @@ const getIndex = (req, res) => {
 const postIndex = async (req, res) => {
     const newLink = req.body;
     let {redirect} = req.query;
-    console.log("")
-    console.log(redirect);
     try {
         await FilterBySector.pullDB(newLink.sector);
         await Dimension.pullDB();
         await AxesDimension.pullDB();
-        const idbusinessMinTic = await DBMinTicTest.pushBusiness(newLink.busisnessName, newLink.sector);
+        const idBusinessMinTic = await DBMinTicTest.pushBusiness(newLink.busisnessName, newLink.sector);
         const idbusiness = await PushOurTest.pushBusiness(newLink.busisnessName, newLink.sector);
         if ( idbusiness !== undefined && idbusiness !== null) {
             req.session.idbusiness = idbusiness;
             req.session.selected = true;
         } 
-        res.status(200).redirect(`/${redirect}`)
+        if (idBusinessMinTic !== undefined && idBusinessMinTic !==null){
+            req.session.idBusinessMinTic = idBusinessMinTic;
+        }
+        if (redirect.length === 0) {
+            res.status(200).redirect('/OurTest')
+        } else {
+            res.status(200).redirect(`/${redirect}`)
+        }
+        
     } catch (e) {
         console.error(e)
     }   

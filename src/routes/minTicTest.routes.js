@@ -4,7 +4,8 @@ const { check, validationResult } = require("express-validator");
 const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
 const ProcessSelected = require("../models/minTicTest/ProcessSelected");
 const AxesByProcess = require("../models/minTicTest/EvaluationAxes");
-const Sectors = require('../models/EconomicSector')
+const Sectors = require('../models/EconomicSector');
+const DBMinTicTest = require('../controller/minTic/DBMinTicTest');
 
 const getMinticTest = (req, res) => {
     let sector = []; k = 0; let idSector = [];
@@ -14,10 +15,10 @@ const getMinticTest = (req, res) => {
         k = k + 1;
     }
 
-    const axesByProcess = AxesByProcess.axesByProcess;
     const errors = validationResult(req);
-    if (errors.isEmpty() && req.session.selected) {
+    if (errors.isEmpty() && req.session.selected) {                
         if (req.session.processSelected === true) {
+            const axesByProcess = AxesByProcess.axesByProcess;
             res.render("layouts/model/index",
             {
                 url: req.url,
@@ -28,6 +29,7 @@ const getMinticTest = (req, res) => {
                 sector: sector, 
                 idSector: idSector,
                 axesByProcess: axesByProcess.axesByProcess,
+                id_eje_evaluacion: axesByProcess.id_eje_evaluacion,
             });
         } else {
             res.redirect('/PrevTest')
@@ -37,8 +39,14 @@ const getMinticTest = (req, res) => {
         res.redirect('/')
     }
 };
-const postMinTicTest = (req, res) => {
-    const newLink = req.body;
+const postMinTicTest = async (req, res) => {
+    if (req.body.lenght !== 0) {
+        console.log("")
+        console.log(req.session.idBusinessMinTic)
+        console.log(req.body)
+        await DBMinTicTest.pushAskResult(req.session.idBusinessMinTic, req.body)
+        res.status(200).redirect('/PrevTest')
+    }
 };
 
 

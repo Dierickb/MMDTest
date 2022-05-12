@@ -25,14 +25,16 @@ AxesByProcess.axesByProcess = {
     processId: [],
     tagProcess: [],
     axesByProcess: {},
+    id_eje_evaluacion: {},
 }
 
-AxesByProcess.add = async function (idSector, sector, idProcess, tagProcess, axesByProcess) {
+AxesByProcess.add = async function (idSector, sector, idProcess, tagProcess, axesByProcess, id_eje_evaluacion) {
     AxesByProcess.axesByProcess.idSector = idSector;
     AxesByProcess.axesByProcess.sector = sector;
     AxesByProcess.axesByProcess.processId = idProcess;
     AxesByProcess.axesByProcess.tagProcess = tagProcess; 
     AxesByProcess.axesByProcess.axesByProcess = axesByProcess;
+    AxesByProcess.axesByProcess.id_eje_evaluacion = id_eje_evaluacion;
 }
 
 AxesByProcess.createElementsProcess = function (process) {
@@ -58,12 +60,15 @@ AxesByProcess.arrayToObject = async function ( processData ) {
     let [ tagProcess,  idProcess ] = AxesByProcess.tagProcess( processData )
     let j = 0;
     let axesByProcess = {};
+    let id_eje_evaluacion = {};
 
     idProcess.map(idArray => {
         let data = []; let i = 0;
+        let eje_evaluacion = [];
         processData.map(element => {
             if (element.id_proceso === idArray) {
-                data[i] = element.nombre_metodo
+                data[i] = element.nombre_metodo;
+                eje_evaluacion[i] = element.id_evaluacion;
                 i = i + 1;
             }            
         })      
@@ -71,10 +76,10 @@ AxesByProcess.arrayToObject = async function ( processData ) {
         tagProcess[j] = tagProcess[j].toLowerCase(); 
         tagProcess[j] = eliminarDiacriticos(tagProcess[j])
         axesByProcess[tagProcess[j]] = data;
+        id_eje_evaluacion[tagProcess[j]] = eje_evaluacion;
         j = j + 1;
     })
-
-    return [idProcess, tagProcess, axesByProcess];
+    return [idProcess, tagProcess, axesByProcess, id_eje_evaluacion];
 }
 
 AxesByProcess.pullDB = async function (idProcesses) {
@@ -89,7 +94,7 @@ AxesByProcess.pullDB = async function (idProcesses) {
     const response = await connection
         .query(
             `   
-                    SELECT ev.id_eje_evaluacion, ejev.nombre_metodo,  ev.id_proceso, p.proceso
+                    SELECT ev.id_evaluacion, ev.id_eje_evaluacion, ejev.nombre_metodo,  ev.id_proceso, p.proceso
                     FROM MINTIC_MODEL.evaluacion ev
                     INNER JOIN MINTIC_MODEL.ejes_evaluacion ejev ON ev.id_eje_evaluacion = ejev.id_eje_evaluacion
                     INNER JOIN MINTIC_MODEL.procesos p ON ev.id_proceso = p.id_proceso

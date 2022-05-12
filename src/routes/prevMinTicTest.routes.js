@@ -18,7 +18,7 @@ const getPrevTest = async (req, res) => {
         k = k + 1;
     }
 
-    if ( req.session.selected && req.session.processSelected !== true) {        
+    if ( req.session.selected ) {        
         res.render("layouts/model/index",
             {
                 title: "Previus to test",
@@ -51,10 +51,10 @@ const postPrevTest = async (req, res) => {
         i=i+1;
     }); 
     await ProcessSelected.add(processSelected);
-    let [idProcess, tagProcess, axesByProcess] = await AxesByProcess.pullDB(ProcessSelected.allProcessSelected.processId);
+    let [idProcess, tagProcess, axesByProcess, id_eje_evaluacion] = await AxesByProcess.pullDB(ProcessSelected.allProcessSelected.processId);
     let idSector = ProcessSelected.allProcessSelected.idSector;
     let sector = ProcessSelected.allProcessSelected.sector;
-    await AxesByProcess.add(idSector, sector, idProcess, tagProcess, axesByProcess)
+    await AxesByProcess.add(idSector, sector, idProcess, tagProcess, axesByProcess, id_eje_evaluacion)
     //req.session.selected = true;
     selected = true;
     req.session.processSelected = req.body.length !== 0;
