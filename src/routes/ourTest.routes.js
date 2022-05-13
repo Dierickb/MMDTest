@@ -26,7 +26,7 @@ const getOurTest = (req, res) => {
                     process: AxesDimension.allDimension,
                     sector: sector, 
                     idSector: idSector,
-                    selected: req.session.selected
+                    selected: true
                 });
         } catch (e) {
             throw new Error(e.message)
