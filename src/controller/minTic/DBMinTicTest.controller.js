@@ -107,7 +107,7 @@ DBMinTicTestController.deleteBusinessInAskByBusiness = async function(idBusiness
 
 // Validations
 DBMinTicTestController.validateBusinessById = async function (id) {
-    const businessDB = await DBMinTicTestController.allBussisness()
+    const businessDB = await DBMinTicTestController.allBusiness()
     let found = false;
 
     for ( let element of businessDB ) {
@@ -118,7 +118,7 @@ DBMinTicTestController.validateBusinessById = async function (id) {
     return found
 }
 DBMinTicTestController.validateBusiness = async function (business, idSector) {
-    const businessDB = await DBMinTicTestController.allBussisness()
+    const businessDB = await DBMinTicTestController.allBusiness()
     let found = false; let id;
     if (businessDB.length !== 0) {
         for ( let element of businessDB ) {
@@ -135,7 +135,7 @@ DBMinTicTestController.validateBusiness = async function (business, idSector) {
     
 }
 DBMinTicTestController.validateBusinessInAsks = async function (idBusiness) {
-    const response = await DBMinTicTestController.allBussisnessInAsks();
+    const response = await DBMinTicTestController.allBusinessInAsks();
     let idBusinessFound = false;
     for ( let property of response ){
         if (idBusiness === property.id_business_name) {

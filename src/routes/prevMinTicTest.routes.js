@@ -23,7 +23,7 @@ const getPrevTest = async (req, res) => {
             {
                 title: "Previus to test",
                 url: url,
-                selected: true,
+                selected: false,
                 process: processBySector,
                 columnHeader: columnHeader,
                 sector: sector, 

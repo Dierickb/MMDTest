@@ -3,7 +3,7 @@
   align-items: center;
   vertical-align: middle;
   width: auto;
-  max-width: 80vw;
+  max-width: 90vw;
 }
 .cardBox {
   position: relative;
@@ -15,7 +15,7 @@
   height: 70vh;
   position: relative;
   background-color: #fefffa;
-  padding: 2.5vw;
+  padding: 2.7vh 2.5vw 2.7vh 2.5vh;
   display: flex;
   cursor: pointer;
 }
