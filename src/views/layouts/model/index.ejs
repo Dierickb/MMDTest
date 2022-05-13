@@ -11,7 +11,7 @@
             <%- include('./carousel') %>
 
         <% } else {%>
-            <% if (selected) { %>
+            <% if (!selected) { %>
                 <%- include('./carousel') %>               
             <% } else {%>                                
                 <%- include('./prevMinTicTest/prevForm') %>                 
