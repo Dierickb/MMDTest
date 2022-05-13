@@ -3,12 +3,13 @@ const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
 const AxesDimension = require('../models/ourTest/EvaluationAxes');
-const PushOurTest = require('../models/ourTest/PushOurTest');
+const PushOurTest = require('../controller/ourTest/OurTest.controller');
 const Sectors = require('../models/EconomicSector');
 
 const getOurTest = (req, res) => {
     const errors = validationResult(req);
-    let sector = []; k = 0; let idSector = [];
+    let sector = [];
+    let k = 0; let idSector = [];
     for (let value of Sectors.allSectors) {
         sector[k] = value.tipo_empresas;
         idSector[k] = value.id_tipo_empresa;
@@ -41,11 +42,6 @@ const postOurTest = async (req, res) => {
         res.status(200).redirect('/PrevTest')
     }
 };
-
-const updateOurTest = (req, res) => {
-
-}
-
 
 module.exports = {
     router,

@@ -5,10 +5,11 @@ const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
 const ProcessSelected = require("../models/minTicTest/ProcessSelected");
 const AxesByProcess = require("../models/minTicTest/EvaluationAxes");
 const Sectors = require('../models/EconomicSector');
-const DBMinTicTest = require('../controller/minTic/DBMinTicTest');
+const DBMinTicTest = require('../controller/minTic/DBMinTicTest.controller');
 
-const getMinticTest = (req, res) => {
-    let sector = []; k = 0; let idSector = [];
+const getMinTicTest = (req, res) => {
+    let sector = [];
+    let k = 0; let idSector = [];
     for (let value of Sectors.allSectors) {
         sector[k] = value.tipo_empresas;
         idSector[k] = value.id_tipo_empresa;
@@ -49,6 +50,6 @@ const postMinTicTest = async (req, res) => {
 
 module.exports = {
     router,
-    getMinticTest,
+    getMinTicTest,
     postMinTicTest,
 };

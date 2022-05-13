@@ -1,6 +1,6 @@
 const connection = require('../../accessDB');
 
-let PushOurTest = function ( bussisness, idSector, idDimension, idQuestion, valueQuestion ) {
+let OurTestController = function (bussisness, idSector, idDimension, idQuestion, valueQuestion ) {
     this.bussisness = bussisness;
     this.idSector = idSector;
     this.idDimension = idDimension;
@@ -10,7 +10,7 @@ let PushOurTest = function ( bussisness, idSector, idDimension, idQuestion, valu
 
 
 // Pull data
-PushOurTest.allBussisness = async function () {
+OurTestController.allBussisness = async function () {
     const response = await connection.query(
         `   
             SELECT * FROM pf.businesses
@@ -21,11 +21,11 @@ PushOurTest.allBussisness = async function () {
     });
     return response
 }
-PushOurTest.allBussisnessInAsks = async function () {
+OurTestController.allBussisnessInAsks = async function () {
     const response = await connection.query(
         `   
-            SELECT idbusisnesses FROM pf.asksresults
-            GROUP BY idbusisnesses
+            SELECT idbusinesses FROM pf.asksresults
+            GROUP BY idbusinesses
         `
     )
     .catch((e) => {
@@ -35,16 +35,16 @@ PushOurTest.allBussisnessInAsks = async function () {
 }
 
 // Push
-PushOurTest.pushBusiness = async function (busisnessName, idSector) {    
+OurTestController.pushBusiness = async function (businessName, idSector) {
     idSector = parseInt(idSector);
-    const [finded, id] = await PushOurTest.validateBusiness(busisnessName, idSector)
+    const [found, id] = await OurTestController.validateBusiness(businessName, idSector)
     let response
     
-    if (!finded) {
+    if (!found) {
         response = await connection.query(
             `   
                 INSERT INTO pf.businesses (businesses, id_sector)
-                VALUES ("${busisnessName}", ${idSector});
+                VALUES ("${businessName}", ${idSector});
             `
         )
         .catch((e) => {
@@ -55,12 +55,12 @@ PushOurTest.pushBusiness = async function (busisnessName, idSector) {
         return id;
     }
 }
-PushOurTest.pushAskResult = async function (idbusiness, askObject) {
-    const finded = await PushOurTest.validateBusinessInAsks(idbusiness)
+OurTestController.pushAskResult = async function (idbusiness, askObject) {
+    const found = await OurTestController.validateBusinessInAsks(idbusiness)
     const value = askObject.value; const questionId = askObject.idQuestion; let data = '';
     const insert = async (asks) => {
         connection.query(
-            `INSERT INTO pf.asksresults (idbusisnesses, value, idquestion) VALUES ${asks}`
+            `INSERT INTO pf.asksresults (idbusinesses, value, idquestion) VALUES ${asks}`
         )
         .catch((e) => {
             throw e;
@@ -71,8 +71,8 @@ PushOurTest.pushAskResult = async function (idbusiness, askObject) {
     }    
     data = data.concat(`("${idbusiness}", "${value[value.length -1]}", "${questionId[value.length -1]}" ); `) ;
 
-    if (finded) {
-        await PushOurTest.deleteBusinessInAskByBusiness(idbusiness)
+    if (found) {
+        await OurTestController.deleteBusinessInAskByBusiness(idbusiness)
         await insert(data)
     } else {
         await insert(data)
@@ -80,8 +80,8 @@ PushOurTest.pushAskResult = async function (idbusiness, askObject) {
 }
 
 // Delete
-PushOurTest.deleteBusinessById = async function(id) {
-    PushOurTest.validateBusinessById(id)
+OurTestController.deleteBusinessById = async function(id) {
+    OurTestController.validateBusinessById(id)
 
     await connection.query(
         ` DELETE FROM pf.asksresults WHERE idbusinesses=${id};  `
@@ -91,13 +91,13 @@ PushOurTest.deleteBusinessById = async function(id) {
     });
 
 }
-PushOurTest.deleteBusinessInAskByBusiness = async function(idBusiness) {
+OurTestController.deleteBusinessInAskByBusiness = async function(idBusiness) {
 
-    const finded = await PushOurTest.validateBusinessInAsks(idBusiness);
+    const found = await OurTestController.validateBusinessInAsks(idBusiness);
     
-    if (finded) {
+    if (found) {
         await connection.query(
-            ` DELETE FROM pf.asksresults WHERE idbusisnesses=${idBusiness};  `
+            ` DELETE FROM pf.asksresults WHERE idbusinesses=${idBusiness};  `
         )
         .catch((e) => {
             throw e;
@@ -110,32 +110,32 @@ PushOurTest.deleteBusinessInAskByBusiness = async function(idBusiness) {
 
 // Validations
 
-PushOurTest.validateBusinessById = async function (id) {
-    const businessDB = await PushOurTest.allBussisness()
-    const finded = false;
+OurTestController.validateBusinessById = async function (id) {
+    const businessDB = await OurTestController.allBussisness()
+    let found = false;
 
     for ( element of businessDB ) {
         if ( element.idbusinesses === id) {
-            finded = true ;
+            found = true ;
         }
     }
-    return finded
+    return found
 }
-PushOurTest.validateBusiness = async function (business, idSector) {
-    const businessDB = await PushOurTest.allBussisness()
-    let finded = false; let id = 0;
-    for ( element of businessDB ) {
+OurTestController.validateBusiness = async function (business, idSector) {
+    const businessDB = await OurTestController.allBussisness()
+    let found = false; let id = 0;
+    for ( let element of businessDB ) {
         if ( element.businesses === business && element.id_sector === idSector) {
-            finded = true;
+            found = true;
             id = element.idbusinesses
-            return [finded, id]
+            return [found, id]
         }
     }
     id = null;
-    return [finded, id]
+    return [found, id]
 }
-PushOurTest.validateBusinessInAsks = async function (idBusiness) {
-    const response = await PushOurTest.allBussisnessInAsks();
+OurTestController.validateBusinessInAsks = async function (idBusiness) {
+    const response = await OurTestController.allBussisnessInAsks();
     let idBusinessFound = false;
     for ( let property of response ){
         if (idBusiness === property.idbusisnesses) {
@@ -147,4 +147,4 @@ PushOurTest.validateBusinessInAsks = async function (idBusiness) {
     
 }
 
-module.exports = PushOurTest;
+module.exports = OurTestController;

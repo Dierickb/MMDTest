@@ -1,14 +1,14 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 const { getIndex, postIndex, } = require('./home.routes')
 const { getOurTest, postOurTest, } = require('./ourTest.routes')
 const { getPrevTest, postPrevTest} = require('./prevMinTicTest.routes');
-const { getMinticTest, postMinTicTest, } = require('./minTicTest.routes')
+const { getMinTicTest, postMinTicTest, } = require('./minTicTest.routes')
 
 router.get('/', getIndex);
 router.get('/OurTest', getOurTest);
-router.get('/MinTicTest', getMinticTest);
+router.get('/MinTicTest', getMinTicTest);
 router.get('/PrevTest', getPrevTest)
 
 router.post('/', postIndex);

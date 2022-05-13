@@ -36,12 +36,7 @@ Dimension.add = async function (dimension) {
 
 Dimension.pullDB = async function () {
     const response = await connection
-        .query(
-            `   
-                SELECT * FROM pf.dimension
-                
-            `
-        )
+        .query(`SELECT * FROM pf.dimension`)
         .catch((e) => {
             throw e;
         });

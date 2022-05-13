@@ -5,8 +5,8 @@ const { check, validationResult } = require("express-validator");
 const Dimension = require("../models/ourTest/Dimension");
 const AxesDimension = require('../models/ourTest/EvaluationAxes')
 const FilterBySector = require('../models/minTicTest/FilerBySector');
-const PushOurTest = require('../models/ourTest/PushOurTest')
-const DBMinTicTest = require('../controller/minTic/DBMinTicTest')
+const PushOurTest = require('../controller/ourTest/OurTest.controller')
+const DBMinTicTest = require('../controller/minTic/DBMinTicTest.controller')
 
 const getIndex = (req, res) => {
     const errors = validationResult(req);
@@ -36,9 +36,9 @@ const postIndex = async (req, res) => {
         await Dimension.pullDB();
         await AxesDimension.pullDB();
         const idBusinessMinTic = await DBMinTicTest.pushBusiness(newLink.busisnessName, newLink.sector);
-        const idbusiness = await PushOurTest.pushBusiness(newLink.busisnessName, newLink.sector);
-        if ( idbusiness !== undefined && idbusiness !== null) {
-            req.session.idbusiness = idbusiness;
+        const idBusiness = await PushOurTest.pushBusiness(newLink.busisnessName, newLink.sector);
+        if ( idBusiness !== undefined && idBusiness !== null) {
+            req.session.idbusiness = idBusiness;
             req.session.selected = true;
         } 
         if (idBusinessMinTic !== undefined && idBusinessMinTic !==null){

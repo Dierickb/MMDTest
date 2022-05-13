@@ -1,4 +1,4 @@
-var OurFormulary = require('../../../models/ourTest/OurFormulario');
+const OurFormulary = require('../../../models/ourTest/OurFormulario');
 
 exports.ourFormulary_list = async function(req, res){
     res.status(200).json({

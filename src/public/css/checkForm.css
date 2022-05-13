@@ -1,3 +1,6 @@
 .wd-min{
     width: min-content;
 }
+.offcanvas-top {
+    height: 34vh;
+}
