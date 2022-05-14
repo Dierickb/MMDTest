@@ -17,7 +17,7 @@ AritmeticFunctions.prom = function(myArray){
     }
     let prom = summ / ArrayLen
     prom = prom.toFixed(3)
-    return [summ, prom];
+    return [summ, parseFloat(prom)];
 }
 
 AritmeticFunctions.varianze = function(average, myArray){
@@ -27,7 +27,7 @@ AritmeticFunctions.varianze = function(average, myArray){
     })
 
     s2 = s2 * cache;
-    return s2.toFixed(3)
+    return parseFloat(s2.toFixed(3))
 }
 
 module.exports = AritmeticFunctions

@@ -20,7 +20,6 @@ const getMinTicTest = (req, res) => {
     if (errors.isEmpty() && req.session.selected) {                
         if (req.session.processSelected === true) {
             const axesByProcess = AxesByProcess.axesByProcess;
-            
             res.render("layouts/model/index",
             {
                 url: req.url,
@@ -44,9 +43,10 @@ const getMinTicTest = (req, res) => {
 };
 const postMinTicTest = async (req, res) => {
     if (req.body.lenght !== 0) {
+        req.session.minticTest = true;
         DBMinTicTest.pushAskResult(req.session.idBusinessMinTic, req.body)
         await DBMinTicTest.pushResultInfo(req.body)
-        res.status(200).redirect('/PrevTest')
+        res.status(200).redirect('/TestResult')
     }
 };
 

@@ -60,6 +60,9 @@ const redirect = async (nextUrl, data) => {
     if (nextUrl === "OurTest") {
         window.location.href = "/PrevTest";
     }
+    if (nextUrl === "MinTicTest") {
+        window.location.href = "/TestResult";
+    }
 };
 
 const swalWithBootstrapButtons = Swal.mixin({

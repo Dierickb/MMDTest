@@ -231,7 +231,7 @@ DBMinTicTestController.tagProcessSelected = async function (asks) {
         let tagProcess = DBMinTicTestController.eliminarDiacriticos(ProcessSelected.allProcessSelected.process[i])
         process[ProcessSelected.allProcessSelected.processId[i]] = {
             tagProcess: DBMinTicTestController.createElements(tagProcess),
-            processName: ProcessSelected.allProcessSelected.process[0]
+            processName: ProcessSelected.allProcessSelected.process[i]
         }
     }
 

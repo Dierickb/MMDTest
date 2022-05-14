@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Sectors = require('../models/EconomicSector')
+const Sectors = require('../models/EconomicSector');
 const { check, validationResult } = require("express-validator");
 const Dimension = require("../models/ourTest/Dimension");
 const AxesDimension = require('../models/ourTest/EvaluationAxes')
