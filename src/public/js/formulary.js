@@ -94,11 +94,15 @@ const obtainData = (dataValue)  => {
     const question = {
         value: [],
         idQuestion: [],
+        process: []
     } 
     let i = 0;
     for (element of dataValue) {        
         question.value[i] = parseInt(element[0]);
         question.idQuestion[i] = parseInt(element[1].split("-")[1]);
+        if (element[1].split("-").length === 3){            
+            question.process[i] = parseInt(element[1].split("-")[2]);
+        }
         i = i + 1;
     }
     return question

@@ -1,4 +1,5 @@
-<% active = true; j=0;%> 
+<% active = true %>
+<% j = 0 %>  
 
 <% for (property in axesByProcess) { %>
 
@@ -25,9 +26,9 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <% for( let j = 0; j <columnHeader.length; j++ ) { %> 
+                                    <% for( let z = 0; z <columnHeader.length; z++ ) { %> 
                                         <th scope="col">
-                                            <%= columnHeader[j] %> 
+                                            <%= columnHeader[z] %> 
                                         </th>
                                     <% } %> 
                                 </tr>
@@ -41,6 +42,6 @@
             </div>
         </div>
     
-<% j=j+1;}; %>
+<% j=j+1; }; %>
 
 

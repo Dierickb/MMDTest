@@ -1,4 +1,6 @@
 const connection = require('../../accessDB');
+const ProcessSelected = require('../../models/minTicTest/ProcessSelected')
+const AritmeticFunctions = require('../../common/aritmeticFunctions');
 
 let DBMinTicTestController = function (businessName, idSector, idDimension, idQuestion, valueQuestion ) {
     this.businessName = businessName;
@@ -7,6 +9,14 @@ let DBMinTicTestController = function (businessName, idSector, idDimension, idQu
     this.valueQuestion = valueQuestion;
 }
 
+DBMinTicTestController.eliminarDiacriticos = function(texto) {
+    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g,"");
+}
+DBMinTicTestController.createElements = function (process) {
+    return process.replace(/ /g, "_")
+}
+
+DBMinTicTestController.allAskResults = {};
 
 // Pull data
 DBMinTicTestController.allBusiness = async function () {
@@ -33,11 +43,10 @@ DBMinTicTestController.allBusinessInAsks = async function () {
 DBMinTicTestController.pullAskResult = async function () {
     return await connection.query(
         `   
-            SELECT askres.id_business_name, busnam.business_name, 
+            SELECT askres.id_business_name, 
                 busnam.tipo_empresa, temp.tipo_empresas, 
-                askres.id_evaluacion, 
-                    ev.id_proceso, prcs.proceso,
-                    ev.id_eje_evaluacion, ejev.nombre_metodo,
+                ev.id_proceso, prcs.proceso,
+                ev.id_eje_evaluacion, ejev.nombre_metodo,
                 askres.value
             FROM MINTIC_MODEL.ask_results askres
             INNER JOIN MINTIC_MODEL.business_name busnam ON askres.id_business_name = busnam.id_business_name
@@ -47,9 +56,30 @@ DBMinTicTestController.pullAskResult = async function () {
             INNER JOIN MINTIC_MODEL.ejes_evaluacion ejev ON ev.id_eje_evaluacion = ejev.id_eje_evaluacion
          `
     )
-        .catch((e) => {
-            throw e;
-        })
+    .catch((e) => {
+        throw e;
+    })
+}
+DBMinTicTestController.pullASKBySector = async function (idSector) {
+    return await connection.query(
+        `   
+            SELECT askres.id_business_name, 
+                busnam.tipo_empresa, temp.tipo_empresas, 
+                ev.id_proceso, prcs.proceso,
+                ev.id_eje_evaluacion, ejev.nombre_metodo,
+                askres.value
+            FROM MINTIC_MODEL.ask_results askres
+            INNER JOIN MINTIC_MODEL.business_name busnam ON askres.id_business_name = busnam.id_business_name
+            INNER JOIN MINTIC_MODEL.evaluacion ev ON askres.id_evaluacion = ev.id_evaluacion
+            INNER JOIN MINTIC_MODEL.tipo_empresa temp ON busnam.tipo_empresa = temp.id_tipo_empresa
+            INNER JOIN MINTIC_MODEL.procesos prcs ON ev.id_proceso = prcs.id_proceso  
+            INNER JOIN MINTIC_MODEL.ejes_evaluacion ejev ON ev.id_eje_evaluacion = ejev.id_eje_evaluacion
+            WHERE busnam.tipo_empresa = ${idSector}
+         `
+    )
+    .catch((e) => {
+        throw e;
+    })
 }
 
 // Push
@@ -93,6 +123,31 @@ DBMinTicTestController.pushAskResult = async function (idBusiness, askObject) {
     } else {
         await insert(data)
     }    
+}
+DBMinTicTestController.pushResultInfo = async function (results){
+    resultByProcess = {};
+    const askByProcess = await DBMinTicTestController.tagProcessSelected(results)
+
+    resultByProcess["idSector"] = ProcessSelected.allProcessSelected.idSector;
+    resultByProcess["sector"] = ProcessSelected.allProcessSelected.sector;
+
+    for(property in askByProcess){
+        let [summ, average] = AritmeticFunctions.prom(askByProcess[property].value);
+        let varianze = AritmeticFunctions.varianze(average, askByProcess[property].value);
+        resultByProcess[property] = {
+            processName: askByProcess[property].processName,
+            total: summ,
+            average: average,
+            cantN: askByProcess[property].value.length,
+            varianze: varianze,
+            standardDeviation: Math.pow(varianze, 1/2).toFixed(3)
+        }
+    }
+    // Hacer push
+
+    DBMinTicTestController.allAskResults = resultByProcess;
+    return resultByProcess
+
 }
 
 // Delete
@@ -166,5 +221,74 @@ DBMinTicTestController.validateBusinessInAsks = async function (idBusiness) {
     return idBusinessFound
     
 }
+
+// Refactor data
+DBMinTicTestController.tagProcessSelected = async function (asks) {
+    let j = 0; let askByProcess = {}; let = []; let object = ""; let value = []; let idQuestion = [];
+    let process = [];
+
+    for (let i = 0; i < ProcessSelected.allProcessSelected.processId.length ; i++ ){
+        let tagProcess = DBMinTicTestController.eliminarDiacriticos(ProcessSelected.allProcessSelected.process[i])
+        process[ProcessSelected.allProcessSelected.processId[i]] = {
+            tagProcess: DBMinTicTestController.createElements(tagProcess),
+            processName: ProcessSelected.allProcessSelected.process[0]
+        }
+    }
+
+    /*
+        askByProcess: {
+            process_1: {
+                id: number,
+                process: string,
+                value: number[],
+                idQuestion: number[]
+            }
+            ..
+            ..
+            ..
+            process_n: {
+                id: number,
+                process: string,
+                value: number[],
+                idQuestion: number[]
+            }
+        }
+    */
+    for (let i = 0; i < asks.value.length; i++) {
+        if (process[asks.process[i]].tagProcess !== object) {
+
+            value = []; idQuestion = []; j = 0;
+            askByProcess[process[asks.process[i]].tagProcess] = { }
+            value[j] = asks.value[i];
+            idQuestion[j] = asks.idQuestion[i];
+            object = process[asks.process[i]].tagProcess;
+
+            askByProcess[process[asks.process[i]].tagProcess] = {
+                id: asks.process[i],
+                processName: process[asks.process[i]].processName,
+                value: value,
+                idQuestion: idQuestion,
+            }
+            j = j + 1;
+        } else { 
+            
+            value[j] = asks.value[i];
+            idQuestion[j] = asks.idQuestion[i];
+            
+            askByProcess[process[asks.process[i]].tagProcess] = {
+                id: asks.process[i],
+                processName: process[asks.process[i]].processName,
+                value: value,
+                idQuestion: idQuestion,
+            }
+            j = j + 1;
+        }
+        
+    }
+
+    return askByProcess
+
+}
+
 
 module.exports = DBMinTicTestController;
