@@ -8,8 +8,10 @@ const FilterBySector = require('../models/minTicTest/FilerBySector');
 const PushOurTest = require('../controller/ourTest/OurTest.controller')
 const DBMinTicTest = require('../controller/minTic/DBMinTicTest.controller')
 
-const getIndex = (req, res) => {
+const getIndex = async (req, res) => {
     const errors = validationResult(req);
+    const results = await DBMinTicTest.pullAskResult();
+    console.log(results)
     let sector = []; k = 0; let idSector = [];
     for (let value of Sectors.allSectors) {
         sector[k] = value.tipo_empresas;

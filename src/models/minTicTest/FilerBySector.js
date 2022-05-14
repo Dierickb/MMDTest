@@ -41,12 +41,12 @@ FilterBySector.pullDB = async function (idFilterBySector) {
     const response = await connection
         .query(
             `   
-                    SELECT tep.id_tipo_empresas, te.tipo_empresas, tep.id_proceso, p.proceso
-                    FROM MINTIC_MODEL.tipo_empresa_proceso tep
-                    INNER JOIN MINTIC_MODEL.tipo_empresa te ON tep.id_tipo_empresas = te.id_tipo_empresa
-                    INNER JOIN MINTIC_MODEL.procesos p ON tep.id_proceso = p.id_proceso
-                    WHERE tep.id_tipo_empresas="${id}"
-                `
+                SELECT tep.id_tipo_empresas, te.tipo_empresas, tep.id_proceso, p.proceso
+                FROM MINTIC_MODEL.tipo_empresa_proceso tep
+                INNER JOIN MINTIC_MODEL.tipo_empresa te ON tep.id_tipo_empresas = te.id_tipo_empresa
+                INNER JOIN MINTIC_MODEL.procesos p ON tep.id_proceso = p.id_proceso
+                WHERE tep.id_tipo_empresas="${id}"
+            `
         )
         .catch((e) => {
             throw e;

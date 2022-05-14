@@ -30,6 +30,27 @@ DBMinTicTestController.allBusinessInAsks = async function () {
             throw e;
         })
 }
+DBMinTicTestController.pullAskResult = async function () {
+    return await connection.query(
+        `   
+            SELECT askres.id_business_name, busnam.business_name, 
+                busnam.tipo_empresa, temp.tipo_empresas, 
+                askres.id_evaluacion, 
+                    ev.id_proceso, prcs.proceso,
+                    ev.id_eje_evaluacion, ejev.nombre_metodo,
+                askres.value
+            FROM MINTIC_MODEL.ask_results askres
+            INNER JOIN MINTIC_MODEL.business_name busnam ON askres.id_business_name = busnam.id_business_name
+            INNER JOIN MINTIC_MODEL.evaluacion ev ON askres.id_evaluacion = ev.id_evaluacion
+            INNER JOIN MINTIC_MODEL.tipo_empresa temp ON busnam.tipo_empresa = temp.id_tipo_empresa
+            INNER JOIN MINTIC_MODEL.procesos prcs ON ev.id_proceso = prcs.id_proceso  
+            INNER JOIN MINTIC_MODEL.ejes_evaluacion ejev ON ev.id_eje_evaluacion = ejev.id_eje_evaluacion
+         `
+    )
+        .catch((e) => {
+            throw e;
+        })
+}
 
 // Push
 DBMinTicTestController.pushBusiness = async function (businessName, idSector) {
@@ -103,7 +124,6 @@ DBMinTicTestController.deleteBusinessInAskByBusiness = async function(idBusiness
         throw new Error("This business id does not exist")
     }
 }
-
 
 // Validations
 DBMinTicTestController.validateBusinessById = async function (id) {
