@@ -64,6 +64,18 @@ OurTestController.pullAxesByDimension = async function () {
         });
     return response
 }
+OurTestController.pullBusinessInAskResultStadistic = async function () {
+    const response = await connection.query(
+        `   
+            SELECT id_business FROM pf.id_business
+            GROUP BY id_business
+        `
+    )
+    .catch((e) => {
+        throw e;
+    });
+    return response
+}
 
 OurTestController.allDimensions = [];
 OurTestController.askByDimension = {};
@@ -198,6 +210,9 @@ OurTestController.validateBusinessInAsks = async function (idBusiness) {
     }
     return idBusinessFound
     
+}
+OurTestController.validateBusinessInAskResultStadistic = async function (idBusiness) {
+
 }
 
 // Refactor
