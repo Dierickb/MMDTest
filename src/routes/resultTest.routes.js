@@ -22,8 +22,12 @@ const getTestResults = (req, res) => {
                 ourTest: req.session.OurTest,
                 minTicTest: req.session.minticTest,
             });
-        }         
-    }
+        } else {
+            res.status(200).redirect('/')
+        } 
+    } else {
+        res.status(200).redirect('/')
+    } 
 }
 
 module.exports = {
