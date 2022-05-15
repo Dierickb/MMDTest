@@ -5,7 +5,7 @@ const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
 const ProcessSelected = require("../models/minTicTest/ProcessSelected");
 const AxesByProcess = require("../models/minTicTest/EvaluationAxes");
 const Sectors = require('../models/EconomicSector');
-const DBMinTicTest = require('../controller/minTic/DBMinTicTest.controller');
+const DBMinTicTestController = require('../controller/minTic/DBMinTicTest.controller');
 
 const getMinTicTest = (req, res) => {
     let sector = [];
@@ -19,6 +19,7 @@ const getMinTicTest = (req, res) => {
     const errors = validationResult(req);
     if (errors.isEmpty() && req.session.selected) {                
         if (req.session.processSelected === true) {
+            console.log(req.session.idBusinessMinTic)
             const axesByProcess = AxesByProcess.axesByProcess;
             res.render("layouts/model/index",
             {
@@ -44,8 +45,8 @@ const getMinTicTest = (req, res) => {
 const postMinTicTest = async (req, res) => {
     if (req.body.lenght !== 0) {
         req.session.minticTest = true;
-        DBMinTicTest.pushAskResult(req.session.idBusinessMinTic, req.body)
-        await DBMinTicTest.pushResultInfo(req.body)
+        DBMinTicTestController.pushAskResult(req.session.idBusinessMinTic, req.body)
+        await DBMinTicTestController.pushResultInfo(req.body, req.session.idBusinessMinTic)
         res.status(200).redirect('/TestResult')
     }
 };

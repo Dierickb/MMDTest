@@ -41,6 +41,29 @@ OurTestController.allBussisnessInAsks = async function () {
     });
     return response
 }
+OurTestController.pullAllDimensions = async function () {
+    const response = await connection
+        .query(`SELECT * FROM pf.dimension`)
+        .catch((e) => {
+            throw e;
+        });
+        
+    return await Dimension.add(response)
+}
+OurTestController.pullAxesByDimension = async function () {
+    const response = await connection
+        .query(
+            `   
+                SELECT form.idformulary, dim.dimension, dim.iddimension, form.nivel, form.question
+                FROM pf.formulary form
+                INNER JOIN pf.dimension dim ON form.iddimension = dim.iddimension
+            `
+        )
+        .catch((e) => {
+            throw e;
+        });
+    return response
+}
 
 OurTestController.allDimensions = [];
 OurTestController.askByDimension = {};
