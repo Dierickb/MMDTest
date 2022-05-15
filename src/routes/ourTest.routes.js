@@ -18,6 +18,8 @@ const getOurTest = (req, res) => {
 
     if (errors.isEmpty() && req.session.selected) {
         try {            
+            PushOurTest.createArrayDimension(AxesDimension.allAxesByDimension)
+
             res.render("layouts/model/index",
                 {
                     url: req.url,
@@ -38,6 +40,7 @@ const getOurTest = (req, res) => {
 };
 const postOurTest = async (req, res) => {
     if (req.body.lenght !== 0) {
+        PushOurTest.pushAskResultInfo(req.body)
         req.session.OurTest = true;
         await PushOurTest.pushAskResult(req.session.idbusiness, req.body)
         res.status(200).redirect('/PrevTest')

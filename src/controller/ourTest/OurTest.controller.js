@@ -1,4 +1,6 @@
 const connection = require('../../accessDB');
+const ProcessSelected = require('../../models/minTicTest/ProcessSelected')
+const AritmeticFunctions = require('../../common/aritmeticFunctions');
 
 let OurTestController = function (bussisness, idSector, idDimension, idQuestion, valueQuestion ) {
     this.bussisness = bussisness;
@@ -8,6 +10,12 @@ let OurTestController = function (bussisness, idSector, idDimension, idQuestion,
     this.valueQuestion = valueQuestion;
 }
 
+OurTestController.eliminarDiacriticos = function(texto) {
+    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g,"");
+}
+OurTestController.createElements = function (process) {
+    return process.replace(/ /g, "_")
+}
 
 // Pull data
 OurTestController.allBussisness = async function () {
@@ -33,6 +41,9 @@ OurTestController.allBussisnessInAsks = async function () {
     });
     return response
 }
+
+OurTestController.allDimensions = [];
+OurTestController.askByDimension = {};
 
 // Push
 OurTestController.pushBusiness = async function (businessName, idSector) {
@@ -78,6 +89,27 @@ OurTestController.pushAskResult = async function (idbusiness, askObject) {
         await insert(data)
     }    
 }
+OurTestController.pushAskResultInfo = async function (resultOurTest) {
+    const result = OurTestController.tagDimension(resultOurTest);
+    let askByDimension = {};
+    askByDimension["idSector"] = ProcessSelected.allProcessSelected.idSector;
+    askByDimension["sector"] = ProcessSelected.allProcessSelected.sector;
+    for( property in result ) {
+        let [summ, average] = AritmeticFunctions.prom(result[property].value);
+        let varianze = AritmeticFunctions.varianze(average, result[property].value);
+
+        askByDimension[property] = {
+            dimensionId: result[property].dimensionId,
+            dimension: result[property].dimension,
+            total: summ,
+            average: average,
+            cantN: result[property].value.length,
+            varianze: varianze,
+            standardDeviation: parseFloat(Math.pow(varianze, 1/2).toFixed(3))
+        }
+    }
+    OurTestController.askByDimension = askByDimension;
+}
 
 // Delete
 OurTestController.deleteBusinessById = async function(id) {
@@ -107,9 +139,7 @@ OurTestController.deleteBusinessInAskByBusiness = async function(idBusiness) {
     }
 }
 
-
 // Validations
-
 OurTestController.validateBusinessById = async function (id) {
     const businessDB = await OurTestController.allBussisness()
     let found = false;
@@ -145,6 +175,55 @@ OurTestController.validateBusinessInAsks = async function (idBusiness) {
     }
     return idBusinessFound
     
+}
+
+// Refactor
+OurTestController.createArrayDimension = async function(dimension) {
+    
+    let dimensions = [];
+    for ( property in dimension ) {
+        dimensions[dimension[property].dimensionId] = dimension[property].dimension;        
+    }
+
+    OurTestController.allDimensions = dimensions;
+}
+OurTestController.tagDimension = function (results) {
+    let i = 0; let dimension = {}; let object = 0; let j = 0; let tagDimension;
+    for (element of results.process) {
+        if (element !== object){      
+            value = []; idQuestion = []; j = 0;
+
+            tagDimension = OurTestController.allDimensions[element];
+            tagDimension = OurTestController.eliminarDiacriticos(tagDimension);
+            tagDimension = OurTestController.createElements(tagDimension);
+
+            value[j] = results.value[i];
+            idQuestion[j] = results.idQuestion[i];
+
+            dimension[tagDimension] = {
+                dimensionId: element,
+                dimension: OurTestController.allDimensions[element],
+                idQuestion: idQuestion,
+                value: value,
+            };
+            j = j + 1;
+            object = element;
+        } else {
+            value[j] = results.value[i];
+            idQuestion[j] = results.idQuestion[i];
+
+            dimension[tagDimension] = {
+                dimensionId: element,
+                dimension: OurTestController.allDimensions[element],
+                idQuestion: idQuestion,
+                value: value,
+            };
+            j = j + 1;
+
+        }
+        i = i + 1;
+    }
+    return dimension
 }
 
 module.exports = OurTestController;

@@ -1,4 +1,4 @@
-const DBMinTicTest = require('../../../controller/minTic/DBMinTicTest.controller');
+const DBMinTicTest = require('../../minTic/DBMinTicTest.controller');
 
 exports.minTicResult_list = async function (req, res) {
     res.status(200).json({

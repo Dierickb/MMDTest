@@ -76,3 +76,8 @@ body {
     width: 20vw;
   }
 }
+@media (max-width: 750px) {
+  .d-grid.gap-2.col-6.mx-auto {
+    width: 30vw;
+  }
+}

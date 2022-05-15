@@ -125,7 +125,7 @@ DBMinTicTestController.pushAskResult = async function (idBusiness, askObject) {
     }    
 }
 DBMinTicTestController.pushResultInfo = async function (results){
-    resultByProcess = {};
+    let resultByProcess = {};
     const askByProcess = await DBMinTicTestController.tagProcessSelected(results)
 
     resultByProcess["idSector"] = ProcessSelected.allProcessSelected.idSector;

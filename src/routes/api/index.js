@@ -5,9 +5,10 @@ const ourTestAPI = require('./ourTest/ourTestAPI');
 const evaluationAxes = require('./minTicTest/evaluationAxes');
 const filterBySector = require('./minTicTest/filterBySector');
 const economicSector = require('./ecnonomicSectorsAPI');
-const dimension = require('./ourTest/dimensionAPI')
-const axesDimension = require('./ourTest/axesDimension')
-const minTicResult = require('./results/minTicResult')
+const dimension = require('./ourTest/dimensionAPI');
+const axesDimension = require('./ourTest/axesDimension');
+const minTicResult = require('./results/minTicResult');
+const ourTestResult = require('./results/ourTestResult')
 
 router.get('/ourTestApi', ourTestAPI)
 router.get('/MinTicTest', evaluationAxes)
@@ -16,6 +17,7 @@ router.get('/economicSector', economicSector)
 router.get('/dimension', dimension)
 router.get('/OurTest', axesDimension)
 router.get('/minTicResult', minTicResult)
+router.get('/ourTestResult', ourTestResult)
 
 module.exports = (
     router
