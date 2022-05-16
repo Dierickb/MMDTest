@@ -217,11 +217,14 @@ DBMinTicTestController.pushResultInfo = async function (results, idBusiness){
             object = resultByProcess[property];
             data = data.concat(`("${resultByProcess.idBusiness}", "${resultByProcess.idSector}", "${object.processId}", "${object.average}", "${object.total}", "${object.varianze}", "${object.standardDeviation}", "${object.cantN}"  ), `);
             i=i+1;
-        } 
+        } else if (property !== "idSector" && property !== "sector" && property !== "idBusiness" && i === objectLength-1) {
+            object = resultByProcess[property];
+            data = data.concat(`("${resultByProcess.idBusiness}", "${resultByProcess.idSector}", "${object.processId}", "${object.average}", "${object.total}", "${object.varianze}", "${object.standardDeviation}", "${object.cantN}"  ); `);
+        }
     }
-    data = data.concat(`("${resultByProcess.idBusiness}", "${resultByProcess.idSector}", "${object.processId}", "${object.average}", "${object.total}", "${object.varianze}", "${object.standardDeviation}", "${object.cantN}"  ); `);
-
+    
     const found = DBMinTicTestController.validateBusinessInAskResultStadistic(idBusiness)
+    
     
     if (found) {
         await DBMinTicTestController.deleteBusinessInAskResultStadistic(idBusiness)
@@ -229,6 +232,7 @@ DBMinTicTestController.pushResultInfo = async function (results, idBusiness){
     } else {
         await insert(data)
     }
+    
     // Hacer push
 
     DBMinTicTestController.allAskResults = resultByProcess;

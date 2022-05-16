@@ -169,15 +169,18 @@ OurTestController.pushAskResultInfo = async function (resultOurTest, idBusiness)
         });
     }
     objectLength = Object.keys(askByDimension).length - 3;
+
     for (property in askByDimension) {        
         if (property !== "idSector" && property !== "sector" && property !== "idBusiness" && i< objectLength-1) {
             object = askByDimension[property];
             data = data.concat(`("${askByDimension.idBusiness}", "${askByDimension.idSector}", "${object.dimensionId}", "${object.average}", "${object.total}", "${object.varianze}", "${object.standardDeviation}", "${object.cantN}"  ), `);
             i=i+1;
-        } 
+        } else if (property !== "idSector" && property !== "sector" && property !== "idBusiness" && i === objectLength-1) {
+            object = askByDimension[property];
+            data = data.concat(`("${askByDimension.idBusiness}", "${askByDimension.idSector}", "${object.dimensionId}", "${object.average}", "${object.total}", "${object.varianze}", "${object.standardDeviation}", "${object.cantN}"  ); `);
+        }
     }
-    data = data.concat(`("${askByDimension.idBusiness}", "${askByDimension.idSector}", "${object.dimensionId}", "${object.average}", "${object.total}", "${object.varianze}", "${object.standardDeviation}", "${object.cantN}"  ); `);
-    
+    console.log(data)
     if (found) {
         await OurTestController.deleteBusinessInAskResultStadistic(idBusiness)
         await insert(data)
