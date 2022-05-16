@@ -21,7 +21,8 @@ const getIndex = async (req, res) => {
             title: "MMD Test", 
             sector: sector, 
             idSector: idSector,
-            selected: req.session.selected
+            selected: req.session.selected,
+            url: req.url
         });
     } else {
         console.error(e);
