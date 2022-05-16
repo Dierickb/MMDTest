@@ -14,6 +14,7 @@ const getIndex = async (req, res) => {
     for (let value of Sectors.allSectors) {
         sector[k] = value.tipo_empresas;
         idSector[k] = value.id_tipo_empresa;
+        PushOurTest.idSector[value.id_tipo_empresa] = value.tipo_empresas;
         k = k + 1;
     }
     if (errors.isEmpty()) {

@@ -1,6 +1,7 @@
 const connection = require('../../accessDB');
 const ProcessSelected = require('../../models/minTicTest/ProcessSelected')
 const AritmeticFunctions = require('../../common/aritmeticFunctions');
+let id_sector;
 
 let OurTestController = function (bussisness, idSector, idDimension, idQuestion, valueQuestion ) {
     this.bussisness = bussisness;
@@ -71,7 +72,6 @@ OurTestController.pullAxesByDimension = async function () {
         .catch((e) => {
             throw e;
         });
-    console.log(response)
     return response
 }
 OurTestController.pullBusinessInAskResultStadistic = async function () {
@@ -103,10 +103,12 @@ OurTestController.pullEvaluationAxes = async function () {
 
 OurTestController.allDimensions = [];
 OurTestController.askByDimension = {};
+OurTestController.idSector = [];
 
 // Push
 OurTestController.pushBusiness = async function (businessName, idSector) {
     idSector = parseInt(idSector);
+    id_sector = idSector;
     const [found, id] = await OurTestController.validateBusiness(businessName, idSector)
     let response
     
@@ -140,7 +142,6 @@ OurTestController.pushAskResult = async function (idbusiness, askObject) {
         data = data.concat(`("${idbusiness}", "${value[i]}", "${questionId[i]}" ), `);
     }    
     data = data.concat(`("${idbusiness}", "${value[value.length -1]}", "${questionId[value.length -1]}" ); `) ;
-    console.log(found)
     if (found) {
         await OurTestController.deleteBusinessInAskByBusiness(idbusiness)
         await insert(data)
@@ -149,15 +150,15 @@ OurTestController.pushAskResult = async function (idbusiness, askObject) {
     }    
 }
 OurTestController.pushAskResultInfo = async function (resultOurTest, idBusiness) {
-    const result = OurTestController.tagDimension(resultOurTest);
-    const askByDimension = OurTestController.resultByDimension(result);
-    const found = OurTestController.validateBusinessInAskResultStadistic()
+    const result = await OurTestController.tagDimension(resultOurTest);
+    const askByDimension = OurTestController.resultByDimension(result, idBusiness);
+    const found = await OurTestController.validateBusinessInAskResultStadistic(idBusiness)
     let data = ''; let i = 0;
-
+    
     const insert = async (asks) => {
         connection.query(
             `
-                INSERT INTO MINTIC_MODEL.ask_result_stadistic
+                INSERT INTO pf.ask_result_stadistic
                     (id_business, id_sector, id_dimension, average, total, varianze, standardDeviation, cantN) 
                 VALUES 
                     ${asks}
@@ -167,7 +168,23 @@ OurTestController.pushAskResultInfo = async function (resultOurTest, idBusiness)
             throw e;
         });
     }
-
+    objectLength = Object.keys(askByDimension).length - 3;
+    for (property in askByDimension) {        
+        if (property !== "idSector" && property !== "sector" && property !== "idBusiness" && i< objectLength-1) {
+            object = askByDimension[property];
+            data = data.concat(`("${askByDimension.idBusiness}", "${askByDimension.idSector}", "${object.dimensionId}", "${object.average}", "${object.total}", "${object.varianze}", "${object.standardDeviation}", "${object.cantN}"  ), `);
+            i=i+1;
+        } 
+    }
+    data = data.concat(`("${askByDimension.idBusiness}", "${askByDimension.idSector}", "${object.dimensionId}", "${object.average}", "${object.total}", "${object.varianze}", "${object.standardDeviation}", "${object.cantN}"  ); `);
+    
+    if (found) {
+        await OurTestController.deleteBusinessInAskResultStadistic(idBusiness)
+        await insert(data)
+    } else {
+        await insert(data)
+    }
+    
     OurTestController.askByDimension = askByDimension;
 }
 
@@ -190,6 +207,19 @@ OurTestController.deleteBusinessInAskByBusiness = async function(idBusiness) {
     if (found) {
         await connection.query(
             ` DELETE FROM pf.asksresults WHERE idbusinesses=${idBusiness};  `
+        )
+        .catch((e) => {
+            throw e;
+        });
+    } else {
+        throw new Error("This business id does not exist")
+    }
+}
+OurTestController.deleteBusinessInAskResultStadistic = async function(idBusiness) {
+    const found = await OurTestController.validateBusinessInAskResultStadistic(idBusiness);
+    if (found) {
+        await connection.query(
+            ` DELETE FROM MINTIC_MODEL.ask_result_stadistic WHERE id_business=${idBusiness}; `
         )
         .catch((e) => {
             throw e;
@@ -239,7 +269,7 @@ OurTestController.validateBusinessInAsks = async function (idBusiness) {
 OurTestController.validateBusinessInAskResultStadistic = async function (idBusiness) {
     const result = await OurTestController.pullBusinessInAskResultStadistic();
     let idBusinessFound = false;
-    for ( let property of response ){
+    for ( let property of result ){
         if (idBusiness === property.id_business) {
             idBusinessFound = true;
             return idBusinessFound
@@ -296,10 +326,11 @@ OurTestController.tagDimension = function (results) {
     }
     return dimension
 }
-OurTestController.resultByDimension = function (result) {
+OurTestController.resultByDimension = function (result, id_business) {
     let askByDimension = {};
-    askByDimension["idSector"] = ProcessSelected.allProcessSelected.idSector;
-    askByDimension["sector"] = ProcessSelected.allProcessSelected.sector;
+    askByDimension["idSector"] = id_sector;
+    askByDimension["sector"] = OurTestController.idSector[id_sector];
+    askByDimension["idBusiness"] = id_business;
     for( property in result ) {
         let [summ, average] = AritmeticFunctions.prom(result[property].value);
         let varianze = AritmeticFunctions.varianze(average, result[property].value);
@@ -314,7 +345,6 @@ OurTestController.resultByDimension = function (result) {
             standardDeviation: parseFloat(Math.pow(varianze, 1/2).toFixed(3))
         }
     }
-
     return askByDimension
 }
 
