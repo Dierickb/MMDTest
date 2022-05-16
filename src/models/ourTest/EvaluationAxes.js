@@ -1,4 +1,4 @@
-const connection = require('../../accessDB')
+const OurTestController = require('../../controller/ourTest/OurTest.controller')
 
 let AxesDimension = function (idDimension, dimension, level, question) {
     this.idDimension = idDimension;
@@ -38,6 +38,7 @@ AxesDimension.tagDimension = function (data1) {
             }
         }
     });
+
     return [tagDimension, idDimension, dimensions]
 }
 
@@ -61,74 +62,28 @@ AxesDimension.arrayToObject = async function (data) {
                     formularyId: [],
                     dimensionId: idDimension[j],
                     dimension: dimensions[j],
-                    level_1: [],
-                    level_2: [],
-                    level_3: [],
-                    level_4: [],
-                    level_5: [],
+                    question: [],
                 }
                 axesDimension[tagDimension[j]].formularyId[z] = element.idformulary;
+                axesDimension[tagDimension[j]].question[z] = element.question;
 
-                if (element.nivel === 1){
-                    axesDimension[tagDimension[j]].level_1[k] = element.question;
-                }
-                if (element.nivel === 2){
-                    axesDimension[tagDimension[j]].level_2[n] = element.question;         
-                }
-                if (element.nivel === 3){
-                    axesDimension[tagDimension[j]].level_3[m] = element.question;
-                }
-                if (element.nivel === 4){
-                    axesDimension[tagDimension[j]].level_4[i] = element.question;
-                }
-                if (element.nivel === 5){ 
-                    axesDimension[tagDimension[j]].level_5[b] = element.question;
-                }
                 j = j + 1; // j es el contador de los cambios de dimensiones 
             } else if (element.dimension === object) {  
                 z = z + 1;
-                axesDimension[tagDimension[j-1]].formularyId[z] = element.idformulary;
-                if (element.nivel === 1){
-                    k = k +1;
-                    axesDimension[tagDimension[j-1]].level_1[k] = element.question;
-                }
-                if (element.nivel === 2){
-                    axesDimension[tagDimension[j-1]].level_2[n] = element.question;
-                    n=n+1;              
-                }
-                if (element.nivel === 3){
-                    axesDimension[tagDimension[j-1]].level_3[m] = element.question;
-                    m=m+1;
-                }
-                if (element.nivel === 4){
-                    axesDimension[tagDimension[j-1]].level_4[i] = element.question;
-                    i=i+1;
-                }
-                if (element.nivel === 5){
-                    axesDimension[tagDimension[j-1]].level_5[b] = element.question;
-                    b=b+1;
-                }          
+                axesDimension[tagDimension[j-1]].formularyId[z] = element.idformulary;      
+                axesDimension[tagDimension[j-1]].question[z] = element.question;             
             }
 
         }
     });
-
+    
     return axesDimension
 }
 
 AxesDimension.pullDB = async function () {
     AxesDimension.allAxesByDimension = {}
-    const response = await connection
-        .query(
-            `   
-                SELECT form.idformulary, dim.dimension, dim.iddimension, form.nivel, form.question
-                FROM pf.formulary form
-                INNER JOIN pf.dimension dim ON form.iddimension = dim.iddimension
-            `
-        )
-        .catch((e) => {
-            throw e;
-        });
+    
+    const response = await OurTestController.pullEvaluationAxes()
 
     AxesDimension.allAxesByDimension = await AxesDimension.arrayToObject(response);
     return AxesDimension.allAxesByDimension 

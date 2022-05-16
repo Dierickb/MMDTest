@@ -18,6 +18,15 @@ OurTestController.createElements = function (process) {
 }
 
 // Pull data
+OurTestController.pullAllOurTest = async function () {
+    const response = await connection
+        .query(`SELECT * FROM pf.dimension`)
+        .catch((e) => {
+            throw e;
+        });
+    return response
+            
+}
 OurTestController.allBussisness = async function () {
     const response = await connection.query(
         `   
@@ -54,7 +63,7 @@ OurTestController.pullAxesByDimension = async function () {
     const response = await connection
         .query(
             `   
-                SELECT form.idformulary, dim.dimension, dim.iddimension, form.nivel, form.question
+                SELECT form.idquestion, dim.dimension, dim.iddimension, form.question, form.question
                 FROM pf.formulary form
                 INNER JOIN pf.dimension dim ON form.iddimension = dim.iddimension
             `
@@ -62,18 +71,33 @@ OurTestController.pullAxesByDimension = async function () {
         .catch((e) => {
             throw e;
         });
+    console.log(response)
     return response
 }
 OurTestController.pullBusinessInAskResultStadistic = async function () {
     const response = await connection.query(
         `   
-            SELECT id_business FROM pf.id_business
+            SELECT id_business FROM pf.ask_result_stadistic
             GROUP BY id_business
         `
     )
     .catch((e) => {
         throw e;
     });
+    return response
+}
+OurTestController.pullEvaluationAxes = async function () {
+    const response = await connection
+        .query(
+            `   
+                SELECT form.idformulary, dim.dimension, dim.iddimension, form.question
+                FROM pf.formulary form
+                INNER JOIN pf.dimension dim ON form.iddimension = dim.iddimension
+            `
+        )
+        .catch((e) => {
+            throw e;
+        });
     return response
 }
 
@@ -116,7 +140,7 @@ OurTestController.pushAskResult = async function (idbusiness, askObject) {
         data = data.concat(`("${idbusiness}", "${value[i]}", "${questionId[i]}" ), `);
     }    
     data = data.concat(`("${idbusiness}", "${value[value.length -1]}", "${questionId[value.length -1]}" ); `) ;
-
+    console.log(found)
     if (found) {
         await OurTestController.deleteBusinessInAskByBusiness(idbusiness)
         await insert(data)
@@ -124,25 +148,26 @@ OurTestController.pushAskResult = async function (idbusiness, askObject) {
         await insert(data)
     }    
 }
-OurTestController.pushAskResultInfo = async function (resultOurTest) {
+OurTestController.pushAskResultInfo = async function (resultOurTest, idBusiness) {
     const result = OurTestController.tagDimension(resultOurTest);
-    let askByDimension = {};
-    askByDimension["idSector"] = ProcessSelected.allProcessSelected.idSector;
-    askByDimension["sector"] = ProcessSelected.allProcessSelected.sector;
-    for( property in result ) {
-        let [summ, average] = AritmeticFunctions.prom(result[property].value);
-        let varianze = AritmeticFunctions.varianze(average, result[property].value);
+    const askByDimension = OurTestController.resultByDimension(result);
+    const found = OurTestController.validateBusinessInAskResultStadistic()
+    let data = ''; let i = 0;
 
-        askByDimension[property] = {
-            dimensionId: result[property].dimensionId,
-            dimension: result[property].dimension,
-            total: summ,
-            average: average,
-            cantN: result[property].value.length,
-            varianze: varianze,
-            standardDeviation: parseFloat(Math.pow(varianze, 1/2).toFixed(3))
-        }
+    const insert = async (asks) => {
+        connection.query(
+            `
+                INSERT INTO MINTIC_MODEL.ask_result_stadistic
+                    (id_business, id_sector, id_dimension, average, total, varianze, standardDeviation, cantN) 
+                VALUES 
+                    ${asks}
+            `
+        )
+        .catch((e) => {
+            throw e;
+        });
     }
+
     OurTestController.askByDimension = askByDimension;
 }
 
@@ -203,7 +228,7 @@ OurTestController.validateBusinessInAsks = async function (idBusiness) {
     const response = await OurTestController.allBussisnessInAsks();
     let idBusinessFound = false;
     for ( let property of response ){
-        if (idBusiness === property.idbusisnesses) {
+        if (idBusiness === property.idbusinesses) {
             idBusinessFound = true;
             return idBusinessFound
         }
@@ -212,7 +237,15 @@ OurTestController.validateBusinessInAsks = async function (idBusiness) {
     
 }
 OurTestController.validateBusinessInAskResultStadistic = async function (idBusiness) {
-
+    const result = await OurTestController.pullBusinessInAskResultStadistic();
+    let idBusinessFound = false;
+    for ( let property of response ){
+        if (idBusiness === property.id_business) {
+            idBusinessFound = true;
+            return idBusinessFound
+        }
+    }
+    return idBusinessFound
 }
 
 // Refactor
@@ -262,6 +295,27 @@ OurTestController.tagDimension = function (results) {
         i = i + 1;
     }
     return dimension
+}
+OurTestController.resultByDimension = function (result) {
+    let askByDimension = {};
+    askByDimension["idSector"] = ProcessSelected.allProcessSelected.idSector;
+    askByDimension["sector"] = ProcessSelected.allProcessSelected.sector;
+    for( property in result ) {
+        let [summ, average] = AritmeticFunctions.prom(result[property].value);
+        let varianze = AritmeticFunctions.varianze(average, result[property].value);
+
+        askByDimension[property] = {
+            dimensionId: result[property].dimensionId,
+            dimension: result[property].dimension,
+            total: summ,
+            average: average,
+            cantN: result[property].value.length,
+            varianze: varianze,
+            standardDeviation: parseFloat(Math.pow(varianze, 1/2).toFixed(3))
+        }
+    }
+
+    return askByDimension
 }
 
 module.exports = OurTestController;

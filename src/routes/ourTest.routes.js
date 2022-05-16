@@ -41,8 +41,9 @@ const getOurTest = (req, res) => {
 const postOurTest = async (req, res) => {
     if (req.body.lenght !== 0) {
         req.session.OurTest = true;
+        console.log(req.session.idbusiness)
         await PushOurTest.pushAskResult(req.session.idbusiness, req.body)
-        await PushOurTest.pushAskResultInfo(req.body)
+        await PushOurTest.pushAskResultInfo(req.body, req.session.idbusiness)
         res.status(200).redirect('/PrevTest')
     }
 };

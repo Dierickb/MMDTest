@@ -1,4 +1,4 @@
-const connection = require('../../accessDB')
+const OurTestController = require('../../controller/ourTest/OurTest.controller')
 
 let Dimension = function (idDimensions, dimensions) {
     this.idDimensions = idDimensions;
@@ -35,12 +35,8 @@ Dimension.add = async function (dimension) {
 }
 
 Dimension.pullDB = async function () {
-    const response = await connection
-        .query(`SELECT * FROM pf.dimension`)
-        .catch((e) => {
-            throw e;
-        });
-        
+
+    const response = await OurTestController.pullAllOurTest()
     return await Dimension.add(response)
 }
 
