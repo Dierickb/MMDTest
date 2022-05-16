@@ -223,8 +223,8 @@ DBMinTicTestController.pushResultInfo = async function (results, idBusiness){
         }
     }
     
-    const found = DBMinTicTestController.validateBusinessInAskResultStadistic(idBusiness)
-    
+    const found = await DBMinTicTestController.validateBusinessInAskResultStadistic(idBusiness)
+     
     
     if (found) {
         await DBMinTicTestController.deleteBusinessInAskResultStadistic(idBusiness)
