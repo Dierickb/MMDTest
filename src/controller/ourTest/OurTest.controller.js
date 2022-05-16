@@ -219,7 +219,7 @@ OurTestController.deleteBusinessInAskResultStadistic = async function(idBusiness
     const found = await OurTestController.validateBusinessInAskResultStadistic(idBusiness);
     if (found) {
         await connection.query(
-            ` DELETE FROM MINTIC_MODEL.ask_result_stadistic WHERE id_business=${idBusiness}; `
+            ` DELETE FROM pf.ask_result_stadistic WHERE id_business=${idBusiness}; `
         )
         .catch((e) => {
             throw e;
