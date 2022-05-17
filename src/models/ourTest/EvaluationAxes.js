@@ -90,7 +90,6 @@ AxesDimension.pullDB = async function () {
     const response = await OurTestController.pullEvaluationAxes()
 
     AxesDimension.allAxesByDimension = await AxesDimension.arrayToObject(response);
-    console.log(AxesDimension.allAxesByDimension)
     return AxesDimension.allAxesByDimension 
 }
 

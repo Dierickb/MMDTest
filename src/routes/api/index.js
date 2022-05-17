@@ -9,6 +9,7 @@ const dimension = require('./ourTest/dimensionAPI');
 const axesDimension = require('./ourTest/axesDimension');
 const minTicResult = require('./results/minTicResult');
 const ourTestResult = require('./results/ourTestResult')
+const DBMinTicTestResultController = require('./home/homeMinTicTestAPI')
 
 router.get('/ourTestApi', ourTestAPI)
 router.get('/MinTicTest', evaluationAxes)
@@ -18,6 +19,7 @@ router.get('/dimension', dimension)
 router.get('/OurTest', axesDimension)
 router.get('/minTicResult', minTicResult)
 router.get('/ourTestResult', ourTestResult)
+router.get('/DBMinTicTestResult/:idSector', DBMinTicTestResultController)
 
 module.exports = (
     router

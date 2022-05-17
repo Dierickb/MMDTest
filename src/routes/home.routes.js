@@ -5,8 +5,9 @@ const { check, validationResult } = require("express-validator");
 const Dimension = require("../models/ourTest/Dimension");
 const AxesDimension = require('../models/ourTest/EvaluationAxes')
 const FilterBySector = require('../models/minTicTest/FilerBySector');
-const PushOurTest = require('../controller/ourTest/OurTest.controller')
-const DBMinTicTest = require('../controller/minTic/DBMinTicTest.controller')
+const PushOurTest = require('../controller/ourTest/OurTest.controller');
+const DBMinTicTest = require('../controller/minTic/DBMinTicTest.controller');
+const DBMinTicTestResultController = require('../controller/home/homeMinTicTest.controller')
 
 const getIndex = async (req, res) => {
     const errors = validationResult(req);
@@ -18,9 +19,10 @@ const getIndex = async (req, res) => {
         k = k + 1;
     }
     if (errors.isEmpty()) {
+        await DBMinTicTestResultController.pullResultBySector(2)
         res.render("index", { 
             title: "MMD Test", 
-            sector: sector, 
+            sector: sector,  
             idSector: idSector,
             selected: req.session.selected,
             url: req.url
