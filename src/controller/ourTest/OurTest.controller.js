@@ -90,7 +90,7 @@ OurTestController.pullEvaluationAxes = async function () {
     const response = await connection
         .query(
             `   
-                SELECT form.idformulary, dim.dimension, dim.iddimension, form.question
+                SELECT form.idformulary, dim.dimension, dim.iddimension, form.question, form.info_question
                 FROM pf.formulary form
                 INNER JOIN pf.dimension dim ON form.iddimension = dim.iddimension
             `
@@ -180,7 +180,7 @@ OurTestController.pushAskResultInfo = async function (resultOurTest, idBusiness)
             data = data.concat(`("${askByDimension.idBusiness}", "${askByDimension.idSector}", "${object.dimensionId}", "${object.average}", "${object.total}", "${object.varianze}", "${object.standardDeviation}", "${object.cantN}"  ); `);
         }
     }
-    console.log(data)
+    
     if (found) {
         await OurTestController.deleteBusinessInAskResultStadistic(idBusiness)
         await insert(data)

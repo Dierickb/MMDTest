@@ -1,12 +1,12 @@
 <% const levels = dimension[property]; let n = 0;%> 
 <% for( elements in levels ) { %>
-    <% if(elements !== "dimensionId" && elements !== "dimension" && elements !== "formularyId") { %>
+    <% if(elements !== "dimensionId" && elements !== "dimension" && elements !== "formularyId" && elements !== "infoQuestion" ) { %>
         <% for (data of levels[elements]) {  %> 
             <tr>
                 <td scope="col" class="wd-min">
                     <%= n+1 %> 
                 </td>
-                <td scope="col" class="wd-min" >
+                <td scope="col" class="wd-min axesEvaluation" title="<%= levels.infoQuestion[n] %> ">
                     ¿ <%= data  %> ?
                 </td>
                 <% for( let k = 0; k < 5; k++ ) { %>

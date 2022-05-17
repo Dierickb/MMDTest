@@ -19,7 +19,6 @@ const getMinTicTest = (req, res) => {
     const errors = validationResult(req);
     if (errors.isEmpty() && req.session.selected) {                
         if (req.session.processSelected === true) {
-            console.log(req.session.idBusinessMinTic)
             const axesByProcess = AxesByProcess.axesByProcess;
             res.render("layouts/model/index",
             {
@@ -33,6 +32,7 @@ const getMinTicTest = (req, res) => {
                 idProcess: axesByProcess.processId,
                 axesByProcess: axesByProcess.axesByProcess,
                 id_eje_evaluacion: axesByProcess.id_eje_evaluacion,
+                infoAxesByProcess: AxesByProcess.axesByProcess.infoAxesByProcess
             });
         } else {
             res.redirect('/PrevTest')

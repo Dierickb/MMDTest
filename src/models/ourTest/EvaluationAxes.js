@@ -49,6 +49,7 @@ AxesDimension.arrayToObject = async function (data) {
     let axesDimension = {
         //dimension: dimensions
     };
+
     AxesDimension.allDimension.length = 0;
     AxesDimension.allDimension = dimensions
     data.map(element => {
@@ -63,15 +64,18 @@ AxesDimension.arrayToObject = async function (data) {
                     dimensionId: idDimension[j],
                     dimension: dimensions[j],
                     question: [],
+                    infoQuestion: [],
                 }
                 axesDimension[tagDimension[j]].formularyId[z] = element.idformulary;
                 axesDimension[tagDimension[j]].question[z] = element.question;
+                axesDimension[tagDimension[j]].infoQuestion[z] = element.info_question;
 
                 j = j + 1; // j es el contador de los cambios de dimensiones 
             } else if (element.dimension === object) {  
                 z = z + 1;
                 axesDimension[tagDimension[j-1]].formularyId[z] = element.idformulary;      
-                axesDimension[tagDimension[j-1]].question[z] = element.question;             
+                axesDimension[tagDimension[j-1]].question[z] = element.question;  
+                axesDimension[tagDimension[j-1]].infoQuestion[z] = element.info_question;           
             }
 
         }
@@ -86,6 +90,7 @@ AxesDimension.pullDB = async function () {
     const response = await OurTestController.pullEvaluationAxes()
 
     AxesDimension.allAxesByDimension = await AxesDimension.arrayToObject(response);
+    console.log(AxesDimension.allAxesByDimension)
     return AxesDimension.allAxesByDimension 
 }
 

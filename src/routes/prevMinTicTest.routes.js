@@ -50,11 +50,13 @@ const postPrevTest = async (req, res) => {
         processSelected.process[i] = process[processId.indexOf(element)];
         i=i+1;
     }); 
+
     await ProcessSelected.add(processSelected);
-    let [idProcess, tagProcess, axesByProcess, id_eje_evaluacion] = await AxesByProcess.pullDB(ProcessSelected.allProcessSelected.processId);
     let idSector = ProcessSelected.allProcessSelected.idSector;
     let sector = ProcessSelected.allProcessSelected.sector;
-    await AxesByProcess.add(idSector, sector, idProcess, tagProcess, axesByProcess, id_eje_evaluacion)
+
+    let [idProcess, tagProcess, axesByProcess, id_eje_evaluacion, infoAxesByProcess] = await AxesByProcess.pullDB(ProcessSelected.allProcessSelected.processId);
+    await AxesByProcess.add(idSector, sector, idProcess, tagProcess, axesByProcess, id_eje_evaluacion, infoAxesByProcess)
     //req.session.selected = true;
     selected = true;
     req.session.processSelected = req.body.length !== 0;

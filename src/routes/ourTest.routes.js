@@ -3,7 +3,7 @@ const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
 const AxesDimension = require('../models/ourTest/EvaluationAxes');
-const PushOurTest = require('../controller/ourTest/OurTest.controller');
+const OurTest = require('../controller/ourTest/OurTest.controller');
 const Sectors = require('../models/EconomicSector');
 
 const getOurTest = (req, res) => {
@@ -18,7 +18,7 @@ const getOurTest = (req, res) => {
 
     if (errors.isEmpty() && req.session.selected) {
         try {            
-            PushOurTest.createArrayDimension(AxesDimension.allAxesByDimension)
+            OurTest.createArrayDimension(AxesDimension.allAxesByDimension)
 
             res.render("layouts/model/index",
                 {
@@ -41,8 +41,8 @@ const getOurTest = (req, res) => {
 const postOurTest = async (req, res) => {
     if (req.body.lenght !== 0) {
         req.session.OurTest = true;
-        await PushOurTest.pushAskResult(req.session.idbusiness, req.body)
-        await PushOurTest.pushAskResultInfo(req.body, req.session.idbusiness)
+        await OurTest.pushAskResult(req.session.idbusiness, req.body)
+        await OurTest.pushAskResultInfo(req.body, req.session.idbusiness)
         res.status(200).redirect('/PrevTest')
     }
 };
