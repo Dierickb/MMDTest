@@ -17,7 +17,6 @@
   background-color: #fefffa;
   padding: 2.7vh 2.5vw 2.7vh 2.5vh;
   display: flex;
-  cursor: pointer;
 }
 .cardBox .card .numbers {
   position: relative;

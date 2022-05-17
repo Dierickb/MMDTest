@@ -4,3 +4,6 @@
 .offcanvas-top {
     height: 34vh;
 }
+.form-check-input{
+    cursor: pointer;
+}
