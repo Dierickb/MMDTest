@@ -112,7 +112,6 @@ OurTestController.pullCriteriosByDimension = async function (dimensionId, level)
         .catch((e) => {
             throw e;
         });
-    console.log(OurTestController.askByDimension)
     return response
     
 }
@@ -365,9 +364,6 @@ OurTestController.resultByDimension = function (result, id_business) {
         }
     }
     return askByDimension
-}
-OurTestController.tagDimensionByLevel = function (result) {
-    console.log(OurTestController.askByDimension)
 }
 
 module.exports = OurTestController;
