@@ -14,7 +14,7 @@ body {
 .bodyContent .stadistic {
   display: grid;
   width: 100%;
-  max-width: 60vw;
+  max-width: 85vw;
   margin: 4vh auto;  
   grid-gap: 20px;
 }

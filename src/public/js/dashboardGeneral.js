@@ -68,7 +68,7 @@ const drawAxisTickColors = async (resultData, idDivGraph, sector) => {
 
     var options = {
         title: 'Resultado del test MinTic',
-        chartArea: { width: '50%' },
+        chartArea: { width: '60%' },
         hAxis: {
             title: 'Valor',
             minValue: 0,
