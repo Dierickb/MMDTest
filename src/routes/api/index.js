@@ -10,7 +10,9 @@ const axesDimension = require('./ourTest/axesDimension');
 const minTicResult = require('./results/minTicResult');
 const ourTestResult = require('./results/ourTestResult')
 const DBMinTicTestResultController = require('./home/homeMinTicTestAPI')
+const sectorList = require('./home/home')
 
+router.get('/',sectorList)
 router.get('/ourTestApi', ourTestAPI)
 router.get('/MinTicTest', evaluationAxes)
 router.get('/filterBySector', filterBySector)

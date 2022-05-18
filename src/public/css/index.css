@@ -11,6 +11,16 @@ body {
 .bodyContent {
   padding-top: 56px;
 }
+.bodyContent .stadistic {
+  display: grid;
+  width: 100%;
+  max-width: 60vw;
+  margin: 0 auto;
+  
+  grid-template-columns: repeat(auto-fill, auto-fill);
+  
+  grid-gap: 20px;
+}
 .home {
   background-color: rgb(230 238 245);
   width: 100%;

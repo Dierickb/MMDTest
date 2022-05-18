@@ -1,12 +1,12 @@
 const connection = require('../../accessDB');
 
-let DBMinTicTestResultController = function ( idSector, idQuestion, valueQuestion ) {
+let DBMinTicTestResultController = function (idSector, idQuestion, valueQuestion) {
     this.idSector = idSector;
     this.idQuestion = idQuestion;
     this.valueQuestion = valueQuestion;
 }
-DBMinTicTestResultController.eliminarDiacriticos = async function(texto) {
-    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g,"");
+DBMinTicTestResultController.eliminarDiacriticos = async function (texto) {
+    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
 }
 DBMinTicTestResultController.createElements = async function (process) {
     return process.replace(/ /g, "_")
@@ -20,9 +20,9 @@ DBMinTicTestResultController.pullSector = async function () {
     return await connection.query(
         ` SELECT id_tipo_empresa, tipo_empresas FROM MINTIC_MODEL.tipo_empresa `
     )
-    .catch((e) => {
-        throw e;
-    })
+        .catch((e) => {
+            throw e;
+        })
 }
 DBMinTicTestResultController.pullResultBySector = async function (idSector) {
     const found = await DBMinTicTestResultController.validateSector(idSector)
@@ -39,11 +39,11 @@ DBMinTicTestResultController.pullResultBySector = async function (idSector) {
                 WHERE askres.id_sector = ${idSector}
              `
         )
-        .catch((e) => {
-            throw e;
-        })
+            .catch((e) => {
+                throw e;
+            })
 
-        const tagProcess = DBMinTicTestResultController.tagProcess(response)        
+        const tagProcess = DBMinTicTestResultController.tagProcess(response)
         return tagProcess
     } else {
         throw new Error("The id sector does not exist")
@@ -54,7 +54,7 @@ DBMinTicTestResultController.pullResultBySector = async function (idSector) {
 DBMinTicTestResultController.validateSector = async function (idSector) {
     const sectorId = await DBMinTicTestResultController.pullSector(idSector);
     let idSectorFound = false;
-    for ( let property of sectorId ){
+    for (let property of sectorId) {
         if (idSector === property.id_tipo_empresa) {
             idSectorFound = true;
             return idSectorFound
@@ -65,47 +65,47 @@ DBMinTicTestResultController.validateSector = async function (idSector) {
 
 // Refactor
 DBMinTicTestResultController.tagProcess = async function (data) {
-    let i = 0; let average = []; let total = []; let standardDeviation = []; 
-    let cantN = []; let object = ""; let datos = {}; let tagProcess;
-    
+    let object = ""; let datos = {}; let tagProcess; let datos_2 = {};
+
     for (let property of data) {
-        datos["sectorId"] = property.id_sector;
-        datos["sector"] = property.tipo_empresas;
+        datos_2["sectorId"] = property.id_sector;
+        datos_2["sector"] = property.tipo_empresas;
         if (property.proceso !== object) {
-            
+            const dataKey = Object.keys(datos_2);
+            const found = dataKey.find(element => element === `${property.proceso}`);
+
             tagProcess = await DBMinTicTestResultController.eliminarDiacriticos(property.proceso);
             tagProcess = await DBMinTicTestResultController.createElements(tagProcess);
 
-            average[i] = property.average;
-            total[i] = property.total;
-            standardDeviation[i] = property.standardDeviation;
-            cantN[i] = property.cantN;
-            
-            datos[tagProcess] = {
-                idProcess: property.id_process,
-                average: average,
-                total: total,
-                standardDeviation: standardDeviation,
-                cantN: cantN,
-            }
+            if ( found === undefined ) {
+                datos_2[tagProcess] = {
+                    idProcess: 0,
+                    process: "",
+                    average: [],
+                    total: [],
+                    standardDeviation: [],
+                    cantN: [],
+                }
+            }            
+
+            datos_2[tagProcess].idProcess = property.id_process;
+            datos_2[tagProcess].process = property.proceso;
+
+            datos_2[tagProcess].average.push(property.average)
+            datos_2[tagProcess].total.push(property.total)
+            datos_2[tagProcess].standardDeviation.push(property.standardDeviation)
+            datos_2[tagProcess].cantN.push(property.cantN)
             object = property.proceso;
         } else {
-            average[i] = property.average;
-            total[i] = property.total;
-            standardDeviation[i] = property.standardDeviation;
-            cantN[i] = property.cantN;
-            datos[tagProcess] = {
-                idProcess: property.id_process,
-                average: average,
-                total: total,
-                standardDeviation: standardDeviation,
-                cantN: cantN,
-            }
+            datos_2[tagProcess].average.push(property.average)
+            datos_2[tagProcess].total.push(property.total)
+            datos_2[tagProcess].standardDeviation.push(property.standardDeviation)
+            datos_2[tagProcess].cantN.push(property.cantN)
         }
-        i = i + 1;
     }
     DBMinTicTestResultController.resultBySector = datos;
-    return datos
+    console.log(datos_2)
+    return datos_2
 }
 
 module.exports = DBMinTicTestResultController

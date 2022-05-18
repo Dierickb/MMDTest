@@ -2,7 +2,7 @@ const DBMinTicTestResultController = require('../../home/homeMinTicTest.controll
 
 exports.DBMinTicTestResultController_list = async function (req, res) {
     res.status(200).json({
-        DBMinTicTestResultController: await DBMinTicTestResultController.pullResultBySector(parseInt(req.params.idSector))
+        DBMinTicTestResultController: await DBMinTicTestResultController.pullResultBySector(parseInt(req.params.idSector)),
     });
 };
 
