@@ -15,7 +15,7 @@ const isObjEmpty = (obj) => {
 const sectorList = async () => {
     const response = await fetch('api/v1');
     let result = await response.json();
-    const sector = result.sector; let i = 0;
+    const sector = result.sectorMinTic; let i = 0;
     let sectors = {
         idSector: [],
         sector: []
@@ -67,8 +67,8 @@ const drawAxisTickColors = async (resultData, idDivGraph, sector) => {
     let data = google.visualization.arrayToDataTable(resultData);
 
     var options = {
-        title: 'Resultado del test MinTic',
-        chartArea: { width: '60%' },
+        title: 'Resultados MinTic',
+        chartArea: { width: '50%' },
         hAxis: {
             title: 'Valor',
             minValue: 0,
@@ -106,9 +106,10 @@ const writeGraphic = async (idDivStadisticBody, idDivGraph, stadisticData, secto
 
     const idDivGraph_1 = document.createElement('div'); let i = 1; let process = [];
     idDivGraph_1.setAttribute("id", `${idDivGraph}`)
+    idDivGraph_1.setAttribute("style", "height: 60vh; width:100%;")
     idDivStadisticBody.appendChild(idDivGraph_1)
 
-    process[0] = ['Process', 'Promedio total', 'Promedio del promedio'];
+    process[0] = ['Process', 'Total', 'Promedio'];
     for (property in stadisticData) {
         if (property !== "sectorId" && property !== "sector" && property !== undefined) {
             process[i] = [stadisticData[property].process, stadisticData[property].total, stadisticData[property].average];

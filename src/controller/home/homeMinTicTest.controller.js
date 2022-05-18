@@ -70,6 +70,7 @@ DBMinTicTestResultController.tagProcess = async function (data) {
     for (let property of data) {
         datos_2["sectorId"] = property.id_sector;
         datos_2["sector"] = property.tipo_empresas;
+        
         if (property.proceso !== object) {
             const dataKey = Object.keys(datos_2);
             const found = dataKey.find(element => element === `${property.proceso}`);
