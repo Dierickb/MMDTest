@@ -31,16 +31,15 @@ const sectorList = async () => {
 const stadisticData = async (idSector) => {
     const response = await fetch(`api/v1/DBMinTicTestResult/${idSector}`);
     let result = await response.json();
-    console.log(result)
     return result.DBMinTicTestResultController;
 }
 
 const refactorData = async (sectorsList) => {
-    let result = []; let i = 0; 
+    let result = []; let i = 0; let sector = {sectorId:[], sector:[]};
 
     for (element of sectorsList.idSector) {
         const minTicResult = await stadisticData(element);
-        let data = {};
+        let data = {}; 
 
         if (!isObjEmpty(minTicResult)) {
             for (property in minTicResult) {
@@ -55,19 +54,20 @@ const refactorData = async (sectorsList) => {
                 data["sectorId"] = minTicResult["sectorId"];
                 data["sector"] = minTicResult["sector"];
             }
+            sector.sectorId.push(minTicResult["sectorId"])
+            sector.sector.push(minTicResult["sector"])
             result[i] = data;
             i = i + 1;
         }
     }
-    return result
+    return [result, sector]
 }
 
-const drawAxisTickColors = async (resultData, idDivGraph) => {
-    console.log(resultData)
+const drawAxisTickColors = async (resultData, idDivGraph, sector) => {
     let data = google.visualization.arrayToDataTable(resultData);
 
     var options = {
-        title: 'Resultado del test',
+        title: 'Resultado del test MinTic',
         chartArea: { width: '50%' },
         hAxis: {
             title: 'Valor',
@@ -84,7 +84,7 @@ const drawAxisTickColors = async (resultData, idDivGraph) => {
             }
         },
         vAxis: {
-            title: 'Proceso',
+            title: `Sector ${sector}`,
             textStyle: {
                 fontSize: 14,
                 bold: true,
@@ -102,12 +102,11 @@ const drawAxisTickColors = async (resultData, idDivGraph) => {
 }
 
 
-const writeGraphic = async (idDivStadisticBody, idDivGraph, stadisticData) => {
+const writeGraphic = async (idDivStadisticBody, idDivGraph, stadisticData, sector) => {
+
     const idDivGraph_1 = document.createElement('div'); let i = 1; let process = [];
     idDivGraph_1.setAttribute("id", `${idDivGraph}`)
     idDivStadisticBody.appendChild(idDivGraph_1)
-
-    console.log(stadisticData)
 
     process[0] = ['Process', 'Promedio total', 'Promedio del promedio'];
     for (property in stadisticData) {
@@ -116,18 +115,20 @@ const writeGraphic = async (idDivStadisticBody, idDivGraph, stadisticData) => {
             i = i + 1;
         }
     }
-    console.log(process)
 
     await google.charts.load('current', { packages: ['corechart', 'bar'] });
-    await google.charts.setOnLoadCallback( drawAxisTickColors(process, idDivGraph));
+    await google.charts.setOnLoadCallback( drawAxisTickColors(process, idDivGraph, sector));
 }
 
 const main = async () => {
     const sectorsList = await sectorList();
-    const result = await refactorData(sectorsList)    
+    console.log(sectorsList)
+    const [result, sector] = await refactorData(sectorsList)    
     const stadisticBody = document.getElementById("stadisticBody");
-
-    await writeGraphic(stadisticBody, `chart_div_${0}`, result[0])
+    
+    for (let i =0; i<sector.sectorId.length; i++) {
+        writeGraphic(stadisticBody, `chart_div_${i}`, result[i], sector.sector[i])
+    }
     
 }
 

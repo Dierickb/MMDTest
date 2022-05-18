@@ -369,7 +369,7 @@ DBMinTicTestController.tagProcessSelected = function (asks) {
     */
     for (let i = 0; i < asks.value.length; i++) {
         if (process[asks.process[i]].tagProcess !== object) {
-
+            
             value = []; idQuestion = []; j = 0;
             askByProcess[process[asks.process[i]].tagProcess] = { }
             value[j] = asks.value[i];

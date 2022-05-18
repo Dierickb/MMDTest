@@ -104,7 +104,6 @@ DBMinTicTestResultController.tagProcess = async function (data) {
         }
     }
     DBMinTicTestResultController.resultBySector = datos;
-    console.log(datos_2)
     return datos_2
 }
 

@@ -15,10 +15,7 @@ body {
   display: grid;
   width: 100%;
   max-width: 60vw;
-  margin: 0 auto;
-  
-  grid-template-columns: repeat(auto-fill, auto-fill);
-  
+  margin: 4vh auto;  
   grid-gap: 20px;
 }
 .home {
