@@ -87,7 +87,7 @@ OurTestController.pullBusinessInAskResultStadistic = async function () {
     return response
 }
 OurTestController.pullEvaluationAxes = async function () {
-    const response = await connection
+    return await connection
         .query(
             `   
                 SELECT form.idformulary, dim.dimension, dim.iddimension, form.question, form.info_question
@@ -98,7 +98,23 @@ OurTestController.pullEvaluationAxes = async function () {
         .catch((e) => {
             throw e;
         });
+}
+OurTestController.pullCriteriosByDimension = async function (dimensionId, level) {
+    const response = await connection
+        .query(
+            `   
+                SELECT dim.dimension, cri.nivel, cri.question
+                FROM pf.criterios cri
+                INNER JOIN pf.dimension dim ON cri.iddimension = dim.iddimension
+                WHERE cri.iddimension = ${dimensionId} AND cri.nivel = ${level}
+            `
+        )
+        .catch((e) => {
+            throw e;
+        });
+    console.log(OurTestController.askByDimension)
     return response
+    
 }
 
 OurTestController.allDimensions = [];
@@ -349,6 +365,9 @@ OurTestController.resultByDimension = function (result, id_business) {
         }
     }
     return askByDimension
+}
+OurTestController.tagDimensionByLevel = function (result) {
+    console.log(OurTestController.askByDimension)
 }
 
 module.exports = OurTestController;

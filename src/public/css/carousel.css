@@ -30,7 +30,6 @@
   font-size: 2.5em;
   color: #03a9f4;
 }
-
 .card {
   width: 100%;
   height: 100%;
@@ -67,6 +66,9 @@
 .allwidth {
   width: 100%;
 }
+.titleDimension {
+  text-decoration: underline;
+}
 
 .nr-b {
   border-bottom-right-radius: 0;
@@ -91,7 +93,6 @@
 .chg-b {
   height: 11vh;
 }
-
 .cardBox .card.chg-b{
   height: 11vh;
 }

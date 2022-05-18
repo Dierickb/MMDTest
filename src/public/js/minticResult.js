@@ -1,3 +1,4 @@
+let dimensions_2;
 const apiResultMinticTest = async () => {
     const dierick = await $.ajax({
         dataType: "json",
@@ -16,12 +17,12 @@ const apiResultMinticTest = async () => {
             i = i + 1;
         }
     }
+    dimensions_2 = process
     return process
 };
 
-const drawAxisTickColors = async () => {
-    const resultData = await apiResultMinticTest()
-    let data = google.visualization.arrayToDataTable(resultData);
+const drawAxisTickColorsMinTic = async () => {
+    let data = google.visualization.arrayToDataTable(dimensions_2);
 
     var options = {
         title: 'Resultado del test',
@@ -57,6 +58,14 @@ const drawAxisTickColors = async () => {
     var chart = new google.visualization.BarChart(document.getElementById('chart_div_prom'));
     chart.draw(data, options);
 }
+const writeLevel = async () => {
+
+}
 
 google.charts.load('current', { packages: ['corechart', 'bar'] });
-google.charts.setOnLoadCallback( drawAxisTickColors);
+google.charts.setOnLoadCallback( drawAxisTickColorsMinTic);
+
+$(window).resize(function () {
+    drawAxisTickColorsMinTic();
+});
+
