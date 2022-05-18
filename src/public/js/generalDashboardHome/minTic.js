@@ -28,7 +28,7 @@ const sectorList = async () => {
     return sectors
 }
 
-const stadisticData = async (idSector) => {
+const stadisticDataMinTic = async (idSector) => {
     const response = await fetch(`api/v1/DBMinTicTestResult/${idSector}`);
     let result = await response.json();
     return result.DBMinTicTestResultController;
@@ -38,7 +38,7 @@ const refactorData = async (sectorsList) => {
     let result = []; let i = 0; let sector = {sectorId:[], sector:[]};
 
     for (element of sectorsList.idSector) {
-        const minTicResult = await stadisticData(element);
+        const minTicResult = await stadisticDataMinTic(element);
         let data = {}; 
 
         if (!isObjEmpty(minTicResult)) {
@@ -102,11 +102,11 @@ const drawAxisTickColors = async (resultData, idDivGraph, sector) => {
 }
 
 
-const writeGraphic = async (idDivStadisticBody, idDivGraph, stadisticData, sector) => {
+const writeGraphicMintic = async (idDivStadisticBody, idDivGraph, stadisticData, sector) => {
 
     const idDivGraph_1 = document.createElement('div'); let i = 1; let process = [];
     idDivGraph_1.setAttribute("id", `${idDivGraph}`)
-    idDivGraph_1.setAttribute("style", "height: 60vh; width:100%;")
+    idDivGraph_1.setAttribute("style", "height: 55vh; width:100%;")
     idDivStadisticBody.appendChild(idDivGraph_1)
 
     process[0] = ['Process', 'Total', 'Promedio'];
@@ -121,17 +121,16 @@ const writeGraphic = async (idDivStadisticBody, idDivGraph, stadisticData, secto
     await google.charts.setOnLoadCallback( drawAxisTickColors(process, idDivGraph, sector));
 }
 
-const main = async () => {
+const mainMinTic = async () => {
     const sectorsList = await sectorList();
-    console.log(sectorsList)
     const [result, sector] = await refactorData(sectorsList)    
-    const stadisticBody = document.getElementById("stadisticBody");
+    const stadisticBody = document.getElementById("minTicStadistic");
     
     for (let i =0; i<sector.sectorId.length; i++) {
-        writeGraphic(stadisticBody, `chart_div_${i}`, result[i], sector.sector[i])
+        writeGraphicMintic(stadisticBody, `chart_div_minTic_${i}`, result[i], sector.sector[i])
     }
     
 }
 
-main()
+mainMinTic()
 
