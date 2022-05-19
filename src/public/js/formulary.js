@@ -140,7 +140,7 @@ const validateCardsContent = async () => {
         e.preventDefault();
         let tasks = e.target.elements;
         let task = totalCantCheckBoxFunc(tasks, totalCantCheckBox);
-        if (task.length !== cantQuestionsTotal) {             
+        if (task.length === cantQuestionsTotal) {             
             const pullrequest = await result();
             resIsConfirmed(url, pullrequest, task)
         } else {                  
