@@ -1,4 +1,5 @@
 const connection = require('../../accessDB')
+const DBMinTicTestController = require('../../controller/minTic/DBMinTicTest.controller')
 
 function eliminarDiacriticos(texto) {
     return texto.normalize('NFD').replace(/[\u0300-\u036f]/g,"");
@@ -89,30 +90,8 @@ AxesByProcess.arrayToObject = async function ( processData ) {
 }
 
 AxesByProcess.pullDB = async function (idProcesses) {
-    let data = ''
-    for (let i = 0; i < idProcesses.length; i++) {
-        if (i === 0) {
-            data = data.concat(' ', `WHERE ev.id_proceso = "${idProcesses[i]}"`)
-        } else {
-            data = data.concat(' ', `OR ev.id_proceso = "${idProcesses[i]}"`)
-        }
-    }
-    const response = await connection
-        .query(
-            `   
-                    SELECT ev.id_evaluacion, ev.id_eje_evaluacion, ejev.nombre_metodo,  ejev.info_nombre_metodo,
-                    ev.id_proceso, p.proceso
-                    FROM MINTIC_MODEL.evaluacion ev
-                    INNER JOIN MINTIC_MODEL.ejes_evaluacion ejev ON ev.id_eje_evaluacion = ejev.id_eje_evaluacion
-                    INNER JOIN MINTIC_MODEL.procesos p ON ev.id_proceso = p.id_proceso
-                    ${data}
-                `
-        )
-        .catch((e) => {
-            throw e;
-        });
-
+    const response = await DBMinTicTestController.pullAxesByProcess(idProcesses)
     return AxesByProcess.arrayToObject(response);
 }
 
-module.exports = AxesByProcess;
+module.exports = AxesByProcess;0

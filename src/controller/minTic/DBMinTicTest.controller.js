@@ -81,24 +81,25 @@ DBMinTicTestController.pullASKBySector = async function (idSector) {
         throw e;
     })
 }
-DBMinTicTestController.pullAxesByProcess = async function (idProcess) {
+DBMinTicTestController.pullAxesByProcess = async function (idProcesses) {
     let data = ''
-    for (let i = 0; i < idProcess.length; i++) {
+    for (let i = 0; i < idProcesses.length; i++) {
         if (i === 0) {
-            data = data.concat(' ', `WHERE ev.id_proceso = "${idProcess[i]}"`)
+            data = data.concat(' ', `WHERE ev.id_proceso = "${idProcesses[i]}"`)
         } else {
-            data = data.concat(' ', `OR ev.id_proceso = "${idProcess[i]}"`)
+            data = data.concat(' ', `OR ev.id_proceso = "${idProcesses[i]}"`)
         }
     }
     const response = await connection
         .query(
             `   
-                    SELECT ev.id_evaluacion, ev.id_eje_evaluacion, ejev.nombre_metodo,  ev.id_proceso, p.proceso
-                    FROM MINTIC_MODEL.evaluacion ev
-                    INNER JOIN MINTIC_MODEL.ejes_evaluacion ejev ON ev.id_eje_evaluacion = ejev.id_eje_evaluacion
-                    INNER JOIN MINTIC_MODEL.procesos p ON ev.id_proceso = p.id_proceso
-                    ${data}
-                `
+                SELECT ev.id_evaluacion, ev.id_eje_evaluacion, ejev.nombre_metodo,  ejev.info_nombre_metodo,
+                ev.id_proceso, p.proceso
+                FROM MINTIC_MODEL.evaluacion ev
+                INNER JOIN MINTIC_MODEL.ejes_evaluacion ejev ON ev.id_eje_evaluacion = ejev.id_eje_evaluacion
+                INNER JOIN MINTIC_MODEL.procesos p ON ev.id_proceso = p.id_proceso
+                ${data}
+            `
         )
         .catch((e) => {
             throw e;
@@ -108,7 +109,6 @@ DBMinTicTestController.pullAxesByProcess = async function (idProcess) {
 }
 DBMinTicTestController.pullFilterProcessBySector = async function (idSector) {
     const id = parseInt(idSector); let i = 0;
-    FilterBySector.clean()
     const response = await connection
         .query(
             `   
@@ -149,6 +149,20 @@ DBMinTicTestController.pullAllAskResultStadistic = async function () {
     .catch((e) => {
         throw e;
     })
+}
+DBMinTicTestController.pullProcessBySector = async function () {
+    return await connection
+        .query(
+            `
+                SELECT tep.id_tipo_empresas, te.tipo_empresas, tep.id_proceso, p.proceso
+                FROM MINTIC_MODEL.tipo_empresa_proceso tep
+                INNER JOIN MINTIC_MODEL.tipo_empresa te ON tep.id_tipo_empresas = te.id_tipo_empresa
+                INNER JOIN MINTIC_MODEL.procesos p ON tep.id_proceso = p.id_proceso
+            `
+        )
+        .catch((e) => {
+            throw e;
+        })
 }
 
 // Push
