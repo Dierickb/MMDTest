@@ -69,7 +69,10 @@ body {
   align-items: center;
   width: 40vw;
 }
-
+.testChartjs {
+  width: 705px;
+  margin: auto;
+}
 #formControl {
   text-transform: uppercase;
 }
@@ -96,6 +99,16 @@ body {
     position: absolute;
     top: 29vh;
     width: 20vw;
+  }
+}
+@media (max-width: 915px) {
+  .testChartjs {
+    width: 60vw;
+  }
+}
+@media (max-width: 845px) {
+  .testChartjs {
+    width: 68vw;
   }
 }
 @media (max-width: 750px) {

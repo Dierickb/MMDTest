@@ -1,5 +1,3 @@
-let dimensions_2;
-
 const apiResultMinticTest = async () => {
     const dierick = await $.ajax({
         dataType: "json",
@@ -10,10 +8,9 @@ const apiResultMinticTest = async () => {
     });
     const resultData = dierick.minTicResult;
     let process = []; let i = 1;
-    let processProm = [];
     process[0] = ['Process', 'Total', 'Promedio'];
     for (property in resultData) {
-        if (property !== "idSector" && property !== "sector" && property !== undefined) {
+        if (property !== "idSector" && property !== "sector" && property !== undefined && property !== "idBusiness") {
             process[i] = [resultData[property].processName, resultData[property].total, resultData[property].average];
             i = i + 1;
         }
@@ -21,53 +18,55 @@ const apiResultMinticTest = async () => {
     return process
 };
 
-const drawAxisTickColorsMinTic = async () => {
-    let data = google.visualization.arrayToDataTable(dimensions_2);
+const minTicResultChartJs = async (parameters) => {
+    let average = []; let labels = [];
+    for (let i = 1; i < parameters.length; i++) {
+        average.push(parameters[i][2])
+        labels.push(parameters[i][0])
+    }
 
-    var options = {
-        title: 'Resultado del test',
-        chartArea: { width: '50%' },
-        hAxis: {
-            title: 'Valor',
-            minValue: 0,
-            textStyle: {
-                bold: true,
-                fontSize: 12,
-                color: '#4d4d4d'
-            },
-            titleTextStyle: {
-                bold: true,
-                fontSize: 18,
-                color: '#4d4d4d'
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'MinTicTest',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: average,
+            fill: true,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgb(255, 99, 132)',
+            pointBackgroundColor: 'rgb(255, 99, 132)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(255, 99, 132)'
+        }]
+    };
+
+    const config = {
+        type: 'radar',
+        data: data,
+        options: {
+            elements: {
+                line: {
+                    borderWidth: 3
+                }
             }
         },
-        vAxis: {
-            title: 'Proceso',
-            textStyle: {
-                fontSize: 14,
-                bold: true,
-                color: '#848484'
-            },
-            titleTextStyle: {
-                fontSize: 14,
-                bold: true,
-                color: '#848484'
-            }
-        }
     };
-    var chart = new google.visualization.BarChart(document.getElementById('chart_div_prom'));
-    chart.draw(data, options);
+
+    const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+    );
+
+    myChart
 }
 
 const mainMin = async () => {
-    
-    dimensions_2 = await apiResultMinticTest()
-    
-    google.charts.load('current', { packages: ['corechart', 'bar'] });
-    google.charts.setOnLoadCallback(drawAxisTickColorsMinTic);
-    $(window).resize(function () {
-        drawAxisTickColorsMinTic();
-    });
+
+    let dimensions_2 = await apiResultMinticTest()
+
+    minTicResultChartJs(dimensions_2)
 
 }
 
