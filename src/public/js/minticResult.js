@@ -46,6 +46,15 @@ const minTicResultChartJs = async (parameters) => {
         type: 'radar',
         data: data,
         options: {
+            scales: {
+                r: {
+                    angleLines: {
+                        display: false
+                    },
+                    suggestedMin: 1,
+                    suggestedMax: 5
+                }
+            },
             elements: {
                 line: {
                     borderWidth: 3
