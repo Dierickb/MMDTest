@@ -35,7 +35,7 @@ const stadisticDataMinTic = async (idSector) => {
 }
 
 const refactorData = async (sectorsList) => {
-    let result = []; let i = 0; let sector = {sectorId:[], sector:[]};
+    let result = []; let i = 0; let sector = {sectorId:[], sector:[]}; let j=0;
 
     for (element of sectorsList.idSector) {
         const minTicResult = await stadisticDataMinTic(element);
@@ -51,14 +51,16 @@ const refactorData = async (sectorsList) => {
                         total: arrayAvg(minTicResult[property].total)
                     }
                 }
-                data["sectorId"] = minTicResult["sectorId"];
-                data["sector"] = minTicResult["sector"];
+                data["sectorId"] = element;
+                data["sector"] = sectorsList.sector[j];
+                console.log(sectorsList.sector[j])
             }
-            sector.sectorId.push(minTicResult["sectorId"])
-            sector.sector.push(minTicResult["sector"])
+            sector.sectorId.push(element)
+            sector.sector.push(sectorsList.sector[j])
             result[i] = data;
             i = i + 1;
         }
+        j=j+1;
     }
     return [result, sector]
 }
@@ -109,10 +111,10 @@ const writeGraphicMintic = async (idDivStadisticBody, idDivGraph, stadisticData,
     idDivGraph_1.setAttribute("style", "height: 55vh; width:100%;")
     idDivStadisticBody.appendChild(idDivGraph_1)
 
-    process[0] = ['Process', 'Total', 'Promedio'];
+    process[0] = ['Process', 'Promedio'];
     for (property in stadisticData) {
         if (property !== "sectorId" && property !== "sector" && property !== undefined) {
-            process[i] = [stadisticData[property].process, stadisticData[property].total, stadisticData[property].average];
+            process[i] = [stadisticData[property].process, stadisticData[property].average];
             i = i + 1;
         }
     }

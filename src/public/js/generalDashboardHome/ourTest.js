@@ -62,21 +62,11 @@ const drawAxisTickColorsOurTest = async (resultData, idDivGraph, sector) => {
                 bold: true,
                 fontSize: 12,
                 color: '#4d4d4d'
-            },
-            titleTextStyle: {
-                bold: true,
-                fontSize: 18,
-                color: '#4d4d4d'
             }
         },
         vAxis: {
             title: `Sector ${sector}`,
             textStyle: {
-                fontSize: 14,
-                bold: true,
-                color: '#848484'
-            },
-            titleTextStyle: {
                 fontSize: 14,
                 bold: true,
                 color: '#848484'
@@ -94,10 +84,10 @@ const writeGraphicOurTest = async (idDivStadisticBody, idDivGraph, stadisticData
     idDivGraph_1.setAttribute("style", "height: 55vh; width:100%;")
     idDivStadisticBody.appendChild(idDivGraph_1)
 
-    process[0] = ['Dimension', 'Total', 'Promedio'];
+    process[0] = ['Dimension', 'Promedio'];
     for (property in stadisticData) {
         if (property !== "sectorId" && property !== "sector" && property !== undefined) {
-            process[i] = [stadisticData[property].dimension, stadisticData[property].total, stadisticData[property].average];
+            process[i] = [stadisticData[property].dimension, stadisticData[property].average];
             i = i + 1;
         }
     }
