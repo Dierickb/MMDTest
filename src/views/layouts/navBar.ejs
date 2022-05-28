@@ -41,16 +41,13 @@
                             <a class="nav-link" href="/MinTicTest">MinTicTest</a>
                         <% } %>   
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Sector económico
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
-                            <% for ( let i=0; i<sector.length; i++) { %>
-                                <li><a class="dropdown-item" href="#"><%= sector[i] %></a></li>
-                            <% } %>
-                        </ul>
+                    <li class="nav-item">
+                        <% if(selected !== true && (url == '/OurTest' || url == '/TestResult' || url == '/') ) { %>                                 
+                            <a class="nav-link" id="MinT" data-bs-toggle="offcanvas" href="#"
+                            data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">Resultados</a>                            
+                        <% } else { %> 
+                            <a class="nav-link" href="/TestResult">MinTicTest</a>
+                        <% } %>   
                     </li>
                 </ul>
             </div>
