@@ -1,16 +1,14 @@
 const connection = require('../../accessDB');
 const ProcessSelected = require('../../models/minTicTest/ProcessSelected')
-const AritmeticFunctions = require('../../common/aritmeticFunctions');
+const ArithmeticFunctions = require('../../common/aritmeticFunctions');
 
-let DBMinTicTestController = function (businessName, idSector, idDimension, idQuestion, valueQuestion ) {
-    this.businessName = businessName;
+let DBMinTicTestController = function ( idSector, idQuestion ) {
     this.idSector = idSector;
     this.idQuestion = idQuestion;
-    this.valueQuestion = valueQuestion;
 }
 
-DBMinTicTestController.eliminarDiacriticos = function(texto) {
-    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g,"");
+DBMinTicTestController.removeDiacritics = function(text) {
+    return text.normalize('NFD').replace(/[\u0300-\u036f]/g,"");
 }
 DBMinTicTestController.createElements = function (process) {
     return process.replace(/ /g, "_")
@@ -22,7 +20,7 @@ DBMinTicTestController.allAskResults = {};
 DBMinTicTestController.allBusiness = async function () {
     return await connection.query(
         `   
-            SELECT * FROM MINTIC_MODEL.business_name
+            SELECT * FROM MINTIC_MODEL.business
         `
     )
         .catch((e) => {
@@ -49,11 +47,11 @@ DBMinTicTestController.pullAskResult = async function () {
                 ev.id_eje_evaluacion, ejev.nombre_metodo,
                 askres.value
             FROM MINTIC_MODEL.ask_results askres
-            INNER JOIN MINTIC_MODEL.business_name busnam ON askres.id_business_name = busnam.id_business_name
-            INNER JOIN MINTIC_MODEL.evaluacion ev ON askres.id_evaluacion = ev.id_evaluacion
-            INNER JOIN MINTIC_MODEL.tipo_empresa temp ON busnam.tipo_empresa = temp.id_tipo_empresa
-            INNER JOIN MINTIC_MODEL.procesos prcs ON ev.id_proceso = prcs.id_proceso  
-            INNER JOIN MINTIC_MODEL.ejes_evaluacion ejev ON ev.id_eje_evaluacion = ejev.id_eje_evaluacion
+            INNER JOIN MINTIC_MODEL.business busnam ON askres.id_business_name = busnam.id_business_name
+            INNER JOIN MINTIC_MODEL.evaluation ev ON askres.id_evaluacion = ev.id_evaluacion
+            INNER JOIN MINTIC_MODEL.economic_sector temp ON busnam.tipo_empresa = temp.id_tipo_empresa
+            INNER JOIN MINTIC_MODEL.process prcs ON ev.id_proceso = prcs.id_proceso  
+            INNER JOIN MINTIC_MODEL.evaluation_axes ejev ON ev.id_eje_evaluacion = ejev.id_eje_evaluacion
          `
     )
     .catch((e) => {
@@ -69,11 +67,11 @@ DBMinTicTestController.pullASKBySector = async function (idSector) {
                 ev.id_eje_evaluacion, ejev.nombre_metodo,
                 askres.value
             FROM MINTIC_MODEL.ask_results askres
-            INNER JOIN MINTIC_MODEL.business_name busnam ON askres.id_business_name = busnam.id_business_name
-            INNER JOIN MINTIC_MODEL.evaluacion ev ON askres.id_evaluacion = ev.id_evaluacion
-            INNER JOIN MINTIC_MODEL.tipo_empresa temp ON busnam.tipo_empresa = temp.id_tipo_empresa
-            INNER JOIN MINTIC_MODEL.procesos prcs ON ev.id_proceso = prcs.id_proceso  
-            INNER JOIN MINTIC_MODEL.ejes_evaluacion ejev ON ev.id_eje_evaluacion = ejev.id_eje_evaluacion
+            INNER JOIN MINTIC_MODEL.business busnam ON askres.id_business_name = busnam.id_business_name
+            INNER JOIN MINTIC_MODEL.evaluation ev ON askres.id_evaluacion = ev.id_evaluacion
+            INNER JOIN MINTIC_MODEL.economic_sector temp ON busnam.tipo_empresa = temp.id_tipo_empresa
+            INNER JOIN MINTIC_MODEL.process prcs ON ev.id_proceso = prcs.id_proceso  
+            INNER JOIN MINTIC_MODEL.evaluation_axes ejev ON ev.id_eje_evaluacion = ejev.id_eje_evaluacion
             WHERE busnam.tipo_empresa = ${idSector}
          `
     )
@@ -90,22 +88,20 @@ DBMinTicTestController.pullAxesByProcess = async function (idProcesses) {
             data = data.concat(' ', `OR ev.id_proceso = "${idProcesses[i]}"`)
         }
     }
-    const response = await connection
+    return await connection
         .query(
             `   
                 SELECT ev.id_evaluacion, ev.id_eje_evaluacion, ejev.nombre_metodo,  ejev.info_nombre_metodo,
                 ev.id_proceso, p.proceso
-                FROM MINTIC_MODEL.evaluacion ev
-                INNER JOIN MINTIC_MODEL.ejes_evaluacion ejev ON ev.id_eje_evaluacion = ejev.id_eje_evaluacion
-                INNER JOIN MINTIC_MODEL.procesos p ON ev.id_proceso = p.id_proceso
+                FROM MINTIC_MODEL.evaluation ev
+                INNER JOIN MINTIC_MODEL.evaluation_axes ejev ON ev.id_eje_evaluacion = ejev.id_eje_evaluacion
+                INNER JOIN MINTIC_MODEL.process p ON ev.id_proceso = p.id_proceso
                 ${data}
             `
         )
         .catch((e) => {
             throw e;
-        });
-
-    return response
+        })
 }
 DBMinTicTestController.pullFilterProcessBySector = async function (idSector) {
     const id = parseInt(idSector); let i = 0;
@@ -113,9 +109,9 @@ DBMinTicTestController.pullFilterProcessBySector = async function (idSector) {
         .query(
             `   
                 SELECT tep.id_tipo_empresas, te.tipo_empresas, tep.id_proceso, p.proceso
-                FROM MINTIC_MODEL.tipo_empresa_proceso tep
-                INNER JOIN MINTIC_MODEL.tipo_empresa te ON tep.id_tipo_empresas = te.id_tipo_empresa
-                INNER JOIN MINTIC_MODEL.procesos p ON tep.id_proceso = p.id_proceso
+                FROM MINTIC_MODEL.economic_sector_process tep
+                INNER JOIN MINTIC_MODEL.economic_sector te ON tep.id_tipo_empresas = te.id_tipo_empresa
+                INNER JOIN MINTIC_MODEL.process p ON tep.id_proceso = p.id_proceso
                 WHERE tep.id_tipo_empresas="${id}"
             `
         )
@@ -139,7 +135,7 @@ DBMinTicTestController.pullFilterProcessBySector = async function (idSector) {
 
     return sectorProcess
 }
-DBMinTicTestController.pullAllAskResultStadistic = async function () {
+DBMinTicTestController.pullAllAskResultStatistics = async function () {
     return await connection.query(
         `   
             SELECT id_business FROM MINTIC_MODEL.ask_result_stadistic
@@ -155,9 +151,9 @@ DBMinTicTestController.pullProcessBySector = async function () {
         .query(
             `
                 SELECT tep.id_tipo_empresas, te.tipo_empresas, tep.id_proceso, p.proceso
-                FROM MINTIC_MODEL.tipo_empresa_proceso tep
-                INNER JOIN MINTIC_MODEL.tipo_empresa te ON tep.id_tipo_empresas = te.id_tipo_empresa
-                INNER JOIN MINTIC_MODEL.procesos p ON tep.id_proceso = p.id_proceso
+                FROM MINTIC_MODEL.economic_sector_process tep
+                INNER JOIN MINTIC_MODEL.economic_sector te ON tep.id_tipo_empresas = te.id_tipo_empresa
+                INNER JOIN MINTIC_MODEL.process p ON tep.id_proceso = p.id_proceso
             `
         )
         .catch((e) => {
@@ -173,7 +169,7 @@ DBMinTicTestController.pushBusiness = async function (businessName, idSector) {
     if (!found) {
         const response = await connection.query(
             `   
-                INSERT INTO MINTIC_MODEL.business_name (business_name, tipo_empresa)
+                INSERT INTO MINTIC_MODEL.business (business_name, tipo_empresa)
                 VALUES ("${businessName}", ${idSector});
             `
         )
@@ -237,11 +233,11 @@ DBMinTicTestController.pushResultInfo = async function (results, idBusiness){
         }
     }
     
-    const found = await DBMinTicTestController.validateBusinessInAskResultStadistic(idBusiness)
+    const found = await DBMinTicTestController.validateBusinessInAskResultStatistics(idBusiness)
      
     
     if (found) {
-        await DBMinTicTestController.deleteBusinessInAskResultStadistic(idBusiness)
+        await DBMinTicTestController.deleteBusinessInAskResultStatistic(idBusiness)
         await insert(data)
     } else {
         await insert(data)
@@ -267,7 +263,6 @@ DBMinTicTestController.deleteBusinessById = async function(id) {
 
 }
 DBMinTicTestController.deleteBusinessInAskByBusiness = async function(idBusiness) {
-
     const found = await DBMinTicTestController.validateBusinessInAsks(idBusiness);
     
     if (found) {
@@ -281,7 +276,7 @@ DBMinTicTestController.deleteBusinessInAskByBusiness = async function(idBusiness
         throw new Error("This business id does not exist")
     }
 }
-DBMinTicTestController.deleteBusinessInAskResultStadistic = async function(idBusiness) {
+DBMinTicTestController.deleteBusinessInAskResultStatistic = async function(idBusiness) {
     const found = await DBMinTicTestController.validateBusinessInAsks(idBusiness);
     
     if (found) {
@@ -313,7 +308,7 @@ DBMinTicTestController.validateBusiness = async function (business, idSector) {
     let found = false; let id;
     if (businessDB.length !== 0) {
         for ( let element of businessDB ) {
-            if ( element.business_name === business && element.tipo_empresa === idSector) {
+            if ( element.business_name === business && element.economic_sector === idSector) {
                 found = true;
                 id = element.id_business_name;
                 return [found, id]
@@ -337,8 +332,8 @@ DBMinTicTestController.validateBusinessInAsks = async function (idBusiness) {
     return idBusinessFound
     
 }
-DBMinTicTestController.validateBusinessInAskResultStadistic = async function (idBusiness) {
-    const response = await DBMinTicTestController.pullAllAskResultStadistic();
+DBMinTicTestController.validateBusinessInAskResultStatistics = async function (idBusiness) {
+    const response = await DBMinTicTestController.pullAllAskResultStatistics();
     let idBusinessFound = false;
     for ( let property of response ){
         if (idBusiness === property.id_business) {
@@ -351,11 +346,11 @@ DBMinTicTestController.validateBusinessInAskResultStadistic = async function (id
 
 // Refactor data
 DBMinTicTestController.tagProcessSelected = function (asks) {
-    let j = 0; let askByProcess = {}; let = []; let object = ""; let value = []; let idQuestion = [];
+    let j = 0; let askByProcess = {}; let object = ""; let value = []; let idQuestion = [];
     let process = [];
 
     for (let i = 0; i < ProcessSelected.allProcessSelected.processId.length ; i++ ){
-        let tagProcess = DBMinTicTestController.eliminarDiacriticos(ProcessSelected.allProcessSelected.process[i])
+        let tagProcess = DBMinTicTestController.removeDiacritics(ProcessSelected.allProcessSelected.process[i])
         process[ProcessSelected.allProcessSelected.processId[i]] = {
             tagProcess: DBMinTicTestController.createElements(tagProcess),
             processName: ProcessSelected.allProcessSelected.process[i]
@@ -424,20 +419,19 @@ DBMinTicTestController.resultByProcess = function (askByProcess, idBusiness) {
     resultByProcess["idBusiness"] = idBusiness;
 
     for(property in askByProcess){
-        let [summ, average] = AritmeticFunctions.prom(askByProcess[property].value);
-        let varianze = AritmeticFunctions.varianze(average, askByProcess[property].value);
+        let [sum, average] = ArithmeticFunctions.prom(askByProcess[property].value);
+        let variance = ArithmeticFunctions.varianze(average, askByProcess[property].value);
         resultByProcess[property] = {
             processName: askByProcess[property].processName,
             processId: askByProcess[property].id,
-            total: summ,
+            total: sum,
             average: average,
             cantN: askByProcess[property].value.length,
-            varianze: varianze,
-            standardDeviation: Math.pow(varianze, 1/2).toFixed(3)
+            variance: variance,
+            standardDeviation: Math.pow(variance, 1/2).toFixed(3)
         }
     }
     return resultByProcess
 }
-
 
 module.exports = DBMinTicTestController;

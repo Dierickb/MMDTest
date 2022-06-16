@@ -3,36 +3,23 @@ const router = express.Router();
 const FilterBySector = require('../models/minTicTest/FilerBySector');
 const ProcessSelected = require("../models/minTicTest/ProcessSelected");
 const AxesByProcess = require("../models/minTicTest/EvaluationAxes");
-const { check, validationResult } = require("express-validator");
-const Sectors = require('../models/EconomicSector');
 
 const getPrevTest = async (req, res) => {
     const url = req.url;
     const columnHeader = ["#", "Proceso", ""];
     const processBySector = await FilterBySector.allFilterBySector;
 
-    let sector = []; k = 0; let idSector = [];
-    for (let value of Sectors.allSectors) {
-        sector[k] = value.tipo_empresas;
-        idSector[k] = value.id_tipo_empresa;
-        k = k + 1;
-    }
-
-    if ( req.session.selected ) {        
-        res.render("layouts/model/index",
-            {
-                title: "Previus to test",
-                url: url,
-                selected: false,
-                process: processBySector,
-                columnHeader: columnHeader,
-                sector: sector, 
-                idSector: idSector,
-            }
-        );
-    } else {        
-        res.status(200).redirect('/')
-    }
+    res.render("layouts/model/index",
+        {
+            title: "Previus to test",
+            url: url,
+            selected: false,
+            process: processBySector,
+            columnHeader: columnHeader,
+            sector: req.sector,
+            idSector: req.idSector,
+        }
+    );
 }
 const postPrevTest = async (req, res) => {
     let processSelected = {
@@ -44,11 +31,9 @@ const postPrevTest = async (req, res) => {
     }
     const processId = FilterBySector.allFilterBySector.processId;
     const process = FilterBySector.allFilterBySector.process;
-    
-    let i = 0;
+
     processSelected.processId.forEach(element => {
-        processSelected.process[i] = process[processId.indexOf(element)];
-        i=i+1;
+        processSelected.process.push(process[processId.indexOf(element)])
     }); 
 
     await ProcessSelected.add(processSelected);
@@ -57,8 +42,7 @@ const postPrevTest = async (req, res) => {
 
     let [idProcess, tagProcess, axesByProcess, id_eje_evaluacion, infoAxesByProcess] = await AxesByProcess.pullDB(ProcessSelected.allProcessSelected.processId);
     await AxesByProcess.add(idSector, sector, idProcess, tagProcess, axesByProcess, id_eje_evaluacion, infoAxesByProcess)
-    //req.session.selected = true;
-    selected = true;
+
     req.session.processSelected = req.body.length !== 0;
     res.status(200).redirect('/MinTicTest')
 }

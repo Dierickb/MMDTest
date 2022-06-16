@@ -1,49 +1,34 @@
 const express = require("express");
 const router = express.Router();
-const { check, validationResult } = require("express-validator");
 const columnHeader = ["#", "Eje de evaluación", "1", "2", "3", "4", "5"];
 const ProcessSelected = require("../models/minTicTest/ProcessSelected");
 const AxesByProcess = require("../models/minTicTest/EvaluationAxes");
-const Sectors = require('../models/EconomicSector');
 const DBMinTicTestController = require('../controller/minTic/DBMinTicTest.controller');
 
 const getMinTicTest = (req, res) => {
-    let sector = [];
-    let k = 0; let idSector = [];
-    for (let value of Sectors.allSectors) {
-        sector[k] = value.tipo_empresas;
-        idSector[k] = value.id_tipo_empresa;
-        k = k + 1;
+    if (req.session.processSelected === true) {
+        const axesByProcess = AxesByProcess.axesByProcess;
+        res.render("layouts/model/index",
+        {
+            url: req.url,
+            title: "Start MinTicTest",
+            columnHeader: columnHeader,
+            process: ProcessSelected.allProcessSelected,
+            selected: true,
+            sector: req.sector,
+            idSector: req.idSector,
+            idProcess: axesByProcess.processId,
+            axesByProcess: axesByProcess.axesByProcess,
+            id_eje_evaluacion: axesByProcess.id_eje_evaluacion,
+            infoAxesByProcess: AxesByProcess.axesByProcess.infoAxesByProcess
+        });
+    } else {
+        res.redirect('/PrevTest')
     }
 
-    const errors = validationResult(req);
-    if (errors.isEmpty() && req.session.selected) {                
-        if (req.session.processSelected === true) {
-            const axesByProcess = AxesByProcess.axesByProcess;
-            res.render("layouts/model/index",
-            {
-                url: req.url,
-                title: "Start MinTicTest",
-                columnHeader: columnHeader,
-                process: ProcessSelected.allProcessSelected,
-                selected: true,
-                sector: sector, 
-                idSector: idSector,
-                idProcess: axesByProcess.processId,
-                axesByProcess: axesByProcess.axesByProcess,
-                id_eje_evaluacion: axesByProcess.id_eje_evaluacion,
-                infoAxesByProcess: AxesByProcess.axesByProcess.infoAxesByProcess
-            });
-        } else {
-            res.redirect('/PrevTest')
-        }
-        
-    } else {
-        res.redirect('/')
-    }
 };
 const postMinTicTest = async (req, res) => {
-    if (req.body.lenght !== 0) {
+    if (req.body.length !== 0) {
         req.session.minticTest = true;
         DBMinTicTestController.pushAskResult(req.session.idBusinessMinTic, req.body)
         await DBMinTicTestController.pushResultInfo(req.body, req.session.idBusinessMinTic)

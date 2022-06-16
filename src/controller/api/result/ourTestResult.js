@@ -8,7 +8,9 @@ exports.ourTestResult_list = async function (req, res) {
 
 exports.ourTestResultLevel_list = async function (req, res) {
     res.status(200).json({
-        levelByDimension: await OurTestController.pullCriteriosByDimension(parseInt(req.params.dimensionId), parseInt(req.params.level))
+        levelByDimension: await OurTestController.pullCriterionByDimension(
+            parseInt(req.params.dimensionId), parseInt(req.params.level)
+        )
     });
 };
 

@@ -1,18 +1,15 @@
 const connection = require('../../accessDB');
-const ProcessSelected = require('../../models/minTicTest/ProcessSelected')
-const AritmeticFunctions = require('../../common/aritmeticFunctions');
+const ArithmeticFunctions = require('../../common/aritmeticFunctions');
+const Dimension = require("../../models/ourTest/Dimension");
 let id_sector;
 
-let OurTestController = function (bussisness, idSector, idDimension, idQuestion, valueQuestion ) {
-    this.bussisness = bussisness;
+let OurTestController = function (business, idSector, idDimension, idQuestion ) {
     this.idSector = idSector;
-    this.idDimension = idDimension;
     this.idQuestion = idQuestion;
-    this.valueQuestion = valueQuestion;
 }
 
-OurTestController.eliminarDiacriticos = function(texto) {
-    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g,"");
+OurTestController.removeDiacritics = function(text) {
+    return text.normalize('NFD').replace(/[\u0300-\u036f]/g,"");
 }
 OurTestController.createElements = function (process) {
     return process.replace(/ /g, "_")
@@ -20,40 +17,30 @@ OurTestController.createElements = function (process) {
 
 // Pull data
 OurTestController.pullAllOurTest = async function () {
-    const response = await connection
-        .query(`SELECT * FROM pf.dimension`)
+    return await connection.query(`SELECT * FROM pf.dimension`)
         .catch((e) => {
             throw e;
-        });
-    return response
-            
+        })
 }
-OurTestController.allBussisness = async function () {
-    const response = await connection.query(
-        `   
-            SELECT * FROM pf.businesses
-        `
-    )
-    .catch((e) => {
-        throw e;
-    });
-    return response
+OurTestController.allBusiness = async function () {
+    return await connection.query(`SELECT * FROM pf.business`)
+        .catch((e) => {
+            throw e;
+        })
 }
-OurTestController.allBussisnessInAsks = async function () {
-    const response = await connection.query(
-        `   
-            SELECT idbusinesses FROM pf.asksresults
-            GROUP BY idbusinesses
-        `
-    )
-    .catch((e) => {
-        throw e;
-    });
-    return response
+OurTestController.allBusinessInAsks = async function () {
+    return await connection.query(
+            `   
+                SELECT idbusinesses FROM pf.ask_results
+                GROUP BY idbusinesses
+            `
+        )
+        .catch((e) => {
+            throw e;
+        })
 }
 OurTestController.pullAllDimensions = async function () {
-    const response = await connection
-        .query(`SELECT * FROM pf.dimension`)
+    const response = await connection.query(`SELECT *FROM pf.dimension`)
         .catch((e) => {
             throw e;
         });
@@ -61,34 +48,30 @@ OurTestController.pullAllDimensions = async function () {
     return await Dimension.add(response)
 }
 OurTestController.pullAxesByDimension = async function () {
-    const response = await connection
-        .query(
+    return await connection.query(
             `   
-                SELECT form.idquestion, dim.dimension, dim.iddimension, form.question, form.question
+                SELECT dim.dimension, dim.iddimension, form.question, form.question
                 FROM pf.formulary form
                 INNER JOIN pf.dimension dim ON form.iddimension = dim.iddimension
             `
         )
         .catch((e) => {
             throw e;
-        });
-    return response
+        })
 }
-OurTestController.pullBusinessInAskResultStadistic = async function () {
-    const response = await connection.query(
-        `   
-            SELECT id_business FROM pf.ask_result_stadistic
-            GROUP BY id_business
-        `
-    )
-    .catch((e) => {
-        throw e;
-    });
-    return response
+OurTestController.pullBusinessInAskResultStatistic = async function () {
+    return await connection.query(
+            `   
+                SELECT id_business FROM pf.ask_result_stadistic
+                GROUP BY id_business
+            `
+        )
+        .catch((e) => {
+            throw e;
+        })
 }
 OurTestController.pullEvaluationAxes = async function () {
-    return await connection
-        .query(
+    return await connection.query(
             `   
                 SELECT form.idformulary, dim.dimension, dim.iddimension, form.question, form.info_question
                 FROM pf.formulary form
@@ -99,9 +82,8 @@ OurTestController.pullEvaluationAxes = async function () {
             throw e;
         });
 }
-OurTestController.pullCriteriosByDimension = async function (dimensionId, level) {
-    const response = await connection
-        .query(
+OurTestController.pullCriterionByDimension = async function (dimensionId, level) {
+    return await connection.query(
             `   
                 SELECT dim.dimension, cri.nivel, cri.question
                 FROM pf.criterios cri
@@ -111,9 +93,7 @@ OurTestController.pullCriteriosByDimension = async function (dimensionId, level)
         )
         .catch((e) => {
             throw e;
-        });
-    return response
-    
+        })
 }
 
 OurTestController.allDimensions = [];
@@ -130,7 +110,7 @@ OurTestController.pushBusiness = async function (businessName, idSector) {
     if (!found) {
         response = await connection.query(
             `   
-                INSERT INTO pf.businesses (businesses, id_sector)
+                INSERT INTO pf.business (businesses, id_sector)
                 VALUES ("${businessName}", ${idSector});
             `
         )
@@ -142,34 +122,34 @@ OurTestController.pushBusiness = async function (businessName, idSector) {
         return id;
     }
 }
-OurTestController.pushAskResult = async function (idbusiness, askObject) {
-    const found = await OurTestController.validateBusinessInAsks(idbusiness)
+OurTestController.pushAskResult = async function (id_business, askObject) {
+    const found = await OurTestController.validateBusinessInAsks(id_business)
     const value = askObject.value; const questionId = askObject.idQuestion; let data = '';
     const insert = async (asks) => {
         connection.query(
-            `INSERT INTO pf.asksresults (idbusinesses, value, idquestion) VALUES ${asks}`
+            `INSERT INTO pf.ask_results (idbusinesses, value, idquestion) VALUES ${asks}`
         )
         .catch((e) => {
             throw e;
         });
     }
     for (let i =0; i< value.length -1; i++) {
-        data = data.concat(`("${idbusiness}", "${value[i]}", "${questionId[i]}" ), `);
+        data = data.concat(`("${id_business}", "${value[i]}", "${questionId[i]}" ), `);
     }    
-    data = data.concat(`("${idbusiness}", "${value[value.length -1]}", "${questionId[value.length -1]}" ); `) ;
+    data = data.concat(`("${id_business}", "${value[value.length -1]}", "${questionId[value.length -1]}" ); `) ;
     if (found) {
-        await OurTestController.deleteBusinessInAskByBusiness(idbusiness)
+        await OurTestController.deleteBusinessInAskByBusiness(id_business)
         await insert(data)
     } else {
         await insert(data)
     }    
 }
 OurTestController.pushAskResultInfo = async function (resultOurTest, idBusiness) {
-    const result = await OurTestController.tagDimension(resultOurTest);
+
+    const result = OurTestController.tagDimension(resultOurTest);
     const askByDimension = OurTestController.resultByDimension(result, idBusiness);
-    const found = await OurTestController.validateBusinessInAskResultStadistic(idBusiness)
-    let data = ''; let i = 0;
-    
+    const found = await OurTestController.validateBusinessInAskResultStatistic(idBusiness)
+    let data = ''; let i = 0; let object;
     const insert = async (asks) => {
         connection.query(
             `
@@ -183,9 +163,9 @@ OurTestController.pushAskResultInfo = async function (resultOurTest, idBusiness)
             throw e;
         });
     }
-    objectLength = Object.keys(askByDimension).length - 3;
+    let objectLength = Object.keys(askByDimension).length - 3;
 
-    for (property in askByDimension) {        
+    for (let property in askByDimension) {
         if (property !== "idSector" && property !== "sector" && property !== "idBusiness" && i< objectLength-1) {
             object = askByDimension[property];
             data = data.concat(`("${askByDimension.idBusiness}", "${askByDimension.idSector}", "${object.dimensionId}", "${object.average}", "${object.total}", "${object.varianze}", "${object.standardDeviation}", "${object.cantN}"  ), `);
@@ -197,7 +177,7 @@ OurTestController.pushAskResultInfo = async function (resultOurTest, idBusiness)
     }
     
     if (found) {
-        await OurTestController.deleteBusinessInAskResultStadistic(idBusiness)
+        await OurTestController.deleteBusinessInAskResultStatistic(idBusiness)
         await insert(data)
     } else {
         await insert(data)
@@ -208,10 +188,10 @@ OurTestController.pushAskResultInfo = async function (resultOurTest, idBusiness)
 
 // Delete
 OurTestController.deleteBusinessById = async function(id) {
-    OurTestController.validateBusinessById(id)
+    await OurTestController.validateBusinessById(id)
 
     await connection.query(
-        ` DELETE FROM pf.asksresults WHERE idbusinesses=${id};  `
+        ` DELETE FROM pf.ask_results WHERE idbusinesses=${id};  `
     )
     .catch((e) => {
         throw e;
@@ -224,7 +204,7 @@ OurTestController.deleteBusinessInAskByBusiness = async function(idBusiness) {
     
     if (found) {
         await connection.query(
-            ` DELETE FROM pf.asksresults WHERE idbusinesses=${idBusiness};  `
+            ` DELETE FROM pf.ask_results WHERE idbusinesses=${idBusiness};  `
         )
         .catch((e) => {
             throw e;
@@ -233,8 +213,8 @@ OurTestController.deleteBusinessInAskByBusiness = async function(idBusiness) {
         throw new Error("This business id does not exist")
     }
 }
-OurTestController.deleteBusinessInAskResultStadistic = async function(idBusiness) {
-    const found = await OurTestController.validateBusinessInAskResultStadistic(idBusiness);
+OurTestController.deleteBusinessInAskResultStatistic = async function(idBusiness) {
+    const found = await OurTestController.validateBusinessInAskResultStatistic(idBusiness);
     if (found) {
         await connection.query(
             ` DELETE FROM pf.ask_result_stadistic WHERE id_business=${idBusiness}; `
@@ -249,10 +229,10 @@ OurTestController.deleteBusinessInAskResultStadistic = async function(idBusiness
 
 // Validations
 OurTestController.validateBusinessById = async function (id) {
-    const businessDB = await OurTestController.allBussisness()
+    const businessDB = await OurTestController.allBusiness()
     let found = false;
 
-    for ( element of businessDB ) {
+    for ( let element of businessDB ) {
         if ( element.idbusinesses === id) {
             found = true ;
         }
@@ -260,8 +240,8 @@ OurTestController.validateBusinessById = async function (id) {
     return found
 }
 OurTestController.validateBusiness = async function (business, idSector) {
-    const businessDB = await OurTestController.allBussisness()
-    let found = false; let id = 0;
+    const businessDB = await OurTestController.allBusiness()
+    let found = false; let id;
     for ( let element of businessDB ) {
         if ( element.businesses === business && element.id_sector === idSector) {
             found = true;
@@ -273,7 +253,7 @@ OurTestController.validateBusiness = async function (business, idSector) {
     return [found, id]
 }
 OurTestController.validateBusinessInAsks = async function (idBusiness) {
-    const response = await OurTestController.allBussisnessInAsks();
+    const response = await OurTestController.allBusinessInAsks();
     let idBusinessFound = false;
     for ( let property of response ){
         if (idBusiness === property.idbusinesses) {
@@ -284,8 +264,8 @@ OurTestController.validateBusinessInAsks = async function (idBusiness) {
     return idBusinessFound
     
 }
-OurTestController.validateBusinessInAskResultStadistic = async function (idBusiness) {
-    const result = await OurTestController.pullBusinessInAskResultStadistic();
+OurTestController.validateBusinessInAskResultStatistic = async function (idBusiness) {
+    const result = await OurTestController.pullBusinessInAskResultStatistic();
     let idBusinessFound = false;
     for ( let property of result ){
         if (idBusiness === property.id_business) {
@@ -300,46 +280,34 @@ OurTestController.validateBusinessInAskResultStadistic = async function (idBusin
 OurTestController.createArrayDimension = async function(dimension) {
     
     let dimensions = [];
-    for ( property in dimension ) {
+    for ( let property in dimension ) {
         dimensions[dimension[property].dimensionId] = dimension[property].dimension;        
     }
 
     OurTestController.allDimensions = dimensions;
 }
 OurTestController.tagDimension = function (results) {
-    let i = 0; let dimension = {}; let object = 0; let j = 0; let tagDimension;
-    for (element of results.process) {
+    let i = 0; let dimension = {}; let object = 0; let tagDimension;
+    let value = []; let idQuestion = [];
+
+    for (let element of results.process) {
         if (element !== object){      
-            value = []; idQuestion = []; j = 0;
+            value = []; idQuestion = [];
 
-            tagDimension = OurTestController.allDimensions[element];
-            tagDimension = OurTestController.eliminarDiacriticos(tagDimension);
+            tagDimension = OurTestController.removeDiacritics(OurTestController.allDimensions[element]);
             tagDimension = OurTestController.createElements(tagDimension);
-
-            value[j] = results.value[i];
-            idQuestion[j] = results.idQuestion[i];
-
-            dimension[tagDimension] = {
-                dimensionId: element,
-                dimension: OurTestController.allDimensions[element],
-                idQuestion: idQuestion,
-                value: value,
-            };
-            j = j + 1;
+            console.log(tagDimension)
             object = element;
-        } else {
-            value[j] = results.value[i];
-            idQuestion[j] = results.idQuestion[i];
-
-            dimension[tagDimension] = {
-                dimensionId: element,
-                dimension: OurTestController.allDimensions[element],
-                idQuestion: idQuestion,
-                value: value,
-            };
-            j = j + 1;
-
         }
+        value.push(results.value[i])
+        idQuestion.push(results.idQuestion[i]);
+
+        dimension[tagDimension] = {
+            dimensionId: element,
+            dimension: OurTestController.allDimensions[element],
+            idQuestion: idQuestion,
+            value: value,
+        };
         i = i + 1;
     }
     return dimension
@@ -349,18 +317,19 @@ OurTestController.resultByDimension = function (result, id_business) {
     askByDimension["idSector"] = id_sector;
     askByDimension["sector"] = OurTestController.idSector[id_sector];
     askByDimension["idBusiness"] = id_business;
-    for( property in result ) {
-        let [summ, average] = AritmeticFunctions.prom(result[property].value);
-        let varianze = AritmeticFunctions.varianze(average, result[property].value);
+
+    for( let property in result ) {
+        let [sum, average] = ArithmeticFunctions.prom(result[property].value);
+        let variance = ArithmeticFunctions.varianze(average, result[property].value);
 
         askByDimension[property] = {
             dimensionId: result[property].dimensionId,
             dimension: result[property].dimension,
-            total: summ,
+            total: sum,
             average: average,
             cantN: result[property].value.length,
-            varianze: varianze,
-            standardDeviation: parseFloat(Math.pow(varianze, 1/2).toFixed(3))
+            variance: variance,
+            standardDeviation: parseFloat(Math.pow(variance, 1/2).toFixed(3))
         }
     }
     return askByDimension

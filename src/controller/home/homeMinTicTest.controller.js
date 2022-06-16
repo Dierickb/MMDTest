@@ -5,8 +5,8 @@ let DBMinTicTestResultController = function (idSector, idQuestion, valueQuestion
     this.idQuestion = idQuestion;
     this.valueQuestion = valueQuestion;
 }
-DBMinTicTestResultController.eliminarDiacriticos = async function (texto) {
-    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+DBMinTicTestResultController.removeDiacritics = async function (text) {
+    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
 }
 DBMinTicTestResultController.createElements = async function (process) {
     return process.replace(/ /g, "_")
@@ -18,7 +18,7 @@ DBMinTicTestResultController.resultBySector = {};
 // Pull data
 DBMinTicTestResultController.pullSector = async function () {
     return await connection.query(
-        ` SELECT id_tipo_empresa, tipo_empresas FROM MINTIC_MODEL.tipo_empresa `
+        ` SELECT id_tipo_empresa, tipo_empresas FROM MINTIC_MODEL.economic_sector `
     )
         .catch((e) => {
             throw e;
@@ -34,8 +34,8 @@ DBMinTicTestResultController.pullResultBySector = async function (idSector) {
                 askres.id_process, prc.proceso,
                 askres.average, askres.total, askres.varianze, askres.standardDeviation, askres.cantN
                 FROM MINTIC_MODEL.ask_result_stadistic askres
-                INNER JOIN MINTIC_MODEL.tipo_empresa temp ON askres.id_sector = temp.id_tipo_empresa
-                INNER JOIN MINTIC_MODEL.procesos prc ON askres.id_process = prc.id_proceso
+                INNER JOIN MINTIC_MODEL.economic_sector temp ON askres.id_sector = temp.id_tipo_empresa
+                INNER JOIN MINTIC_MODEL.process prc ON askres.id_process = prc.id_proceso
                 WHERE askres.id_sector = ${idSector}
              `
         )
@@ -75,7 +75,7 @@ DBMinTicTestResultController.tagProcess = async function (data) {
             const dataKey = Object.keys(datos_2);
             const found = dataKey.find(element => element === `${property.proceso}`);
 
-            tagProcess = await DBMinTicTestResultController.eliminarDiacriticos(property.proceso);
+            tagProcess = await DBMinTicTestResultController.removeDiacritics(property.proceso);
             tagProcess = await DBMinTicTestResultController.createElements(tagProcess);
 
             if ( found === undefined ) {

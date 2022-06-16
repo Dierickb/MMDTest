@@ -11,13 +11,13 @@ const DBMinTicTestResultController = require('../controller/home/homeMinTicTest.
 
 const getIndex = async (req, res) => {
     const errors = validationResult(req);
-    let sector = []; k = 0; let idSector = [];
+    let sector = []; let idSector = [];
     for (let value of Sectors.allSectors) {
-        sector[k] = value.tipo_empresas;
-        idSector[k] = value.id_tipo_empresa;
+        sector.push(value.tipo_empresas);
+        idSector.push(value.id_tipo_empresa);
         PushOurTest.idSector[value.id_tipo_empresa] = value.tipo_empresas;
-        k = k + 1;
     }
+
     if (errors.isEmpty()) {
         await DBMinTicTestResultController.pullResultBySector(2)
         res.render("index", { 

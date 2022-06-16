@@ -16,7 +16,7 @@ OurTestResultController.createElements = async function (process) {
 // Pull data
 OurTestResultController.pullSector = async function () {
     return await connection.query(
-        ` SELECT idSector, sector FROM pf.sector `
+        ` SELECT idSector, sector FROM pf.economic_sector `
     )
         .catch((e) => {
             throw e;
@@ -33,7 +33,7 @@ OurTestResultController.pullResultBySector = async function (idSector) {
                 askres.id_dimension, dim.dimension,
                 askres.total, askres.average, askres.standardDeviation, askres.cantN
                 FROM pf.ask_result_stadistic askres
-                INNER JOIN pf.sector sect ON askres.id_sector = sect.idsector
+                INNER JOIN pf.economic_sector sect ON askres.id_sector = sect.idsector
                 INNER JOIN pf.dimension dim ON askres.id_dimension = dim.iddimension
                 WHERE askres.id_sector = ${idSector}
                 

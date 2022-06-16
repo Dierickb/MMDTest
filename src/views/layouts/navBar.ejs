@@ -21,7 +21,7 @@
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <% if(selected !== true && (url == '/OurTest' || url == '/MinTicTest' || url == '/')) { %> 
+                        <% if(selected !== true && (url === '/OurTest' || url === '/MinTicTest' || url === '/')) { %>
                             <a class="nav-link"id="OurTest"  data-bs-toggle="offcanvas" href="#"
                             data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">MMD Test</a>                            
                         <% } else { %> 
@@ -34,7 +34,7 @@
                         <% } %>                       
                     </li>
                     <li class="nav-item">
-                        <% if(selected !== true && (url == '/OurTest' || url == '/MinTicTest' || url == '/') ) { %>                                 
+                        <% if(selected !== true && (url === '/OurTest' || url === '/MinTicTest' || url === '/') ) { %>
                             <a class="nav-link" id="MinT" data-bs-toggle="offcanvas" href="#"
                             data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">MinTicTest</a>                            
                         <% } else { %> 
@@ -42,11 +42,11 @@
                         <% } %>   
                     </li>
                     <li class="nav-item">
-                        <% if(selected !== true && (url == '/OurTest' || url == '/TestResult' || url == '/') ) { %>                                 
+                        <% if(selected !== true && (url === '/OurTest' || url === '/TestResult' || url === '/') ) { %>
                             <a class="nav-link" id="MinT" data-bs-toggle="offcanvas" href="#"
                             data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">Resultados</a>                            
                         <% } else { %> 
-                            <a class="nav-link" href="/TestResult">MinTicTest</a>
+                            <a class="nav-link" href="/TestResult">Resultados</a>
                         <% } %>   
                     </li>
                 </ul>

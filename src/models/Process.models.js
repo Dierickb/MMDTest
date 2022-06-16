@@ -35,7 +35,7 @@ Process.refactorData = function(process) {
 
 Process.pullDB = async function() {
     const data = await connection.query(
-        `SELECT * FROM MINTIC_MODEL.procesos`,
+        `SELECT * FROM MINTIC_MODEL.process`,
     )
     .catch((e) => {
         throw e;
